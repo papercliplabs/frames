@@ -34,7 +34,7 @@ export const nounsDaoConfigs: Record<SupportedNounsDao, NounsDaoConfig> = {
                 auctionAddress: "0x0aa23a7e112889c965010558803813710becf263",
                 tokenAddress: "0x220e41499CF4d93a3629a5509410CBf9E6E0B109",
             }),
-        collectionName: "Yellow Collective ",
+        collectionName: "Collective Noun #",
         backgroundColor: "#FBCB07",
         textColor: "black",
         fontType: "pally",
