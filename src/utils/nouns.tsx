@@ -12,7 +12,7 @@ interface NounsDaoConfig {
     fontType: FontType;
 }
 
-export type SupportedNounsDao = "nouns" | "yellow" | "purple" | "based-dao" | "builder-dao";
+export type SupportedNounsDao = "nouns" | "yellow" | "purple" | "based-dao" | "builder-dao" | "based-management";
 
 export const nounsDaoConfigs: Record<SupportedNounsDao, NounsDaoConfig> = {
     nouns: {
@@ -73,6 +73,18 @@ export const nounsDaoConfigs: Record<SupportedNounsDao, NounsDaoConfig> = {
         collectionName: "Builder #",
         backgroundColor: "#0088ff",
         textColor: "black",
+        fontType: "inter",
+    },
+    "based-management": {
+        getAuctionDetails: () =>
+            getNounBuilderAuctionDetails({
+                client: basePublicClient,
+                auctionAddress: "0x629c4e852beb467af0b15587b07d71b957b61c8a",
+                tokenAddress: "0xB78b89EB81303a11CC597B4519035079453d8E31",
+            }),
+        collectionName: "Based Management One #",
+        backgroundColor: "#135eff",
+        textColor: "white",
         fontType: "inter",
     },
 };

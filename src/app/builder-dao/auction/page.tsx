@@ -11,5 +11,5 @@ export const metadata = generateFrameMetadata({
 });
 
 export default function Page() {
-    return <RedirectPage url="https://nouns.build/dao/ethereum/0xdf9b7d26c8fc806b1ae6273684556761ff02d422/407" />;
+    return <RedirectPage url="https://nouns.build/dao/ethereum/0xdf9b7d26c8fc806b1ae6273684556761ff02d422" />;
 }

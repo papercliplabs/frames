@@ -35,7 +35,7 @@ export default function AuctionStatus({
                 alt={`#${id}`}
                 tw="shrink-0 rounded-[50px] border-[3px] border-white/30"
             />
-            <div tw="flex flex-col max-w-[800px] pl-[64px] ">
+            <div tw="flex flex-col max-w-[700px] pl-[64px] ">
                 <span tw="pb-[56px]">
                     {collectionName}
                     {id}
