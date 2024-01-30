@@ -1,7 +1,52 @@
 import { Address, PublicClient, formatEther } from "viem";
 import { readContract } from "viem/actions";
 import { formatNumber, formatTimeLeft } from "./format";
-import { getWalletName } from "./wallet";
+import { basePublicClient, getWalletName, mainnetPublicClient } from "./wallet";
+
+interface NounsDaoConfig {
+    getAuctionDetails: () => Promise<AuctionDetails>;
+    collectionName: string;
+    backgroundColor: string;
+    textColor: string;
+}
+
+export type SupportedNounsDao = "nouns" | "yellow" | "purple";
+
+export const nounsDaoConfigs: Record<SupportedNounsDao, NounsDaoConfig> = {
+    nouns: {
+        getAuctionDetails: () =>
+            getNounOgAuctionDetails({
+                client: mainnetPublicClient,
+                auctionAddress: "0x830BD73E4184ceF73443C15111a1DF14e495C706",
+                tokenAddress: "0x9c8ff314c9bc7f6e59a9d9225fb22946427edc03",
+            }),
+        collectionName: "Noun ",
+        backgroundColor: "white",
+        textColor: "black",
+    },
+    yellow: {
+        getAuctionDetails: () =>
+            getNounBuilderAuctionDetails({
+                client: basePublicClient,
+                auctionAddress: "0x0aa23a7e112889c965010558803813710becf263",
+                tokenAddress: "0x220e41499CF4d93a3629a5509410CBf9E6E0B109",
+            }),
+        collectionName: "Yellow Collective ",
+        backgroundColor: "#FBCB07",
+        textColor: "black",
+    },
+    purple: {
+        getAuctionDetails: () =>
+            getNounBuilderAuctionDetails({
+                client: mainnetPublicClient,
+                auctionAddress: "0x43790fe6bd46b210eb27f01306c1d3546aeb8c1b",
+                tokenAddress: "0xa45662638e9f3bbb7a6fecb4b17853b7ba0f3a60",
+            }),
+        collectionName: "Purple #",
+        backgroundColor: "#7649C7",
+        textColor: "white",
+    },
+};
 
 interface GetAuctionDetailsParams {
     client: PublicClient;
@@ -17,7 +62,7 @@ interface AuctionDetails {
     bidder: string;
 }
 
-export async function getNounMainnetAuctionDetails({
+export async function getNounOgAuctionDetails({
     client,
     auctionAddress,
 }: GetAuctionDetailsParams): Promise<AuctionDetails> {
