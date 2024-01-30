@@ -3,6 +3,7 @@ import { generateFrameMetadata } from "@/utils/metadata";
 import { nounsDaoConfigs, SupportedNounsDao } from "@/utils/nouns";
 import { URLSearchParams } from "url";
 import { track } from "@vercel/analytics/server";
+import { permanentRedirect, redirect } from "next/navigation";
 
 export async function POST(req: NextRequest): Promise<Response> {
     const dao = req.nextUrl.searchParams.get("dao");
@@ -13,6 +14,15 @@ export async function POST(req: NextRequest): Promise<Response> {
         console.error("NO CONFIG FOR DAO: ", dao);
         return new NextResponse("Error");
     }
+
+    try {
+        const reqJson = await req.json();
+        const buttonIndex = reqJson["untrustedData"]["buttonIndex"];
+
+        if (buttonIndex == 2) {
+            return Response.redirect(`${process.env.NEXT_PUBLIC_URL}/redirects/${config.auctionUrl}`, 302);
+        }
+    } catch {}
 
     const { nounId, nounImgSrc, timeRemaining, bidFormatted, bidder } = await config.getAuctionDetails();
 
@@ -36,7 +46,10 @@ export async function POST(req: NextRequest): Promise<Response> {
         generateFrameMetadata({
             type: "string",
             image: `${process.env.NEXT_PUBLIC_URL}/common/nouns-auction/api/img/status?${params.toString()}`,
-            buttonNames: ["Refresh"],
+            buttonInfo: [
+                { name: "Refresh", action: "post" },
+                { name: "Bid", action: "post_redirect" },
+            ],
             postUrl: `${process.env.NEXT_PUBLIC_URL}/common/nouns-auction/api?dao=${dao}`,
         }) as string
     );

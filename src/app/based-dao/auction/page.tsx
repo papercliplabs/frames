@@ -4,7 +4,7 @@ import { generateFrameMetadata } from "@/utils/metadata";
 export const metadata = generateFrameMetadata({
     type: "metadata",
     image: `${process.env.NEXT_PUBLIC_URL}/images/based-dao-auction-house.png`,
-    buttonNames: ["View Auction!"],
+    buttonInfo: [{ name: "View Auction!", action: "post" }],
     postUrl: `${process.env.NEXT_PUBLIC_URL}/common/nouns-auction/api?dao=based-dao`,
     ogTitle: "BASED DAO",
     ogDesc: "Our mission is to ignite identity, foster a vibrant community, establish effective governance, and cultivate a robust treasury that empowers and benefits our collective",

@@ -1,9 +1,14 @@
 import type { Metadata } from "next";
 
+interface FrameButtonInfo {
+    name: string;
+    action: "post" | "post_redirect";
+}
+
 interface FrameMetadataGenerationParameters {
     type: "metadata" | "string";
     image: string;
-    buttonNames: string[];
+    buttonInfo: FrameButtonInfo[];
     postUrl: string;
     ogTitle?: string;
     ogDesc?: string;
@@ -12,7 +17,7 @@ interface FrameMetadataGenerationParameters {
 export function generateFrameMetadata({
     type,
     image,
-    buttonNames,
+    buttonInfo,
     postUrl,
     ogTitle,
     ogDesc,
@@ -23,8 +28,9 @@ export function generateFrameMetadata({
         "fc:frame:post_url": postUrl,
     };
 
-    buttonNames.forEach((name, i) => {
-        farcasterMetadata[`fc:frame:button:${i + 1}`] = name;
+    buttonInfo.forEach((info, i) => {
+        farcasterMetadata[`fc:frame:button:${i + 1}`] = info.name;
+        farcasterMetadata[`fc:frame:button:${i + 1}:action`] = info.action;
     });
 
     switch (type) {
