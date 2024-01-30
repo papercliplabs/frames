@@ -1,5 +1,6 @@
 import { ReactElement } from "react";
 import { Optional } from "@/utils/types";
+import { FontType } from "@/utils/baseImg";
 
 interface AuctionStatusProps {
     id: Optional<string>;

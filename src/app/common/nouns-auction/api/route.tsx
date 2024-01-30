@@ -23,6 +23,7 @@ export async function POST(req: NextRequest): Promise<Response> {
         ["bid", bidFormatted],
         ["bidder", bidder],
         ["collectionName", config.collectionName],
+        ["fontType", config.fontType],
         ["backgroundColor", config.backgroundColor],
         ["textColor", config.textColor],
     ]);

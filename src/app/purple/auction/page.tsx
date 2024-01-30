@@ -6,6 +6,8 @@ export const metadata = generateFrameMetadata({
     image: `${process.env.NEXT_PUBLIC_URL}/images/purple-auction-house.png`,
     buttonNames: ["View Auction!"],
     postUrl: `${process.env.NEXT_PUBLIC_URL}/common/nouns-auction/api?dao=purple`,
+    ogTitle: "Purple",
+    ogDesc: "Purple is a DAO whose goal is to proliferate and expand the Farcaster protocol and ecosystem.",
 });
 
 export default function Page() {

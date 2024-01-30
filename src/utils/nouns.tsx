@@ -2,12 +2,14 @@ import { Address, PublicClient, formatEther } from "viem";
 import { readContract } from "viem/actions";
 import { formatNumber, formatTimeLeft } from "./format";
 import { basePublicClient, getWalletName, mainnetPublicClient } from "./wallet";
+import { FontType } from "./baseImg";
 
 interface NounsDaoConfig {
     getAuctionDetails: () => Promise<AuctionDetails>;
     collectionName: string;
     backgroundColor: string;
     textColor: string;
+    fontType: FontType;
 }
 
 export type SupportedNounsDao = "nouns" | "yellow" | "purple";
@@ -23,6 +25,7 @@ export const nounsDaoConfigs: Record<SupportedNounsDao, NounsDaoConfig> = {
         collectionName: "Noun ",
         backgroundColor: "white",
         textColor: "black",
+        fontType: "pally",
     },
     yellow: {
         getAuctionDetails: () =>
@@ -34,6 +37,7 @@ export const nounsDaoConfigs: Record<SupportedNounsDao, NounsDaoConfig> = {
         collectionName: "Yellow Collective ",
         backgroundColor: "#FBCB07",
         textColor: "black",
+        fontType: "pally",
     },
     purple: {
         getAuctionDetails: () =>
@@ -45,6 +49,7 @@ export const nounsDaoConfigs: Record<SupportedNounsDao, NounsDaoConfig> = {
         collectionName: "Purple #",
         backgroundColor: "#7649C7",
         textColor: "white",
+        fontType: "inter",
     },
 };
 

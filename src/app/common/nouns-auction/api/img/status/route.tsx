@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { baseImage } from "@/utils/baseImg";
+import { FontType, baseImage } from "@/utils/baseImg";
 import NounAuctionStatus from "@/components/NounAuctionStatus";
 
 export async function GET(req: NextRequest): Promise<Response> {
@@ -9,6 +9,7 @@ export async function GET(req: NextRequest): Promise<Response> {
     const bid = req.nextUrl.searchParams.get("bid");
     const bidder = req.nextUrl.searchParams.get("bidder");
     const collectionName = req.nextUrl.searchParams.get("collectionName");
+    const fontType = (req.nextUrl.searchParams.get("fontType") ?? "pally") as FontType;
     const backgroundColor = req.nextUrl.searchParams.get("backgroundColor");
     const textColor = req.nextUrl.searchParams.get("textColor");
 
@@ -25,7 +26,7 @@ export async function GET(req: NextRequest): Promise<Response> {
                 textColor={textColor}
             />
         ),
-        fontType: "pally",
+        fontType: fontType,
     });
 }
 
