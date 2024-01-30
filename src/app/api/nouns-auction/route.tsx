@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getEnsName, readContract } from "viem/actions";
 import { formatEther } from "viem";
-import { getWalletName, publicClient } from "@/utils/wallet";
+import { getWalletName, mainnetPublicClient } from "@/utils/wallet";
 import { formatNumber, formatTimeLeft } from "@/utils/format";
 
 export async function GET(req: NextRequest): Promise<Response> {
@@ -41,7 +41,7 @@ export async function POST(req: NextRequest): Promise<Response> {
         },
     ] as const;
 
-    const [nounId, currentBid, startTime, endTime, currentBidder, settled] = await readContract(publicClient, {
+    const [nounId, currentBid, startTime, endTime, currentBidder, settled] = await readContract(mainnetPublicClient, {
         address: "0x830BD73E4184ceF73443C15111a1DF14e495C706",
         abi,
         functionName: "auction",

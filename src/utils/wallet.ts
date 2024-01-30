@@ -1,9 +1,14 @@
 import { Address, createPublicClient, hexToString, http, slice } from "viem";
-import { mainnet } from "viem/chains";
+import { base, mainnet } from "viem/chains";
 
-export const publicClient = createPublicClient({
+export const mainnetPublicClient = createPublicClient({
     chain: mainnet,
-    transport: http(),
+    transport: http(`https://eth-mainnet.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`),
+});
+
+export const basePublicClient = createPublicClient({
+    chain: base,
+    transport: http(`https://base-mainnet.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`),
 });
 
 export const shortenAddress = (address: string, amount: number = 4) =>
@@ -12,9 +17,9 @@ export const shortenAddress = (address: string, amount: number = 4) =>
 export async function getWalletName({ address }: { address: Address }): Promise<string> {
     // Get NNS or ENS name
     try {
-        const res = await publicClient.call({
+        const res = await mainnetPublicClient.call({
             to: "0x849f92178950f6254db5d16d1ba265e70521ac1b",
-            data: `0x55ea6c47000000000000000000000000${address.substring(2)}`,
+            data: `0x55ea6c47000000000000000000000000${address.toLowerCase().substring(2)}`,
         });
 
         let name = undefined;
