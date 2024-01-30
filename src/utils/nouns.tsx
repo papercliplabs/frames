@@ -3,6 +3,10 @@ import { readContract } from "viem/actions";
 import { formatNumber, formatTimeLeft } from "./format";
 import { basePublicClient, getWalletName, mainnetPublicClient } from "./wallet";
 import { FontType } from "./baseImg";
+import { ImageData, getNounData } from "@nouns/assets";
+import { buildSVG } from "@nouns/sdk";
+
+const { palette } = ImageData; // Used with `buildSVG``
 
 interface NounsDaoConfig {
     getAuctionDetails: () => Promise<AuctionDetails>;
@@ -12,7 +16,14 @@ interface NounsDaoConfig {
     fontType: FontType;
 }
 
-export type SupportedNounsDao = "nouns" | "yellow" | "purple" | "based-dao" | "builder-dao" | "based-management";
+export type SupportedNounsDao =
+    | "nouns"
+    | "yellow"
+    | "purple"
+    | "based-dao"
+    | "builder-dao"
+    | "based-management"
+    | "lil-nouns";
 
 export const nounsDaoConfigs: Record<SupportedNounsDao, NounsDaoConfig> = {
     nouns: {
@@ -25,7 +36,7 @@ export const nounsDaoConfigs: Record<SupportedNounsDao, NounsDaoConfig> = {
         collectionName: "Noun ",
         backgroundColor: "white",
         textColor: "black",
-        fontType: "pally",
+        fontType: "londrina",
     },
     yellow: {
         getAuctionDetails: () =>
@@ -87,6 +98,18 @@ export const nounsDaoConfigs: Record<SupportedNounsDao, NounsDaoConfig> = {
         textColor: "white",
         fontType: "inter",
     },
+    "lil-nouns": {
+        getAuctionDetails: () =>
+            getNounOgAuctionDetails({
+                client: mainnetPublicClient,
+                auctionAddress: "0x55e0F7A3bB39a28Bd7Bcc458e04b3cF00Ad3219E",
+                tokenAddress: "0x4b10701Bfd7BFEdc47d50562b76b436fbB5BdB3B",
+            }),
+        collectionName: "Lil Noun ",
+        backgroundColor: "#7cc5f2",
+        textColor: "white",
+        fontType: "londrina",
+    },
 };
 
 interface GetAuctionDetailsParams {
@@ -106,8 +129,9 @@ interface AuctionDetails {
 export async function getNounOgAuctionDetails({
     client,
     auctionAddress,
+    tokenAddress,
 }: GetAuctionDetailsParams): Promise<AuctionDetails> {
-    const abi = [
+    const auctionAbi = [
         {
             inputs: [],
             name: "auction",
@@ -124,21 +148,48 @@ export async function getNounOgAuctionDetails({
         },
     ] as const;
 
+    const tokenAbi = [
+        {
+            inputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+            name: "seeds",
+            outputs: [
+                { internalType: "uint48", name: "background", type: "uint48" },
+                { internalType: "uint48", name: "body", type: "uint48" },
+                { internalType: "uint48", name: "accessory", type: "uint48" },
+                { internalType: "uint48", name: "head", type: "uint48" },
+                { internalType: "uint48", name: "glasses", type: "uint48" },
+            ],
+            stateMutability: "view",
+            type: "function",
+        },
+    ] as const;
+
     const [nounId, currentBid, startTime, endTime, currentBidder, settled] = await readContract(client, {
         address: auctionAddress,
-        abi,
+        abi: auctionAbi,
         functionName: "auction",
     });
 
+    const [background, body, accessory, head, glasses] = await readContract(client, {
+        address: tokenAddress,
+        abi: tokenAbi,
+        functionName: "seeds",
+        args: [nounId],
+    });
+
+    const { parts, background: bg } = getNounData({ background, body, accessory, head, glasses });
+    const svgBinary = buildSVG(parts, palette, bg);
+    const svgBase64 = btoa(svgBinary);
+
     const now = Date.now() / 1000;
-    const timeRemainingFormatter = formatTimeLeft(settled ? 0 : Number(endTime.toString()) - now);
+    const timeRemainingFormatter = formatTimeLeft(settled ? 0 : Math.max(Number(endTime.toString()) - now, 0));
     const currentBidFormatted = formatNumber(formatEther(currentBid), 4);
 
     const bidder = await getWalletName({ address: currentBidder });
 
     return {
         nounId: Number(nounId.toString()),
-        nounImgSrc: `https://noun.pics/${nounId}`,
+        nounImgSrc: `data:image/svg+xml;base64,${svgBase64}`,
         timeRemaining: timeRemainingFormatter,
         bidFormatted: currentBidFormatted,
         bidder,
@@ -199,7 +250,7 @@ export async function getNounBuilderAuctionDetails({
     const imgSrc = parseBase64String(tokenUri).image;
 
     const now = Date.now() / 1000;
-    const timeRemainingFormatter = formatTimeLeft(settled ? 0 : Number(endTime.toString()) - now);
+    const timeRemainingFormatter = formatTimeLeft(settled ? 0 : Math.max(Number(endTime.toString()) - now, 0));
     const currentBidFormatted = formatNumber(formatEther(currentBid), 4);
 
     const bidder = await getWalletName({ address: currentBidder });

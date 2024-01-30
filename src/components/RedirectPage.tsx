@@ -14,7 +14,7 @@ export function RedirectPage({ url }: RedirectPageProps) {
     useEffect(() => {
         const timeout = setTimeout(() => {
             // Need a slight delay so Farcaster will pickup head metadata of whatever page this is on
-            router.replace(url);
+            // router.replace(url);
         }, REDIRECT_TIME_MS);
 
         return () => clearTimeout(timeout);
