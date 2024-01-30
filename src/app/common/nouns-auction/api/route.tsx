@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { basePublicClient } from "@/utils/wallet";
 import { generateFrameMetadata } from "@/utils/metadata";
-import { getNounBuilderAuctionDetails, nounsDaoConfigs, SupportedNounsDao } from "@/utils/nouns";
+import { nounsDaoConfigs, SupportedNounsDao } from "@/utils/nouns";
 import { URLSearchParams } from "url";
+import { track } from "@vercel/analytics/server";
 
 export async function POST(req: NextRequest): Promise<Response> {
     const dao = req.nextUrl.searchParams.get("dao");
@@ -27,6 +27,10 @@ export async function POST(req: NextRequest): Promise<Response> {
         ["backgroundColor", config.backgroundColor],
         ["textColor", config.textColor],
     ]);
+
+    await track("nouns-auction-refresh", {
+        dao: dao,
+    });
 
     return new NextResponse(
         generateFrameMetadata({

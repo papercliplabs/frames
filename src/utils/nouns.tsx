@@ -12,7 +12,7 @@ interface NounsDaoConfig {
     fontType: FontType;
 }
 
-export type SupportedNounsDao = "nouns" | "yellow" | "purple";
+export type SupportedNounsDao = "nouns" | "yellow" | "purple" | "based-dao" | "builder-dao";
 
 export const nounsDaoConfigs: Record<SupportedNounsDao, NounsDaoConfig> = {
     nouns: {
@@ -49,6 +49,30 @@ export const nounsDaoConfigs: Record<SupportedNounsDao, NounsDaoConfig> = {
         collectionName: "Purple #",
         backgroundColor: "#7649C7",
         textColor: "white",
+        fontType: "inter",
+    },
+    "based-dao": {
+        getAuctionDetails: () =>
+            getNounBuilderAuctionDetails({
+                client: basePublicClient,
+                auctionAddress: "0x0d2790f4831bdfd6a8fd21c6f591bb69496b5e91",
+                tokenAddress: "0x10a5676ec8ae3d6b1f36a6f1a1526136ba7938bf",
+            }),
+        collectionName: "BASED DAO #",
+        backgroundColor: "#334afb",
+        textColor: "white",
+        fontType: "inter",
+    },
+    "builder-dao": {
+        getAuctionDetails: () =>
+            getNounBuilderAuctionDetails({
+                client: mainnetPublicClient,
+                auctionAddress: "0x658d3a1b6dabcfbaa8b75cc182bf33efefdc200d",
+                tokenAddress: "0xdf9b7d26c8fc806b1ae6273684556761ff02d422",
+            }),
+        collectionName: "Builder #",
+        backgroundColor: "#0088ff",
+        textColor: "black",
         fontType: "inter",
     },
 };

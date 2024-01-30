@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getEnsName, readContract } from "viem/actions";
+import { readContract } from "viem/actions";
 import { formatEther } from "viem";
 import { getWalletName, mainnetPublicClient } from "@/utils/wallet";
 import { formatNumber, formatTimeLeft } from "@/utils/format";

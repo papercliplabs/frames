@@ -28,7 +28,13 @@ export default function AuctionStatus({
             tw="flex w-full h-full justify-center items-center text-[64px]"
             style={{ backgroundColor: backgroundColor ?? "white", color: textColor ?? "black" }}
         >
-            <img src={imgSrc ?? ""} width={420} height={420} alt={`#${id}`} tw="shrink-0 rounded-[50px]" />
+            <img
+                src={imgSrc ?? ""}
+                width={420}
+                height={420}
+                alt={`#${id}`}
+                tw="shrink-0 rounded-[50px] border-[3px] border-white/30"
+            />
             <div tw="flex flex-col max-w-[800px] pl-[64px] ">
                 <span tw="pb-[56px]">
                     {collectionName}
