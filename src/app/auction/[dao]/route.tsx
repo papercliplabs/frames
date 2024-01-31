@@ -33,6 +33,10 @@ export async function POST(req: NextRequest, { params }: { params: { dao: string
         const reqJson = await req.json();
         const buttonIndex = reqJson["untrustedData"]["buttonIndex"];
 
+        await track("auction-bid", {
+            dao: params.dao,
+        });
+
         if (buttonIndex == 2) {
             return Response.redirect(`${process.env.NEXT_PUBLIC_URL}/redirects/${config.auctionUrl}`, 302);
         }

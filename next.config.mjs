@@ -43,13 +43,54 @@ const nextConfig = {
                 permanent: false,
             }, 
             {
-                source: "/yellow-collective/auction",
+                source: "/yellow/auction",
                 destination: "/auction/yellow-collective",
                 permanent: false,
             }, 
             {
                 source: "/api/nouns-auction",
                 destination: "/auction/nouns",
+                permanent: false,
+            }, 
+            {
+                source: "/api/nouns-auction/img/home",
+                destination: "/images/nouns-auction-house.png",
+                permanent: false,
+            }, 
+            {
+                source: "/common/nouns-auction/api",
+                has: [
+                    {
+                      type: "query",
+                      key: "dao",
+                      value: "yellow",
+                    },
+                  ],
+                destination: "/auction/yellow-collective",
+                permanent: false,
+            }, 
+            {
+                source: "/common/nouns-auction/api",
+                has: [
+                    {
+                      type: "query",
+                      key: "dao",
+                      value: "purple",
+                    },
+                  ],
+                destination: "/auction/purple-dao",
+                permanent: false,
+            }, 
+            {
+                source: "/common/nouns-auction/api",
+                has: [
+                    {
+                      type: "query",
+                      key: "dao",
+                      value: "(?<dao>.*)",
+                    },
+                  ],
+                destination: "/auction/:dao",
                 permanent: false,
             }, 
         ];

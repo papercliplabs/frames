@@ -51,7 +51,7 @@ export const auctionConfigs: Record<SupportedAuctionDao, AuctionConfig> = {
         client: basePublicClient,
         auctionAddress: "0x0aa23a7e112889c965010558803813710becf263",
         tokenAddress: "0x220e41499CF4d93a3629a5509410CBf9E6E0B109",
-        firstPageImage: `${process.env.NEXT_PUBLIC_URL}/images/yellow-collective-auction-house.png`,
+        firstPageImage: `${process.env.NEXT_PUBLIC_URL}/images/yellow-auction-house.png`,
         daoType: "nounsBuilder",
         title: "The Yellow Collective",
         description:
@@ -106,7 +106,7 @@ export const auctionConfigs: Record<SupportedAuctionDao, AuctionConfig> = {
         title: "BASED DAO",
         description:
             "Builder DAO is dedicated to the creation and development of free and accessible DAO infrastructure as a public good.",
-        auctionUrl: "nouns.build/dao/base/0x10a5676ec8ae3d6b1f36a6f1a1526136ba7938bf",
+        auctionUrl: "nouns.build/dao/ethereum/0xdf9b7d26c8fc806b1ae6273684556761ff02d422/408",
         tokenNamePrefix: "Builder #",
         style: {
             backgroundColor: "#0088ff",
