@@ -1,5 +1,5 @@
 import { FontType } from "@/utils/baseImg";
-import { Address, PublicClient, WalletClient } from "viem";
+import { Address, PublicClient } from "viem";
 import { basedAndYellowFrameEditionOneCollectionConfig } from "./individualConfigs/basedAndYellowFrameEditionOne";
 
 export type SupportedMintCollection = "based-and-yellow-frame-edition-one";
@@ -7,11 +7,11 @@ export type SupportedMintCollection = "based-and-yellow-frame-edition-one";
 export interface CollectionMintCondition {
     name: string;
     description: string;
-    check: (user: Address, castId: number) => Promise<boolean>;
+    check: (userAddress: Address, userId: number, castHash: string) => Promise<boolean>;
 }
 
 export interface CollectionConfig {
-    client: PublicClient; // TODO: make to wallet client (?)
+    client: PublicClient;
     collectionName: string;
     collectionDescription: string;
     collectionAddress: Address;
@@ -21,8 +21,11 @@ export interface CollectionConfig {
     mintOrConditions: CollectionMintCondition[];
     oneMintPerAddress: boolean;
     homePageImage: string;
+    noAddressImage: string;
+    soldOutImage: string;
     alreadyMintedImage: string;
     successfulMintImage: string;
+    conditionsNotMetIcon: string;
     style: {
         backgroundColor: string;
         fontColor: string;

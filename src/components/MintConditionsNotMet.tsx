@@ -12,39 +12,47 @@ interface MintConditionsNotMetParams {
         description: string;
         met: boolean;
     }[];
+    backgroundColor: string;
+    fontColor: string;
+    icon: string;
 }
 
 export default function MintConditionsNotMet({
     andConditions,
     orConditions,
+    backgroundColor,
+    fontColor,
+    icon,
 }: MintConditionsNotMetParams): ReactElement {
-    // TODO
+    const orMet = orConditions.reduce((acc, cond) => acc || cond.met, false);
+    const andConditionsWithOr = [...andConditions, { name: "One of:", description: "", met: orMet }];
     return (
         <div
-            tw="flex flex-col w-full h-full justify-center items-center text-[24px]"
-            style={{ backgroundColor: "white", color: "black" }}
+            tw="flex flex-row w-full h-full text-[52px] p-[64px]"
+            style={{ backgroundColor: backgroundColor, color: fontColor }}
         >
-            Conditions Not Met!
-            <div>AND conditions:</div>
-            <ul>
-                {andConditions.map((condition, i) => {
-                    return (
-                        <li key={i}>
-                            {condition.name}: {condition.met ? "MET" : "NOT MET"}
-                        </li>
-                    );
-                })}
-            </ul>
-            <div>OR conditions:</div>
-            <ul tw="flex flex-col">
-                {orConditions.map((condition, i) => {
-                    return (
-                        <li key={i}>
-                            {condition.name}: {condition.met ? "MET" : "NOT MET"}
-                        </li>
-                    );
-                })}
-            </ul>
+            <span tw="text-[68px] w-[300px] mr-[64px]">Missing Conditions...</span>
+            <span tw="flex flex-col w-[708px] pl-[64px]">
+                <ul tw="flex flex-col">
+                    {andConditionsWithOr.map((condition, i) => {
+                        return (
+                            <li key={i}>
+                                {condition.met ? "🟢 " : "⚪️ "} {condition.name}
+                            </li>
+                        );
+                    })}
+                </ul>
+                <ul tw="flex flex-col pl-[64px] text-[44px]">
+                    {orConditions.map((condition, i) => {
+                        return (
+                            <li key={i}>
+                                {condition.met ? "🟢 " : "⚪️ "} {condition.name}
+                            </li>
+                        );
+                    })}
+                </ul>
+            </span>
+            <img src={icon} style={{ position: "absolute", bottom: 0, left: 64, width: 300 }} />
         </div>
     );
 }

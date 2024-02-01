@@ -35,7 +35,15 @@ export async function GET(req: NextRequest, { params }: { params: { collection: 
     });
 
     return await baseImage({
-        content: <MintConditionsNotMet andConditions={andConditions} orConditions={orConditions} />,
+        content: (
+            <MintConditionsNotMet
+                andConditions={andConditions}
+                orConditions={orConditions}
+                backgroundColor={config.style.backgroundColor}
+                fontColor={config.style.fontColor}
+                icon={config.conditionsNotMetIcon}
+            />
+        ),
         fontType: config.style.font,
     });
 }
