@@ -42,7 +42,7 @@ export default function MintConditionsNotMet({
                         );
                     })}
                 </ul>
-                <ul tw="flex flex-col pl-[64px] text-[44px]">
+                <ul tw="flex flex-col pl-[64px] text-[40px]">
                     {orConditions.map((condition, i) => {
                         return (
                             <li key={i}>

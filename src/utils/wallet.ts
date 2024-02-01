@@ -1,6 +1,6 @@
 import { Address, createPublicClient, hexToString, http, slice } from "viem";
 import { getEnsName } from "viem/actions";
-import { base, baseSepolia, mainnet, zora } from "viem/chains";
+import { base, baseSepolia, mainnet, optimism, zora } from "viem/chains";
 
 export const mainnetPublicClient = createPublicClient({
     chain: mainnet,
@@ -15,6 +15,11 @@ export const basePublicClient = createPublicClient({
 export const baseSepoliaPublicClient = createPublicClient({
     chain: baseSepolia,
     transport: http(),
+});
+
+export const optimismClient = createPublicClient({
+    chain: optimism,
+    transport: http(`https://opt-mainnet.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`),
 });
 
 export const zoraPublicClient = createPublicClient({

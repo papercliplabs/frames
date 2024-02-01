@@ -1,6 +1,6 @@
 import { Address } from "viem";
 import { CollectionConfig } from "../collectionConfig";
-import { basePublicClient, baseSepoliaPublicClient, mainnetPublicClient } from "@/utils/wallet";
+import { basePublicClient, baseSepoliaPublicClient, mainnetPublicClient, optimismClient } from "@/utils/wallet";
 import { isNftBalanceAboveThreshold } from "../commonChecks/nftBalance";
 import { isCastLikedByUser, isChannelFollowedByUser } from "../commonChecks/farcaster";
 
@@ -38,6 +38,10 @@ async function isFrameVrHolder(userAddress: Address, userId: number, castHash: s
     return isNftBalanceAboveThreshold(basePublicClient, "0x73d8048044B24e6FbA5833849c3e5c26c6523719", userAddress, 0);
 }
 
+async function isNomoNounHolder(userAddress: Address, userId: number, castHash: string): Promise<boolean> {
+    return isNftBalanceAboveThreshold(optimismClient, "0x1464eBBf9ecd642d42Db8e8827919fdd4A786987", userAddress, 0);
+}
+
 export const basedAndYellowFrameEditionOneCollectionConfig: CollectionConfig = {
     client: basePublicClient,
     collectionName: "Based and Yellow Frame Edition",
@@ -53,6 +57,7 @@ export const basedAndYellowFrameEditionOneCollectionConfig: CollectionConfig = {
         { name: "Noun DAO member", description: "", check: isNounHolder },
         { name: "Yellow Collective member", description: "", check: isYellowCollectiveHolder },
         { name: "Purple DAO member", description: "", check: isPurpleDaoHolder },
+        { name: "Nomo Noun member", description: "", check: isNomoNounHolder },
         { name: "Frame NFT holder", description: "", check: isFrameNftHolder },
         { name: "Frame VR holder", description: "", check: isFrameVrHolder },
     ],
