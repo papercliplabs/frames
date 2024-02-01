@@ -8,9 +8,19 @@ const nextConfig = {
                 permanent: false,
             },
             {
-               source: "/redirects/:route*",
-               destination: "https://:route*",
-               permanent: false,
+                source: "/redirects/etherscan/:route*",
+                destination: "https://etherscan.io/:route*",
+                permanent: false,
+            },
+            {
+                source: "/redirects/basescan/:route*",
+                destination: "https://basescan.org/:route*",
+                permanent: false,
+            },
+            {
+                source: "/redirects/:route*",
+                destination: "https://:route*",
+                permanent: false,
             },
             {
                source: "/based-dao/auction",
