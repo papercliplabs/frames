@@ -59,6 +59,9 @@ export async function POST(req: NextRequest, { params }: { params: { collection:
         mintAndConditionsMet = true;
         mintOrConditionsMet = config.mintOrConditions.length == 0 ? true : false;
 
+        // Do this very first, to avoid race condition with mint + refresh
+        alreadyMinted = await isNftBalanceAboveThreshold(config.client, config.collectionAddress, userAddress, 0);
+
         if (!castHash || !userId) {
             console.error("NO cast hash or user id, should not be possible - ", castHash, userId);
             return Response.error();
@@ -74,8 +77,6 @@ export async function POST(req: NextRequest, { params }: { params: { collection:
             mintOrConditionResults.push(satisfied ? 1 : 0);
             mintOrConditionsMet = mintOrConditionsMet || satisfied;
         }
-
-        alreadyMinted = await isNftBalanceAboveThreshold(config.client, config.collectionAddress, userAddress, 0);
     }
 
     const mintConditionsMet = mintAndConditionsMet && mintOrConditionsMet;
