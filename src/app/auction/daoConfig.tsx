@@ -1,5 +1,5 @@
 import { Address, PublicClient, formatEther } from "viem";
-import { basePublicClient, mainnetPublicClient } from "@/utils/wallet";
+import { basePublicClient, mainnetPublicClient, zoraPublicClient } from "@/utils/wallet";
 import { FontType } from "@/utils/baseImg";
 
 export type NounsDaoType = "originalNouns" | "nounsBuilder";
@@ -28,7 +28,8 @@ export type SupportedAuctionDao =
     | "based-dao"
     | "builder-dao"
     | "based-management"
-    | "lil-nouns";
+    | "lil-nouns"
+    | "energy-dao";
 
 export const auctionConfigs: Record<SupportedAuctionDao, AuctionConfig> = {
     nouns: {
@@ -144,6 +145,23 @@ export const auctionConfigs: Record<SupportedAuctionDao, AuctionConfig> = {
             backgroundColor: "#7cc5f2",
             textColor: "white",
             fontType: "londrina",
+        },
+    },
+    "energy-dao": {
+        client: zoraPublicClient,
+        auctionAddress: "0x94eed78a8e3e862d195cdde333a2201f6517ad97",
+        tokenAddress: "0x32297b7416294b1acf404b6148a3c58107ba8afd",
+        firstPageImage: `${process.env.NEXT_PUBLIC_URL}/images/energy-auction-house.png`,
+        daoType: "nounsBuilder",
+        title: "Energy DAO",
+        description:
+            "ENERGY is a creative grants collective. We fund creative arts and engineering projects on Zora Network.",
+        auctionUrl: "nouns.build/dao/zora/0x32297b7416294b1acf404b6148a3c58107ba8afd",
+        tokenNamePrefix: "Energy #",
+        style: {
+            backgroundColor: "white",
+            textColor: "black",
+            fontType: "inter",
         },
     },
 };
