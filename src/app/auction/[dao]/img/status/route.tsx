@@ -1,32 +1,37 @@
 import { NextRequest } from "next/server";
-import { FontType, baseImage } from "@/utils/baseImg";
-import NounAuctionStatus from "@/components/NounAuctionStatus";
+import { baseImage } from "@/utils/baseImg";
+import NounAuctionStatus from "@/app/auction/components/NounAuctionStatus";
+import { auctionConfigs, SupportedAuctionDao } from "../../../daoConfig";
 
-export async function GET(req: NextRequest): Promise<Response> {
-    const nounId = req.nextUrl.searchParams.get("id");
-    const nounImgSrc = req.nextUrl.searchParams.get("nounImgSrc");
-    const timeRemaining = req.nextUrl.searchParams.get("time");
-    const bid = req.nextUrl.searchParams.get("bid");
-    const bidder = req.nextUrl.searchParams.get("bidder");
-    const collectionName = req.nextUrl.searchParams.get("collectionName");
-    const fontType = (req.nextUrl.searchParams.get("fontType") ?? "pally") as FontType;
-    const backgroundColor = req.nextUrl.searchParams.get("backgroundColor");
-    const textColor = req.nextUrl.searchParams.get("textColor");
+export async function GET(req: NextRequest, { params }: { params: { dao: string } }): Promise<Response> {
+    const config = auctionConfigs[params.dao as SupportedAuctionDao];
+
+    if (!config) {
+        console.error("No auction config found - ", params.dao);
+    }
+
+    const { nounId, nounImgSrc, timeRemaining, bidFormatted, bidder, dynamicTextColor } =
+        await config.getAuctionDetails({
+            client: config.client,
+            auctionAddress: config.auctionAddress,
+            tokenAddress: config.tokenAddress,
+        });
 
     return await baseImage({
         content: (
-            <NounAuctionStatus
-                id={nounId}
+            <config.auctionStatusComponent
+                id={nounId.toString()}
                 imgSrc={nounImgSrc}
                 timeRemaining={timeRemaining}
-                bid={bid}
+                bid={bidFormatted}
                 bidder={bidder}
-                collectionName={collectionName}
-                backgroundColor={backgroundColor}
-                textColor={textColor}
+                collectionName={config.tokenNamePrefix}
+                backgroundColor={config.style.backgroundColor}
+                baseTextColor={config.style.textColor}
+                highlightTextColor={dynamicTextColor ?? config.style.textColor}
             />
         ),
-        fontType: fontType,
+        fontType: config.style.fontType,
     });
 }
 

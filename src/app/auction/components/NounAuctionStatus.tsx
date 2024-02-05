@@ -1,18 +1,7 @@
 import { ReactElement } from "react";
-import { Optional } from "@/utils/types";
+import { AuctionStatusProps } from "./AuctionStatusProps";
 
-interface AuctionStatusProps {
-    id: Optional<string>;
-    imgSrc: Optional<string>;
-    timeRemaining: Optional<string>;
-    bid: Optional<string>;
-    bidder: Optional<string>;
-    collectionName: Optional<string>; // Ex: "Noun ", "Purple #"
-    backgroundColor: Optional<string>;
-    textColor: Optional<string>;
-}
-
-export default function AuctionStatus({
+export default function NounAuctionStatus({
     id,
     imgSrc,
     timeRemaining,
@@ -20,12 +9,13 @@ export default function AuctionStatus({
     bidder,
     collectionName,
     backgroundColor,
-    textColor,
+    baseTextColor,
+    highlightTextColor,
 }: AuctionStatusProps): ReactElement {
     return (
         <div
             tw="flex w-full h-full justify-center items-center text-[64px]"
-            style={{ backgroundColor: backgroundColor ?? "white", color: textColor ?? "black" }}
+            style={{ backgroundColor: backgroundColor ?? "white", color: baseTextColor ?? "black" }}
         >
             <img
                 src={imgSrc ?? ""}
