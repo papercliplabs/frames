@@ -1,41 +1,34 @@
 import { Address, PublicClient, formatEther } from "viem";
-import { readContract } from "viem/actions";
+import { readContract, multicall } from "viem/actions";
 import { ImageData, getNounData } from "@nouns/assets";
 import { buildSVG } from "@nouns/sdk";
-import { NounsDaoType } from "./daoConfig";
 import { getWalletName } from "@/utils/wallet";
 import { formatNumber, formatTimeLeft } from "@/utils/format";
 
 const { palette } = ImageData; // Used with `buildSVG``
 
-interface AuctionDetails {
-    nounId: number;
-    nounImgSrc: string;
-    timeRemaining: string;
-    bidFormatted: string;
-    bidder: string;
-}
+const parseBase64String = (val: string) => {
+    const clean: string = val?.substring(29);
+    const json = Buffer.from(clean, "base64").toString();
+    return JSON.parse(json);
+};
 
-interface GetAuctionDetailsParams {
+export interface GetAuctionDetailsParams {
     client: PublicClient;
     auctionAddress: Address;
     tokenAddress: Address;
 }
 
-export async function getAuctionDetails(
-    params: GetAuctionDetailsParams & { type: NounsDaoType }
-): Promise<AuctionDetails> {
-    switch (params.type) {
-        default:
-            console.error("getAuctionDetails: unsupported type - ", params.type);
-        case "originalNouns":
-            return await getNounOgAuctionDetails(params);
-        case "nounsBuilder":
-            return await getNounBuilderAuctionDetails(params);
-    }
+export interface AuctionDetails {
+    nounId: number;
+    nounImgSrc: string;
+    timeRemaining: string;
+    bidFormatted: string;
+    bidder: string;
+    dynamicTextColor?: string;
 }
 
-async function getNounOgAuctionDetails({
+export async function getNounOgAuctionDetails({
     client,
     auctionAddress,
     tokenAddress,
@@ -106,7 +99,7 @@ async function getNounOgAuctionDetails({
 }
 
 // builder folks decided to change the contract interfaces...
-async function getNounBuilderAuctionDetails({
+export async function getNounBuilderAuctionDetails({
     client,
     auctionAddress,
     tokenAddress,
@@ -151,11 +144,6 @@ async function getNounBuilderAuctionDetails({
         args: [nounId],
     });
 
-    const parseBase64String = (val: string) => {
-        const clean: string = val?.substring(29);
-        const json = Buffer.from(clean, "base64").toString();
-        return JSON.parse(json);
-    };
     const imgSrc = parseBase64String(tokenUri).image;
 
     const now = Date.now() / 1000;
@@ -170,5 +158,122 @@ async function getNounBuilderAuctionDetails({
         timeRemaining: timeRemainingFormatter,
         bidFormatted: currentBidFormatted,
         bidder,
+    };
+}
+
+export async function getBeansDaoAuctionDetails({
+    client,
+    auctionAddress,
+    tokenAddress,
+}: GetAuctionDetailsParams): Promise<AuctionDetails> {
+    const auctionAbi = [
+        {
+            inputs: [],
+            name: "auction",
+            outputs: [
+                { internalType: "uint256", name: "beanId", type: "uint256" },
+                { internalType: "uint256", name: "amount", type: "uint256" },
+                { internalType: "uint256", name: "startTime", type: "uint256" },
+                { internalType: "uint256", name: "endTime", type: "uint256" },
+                { internalType: "address", name: "bidder", type: "address" },
+                { internalType: "bool", name: "settled", type: "bool" },
+            ],
+            stateMutability: "view",
+            type: "function",
+        },
+    ] as const;
+
+    const tokenAbi = [
+        {
+            inputs: [{ internalType: "uint256", name: "tokenId", type: "uint256" }],
+            name: "tokenURI",
+            outputs: [{ internalType: "string", name: "", type: "string" }],
+            stateMutability: "view",
+            type: "function",
+        },
+        {
+            inputs: [{ internalType: "uint256", name: "tokenId", type: "uint256" }],
+            name: "seeds",
+            outputs: [
+                { internalType: "uint256", name: "classOne", type: "uint256" },
+                { internalType: "uint256", name: "classTwo", type: "uint256" },
+                { internalType: "uint256", name: "size", type: "uint256" },
+                { internalType: "uint256", name: "helmetLib", type: "uint256" },
+                { internalType: "uint256", name: "helmet", type: "uint256" },
+                { internalType: "uint256", name: "gearLib", type: "uint256" },
+                { internalType: "uint256", name: "gear", type: "uint256" },
+                { internalType: "uint256", name: "vibe", type: "uint256" },
+            ],
+            stateMutability: "view",
+            type: "function",
+        },
+        {
+            inputs: [],
+            name: "descriptor",
+            outputs: [{ internalType: "address", name: "descriptor", type: "address" }],
+            stateMutability: "view",
+            type: "function",
+        },
+    ] as const;
+
+    const descriptorAbi = [
+        {
+            inputs: [{ internalType: "uint256", name: "index", type: "uint256" }],
+            name: "classOne",
+            outputs: [{ internalType: "string", name: "", type: "string" }],
+            stateMutability: "view",
+            type: "function",
+        },
+    ] as const;
+
+    const [beanId, currentBid, startTime, endTime, currentBidder, settled] = await readContract(client, {
+        address: auctionAddress,
+        abi: auctionAbi,
+        functionName: "auction",
+    });
+
+    const tokenUri = await readContract(client, {
+        address: tokenAddress,
+        abi: tokenAbi,
+        functionName: "tokenURI",
+        args: [beanId],
+    });
+
+    const [classOne] = await readContract(client, {
+        address: tokenAddress,
+        abi: tokenAbi,
+        functionName: "seeds",
+        args: [beanId],
+    });
+
+    const descriptorAddress = await readContract(client, {
+        address: tokenAddress,
+        abi: tokenAbi,
+        functionName: "descriptor",
+        args: [],
+    });
+
+    const highlightColor = await readContract(client, {
+        address: descriptorAddress,
+        abi: descriptorAbi,
+        functionName: "classOne",
+        args: [classOne],
+    });
+
+    const imgSrc = parseBase64String(tokenUri).image;
+
+    const now = Date.now() / 1000;
+    const timeRemainingFormatter = formatTimeLeft(settled ? 0 : Math.max(Number(endTime.toString()) - now, 0));
+    const currentBidFormatted = formatNumber(formatEther(currentBid), 4);
+
+    const bidder = await getWalletName({ address: currentBidder });
+
+    return {
+        nounId: Number(beanId.toString()),
+        nounImgSrc: imgSrc,
+        timeRemaining: timeRemainingFormatter,
+        bidFormatted: currentBidFormatted,
+        bidder,
+        dynamicTextColor: `#${highlightColor}`,
     };
 }

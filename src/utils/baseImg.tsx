@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 import { ReactElement } from "react";
 
-export type FontType = "londrina" | "pally" | "inter";
+export type FontType = "londrina" | "pally" | "inter" | "druk";
 
 interface BaseImageParameters {
     content: ReactElement;
@@ -12,6 +12,7 @@ const fontLookup: Record<FontType, string> = {
     londrina: "fonts/LondrinaSolid-NNS.ttf",
     pally: "fonts/Pally-Bold.ttf",
     inter: "fonts/Inter-Bold.ttf",
+    druk: "fonts/Druk-Wide-Medium.ttf",
 };
 
 export async function baseImage({ content, fontType }: BaseImageParameters): Promise<ImageResponse> {
