@@ -1,14 +1,14 @@
 import { FrameRequest } from "./farcaster";
 
-export async function mintNftWithSyndicate(request: FrameRequest) {
+export async function mintNftWithSyndicate(request: FrameRequest, apiKey: string) {
     const syndicateMintRes = await fetch("https://frame.syndicate.io/api/mint", {
         method: "POST",
         headers: {
             "content-type": "application/json",
-            Authorization: `Bearer ${process.env.SYNDICATE_API_KEY}`,
+            Authorization: `Bearer ${apiKey}`,
         },
         body: JSON.stringify({
-            frameTrustedData: request.trustedData.messageBytes, // You can also get this data from req.body.trustedData.messageBytes
+            frameTrustedData: request.trustedData.messageBytes,
         }),
     });
 
