@@ -3,10 +3,9 @@ import { FrameButtonInfo, generateFrameMetadata } from "@/utils/metadata";
 import { SupportedMintCollection, collectionConfigs } from "../collectionConfig";
 import { getAddress } from "viem";
 import { FrameRequest, validateFrameAndGetPayload } from "@/utils/farcaster";
-import { mintNftWithSyndicate } from "@/utils/syndicate";
+import { track } from "@vercel/analytics/server";
 import { isNftBalanceAboveThreshold } from "../commonChecks/nftBalance";
 import { isNftSoldOut } from "../commonChecks/nftSoldOut";
-import { track } from "@vercel/analytics/server";
 
 export async function GET(req: NextRequest, { params }: { params: { collection: string } }): Promise<Response> {
     const config = collectionConfigs[params.collection as SupportedMintCollection];
@@ -42,48 +41,53 @@ export async function POST(req: NextRequest, { params }: { params: { collection:
         return Response.error();
     }
 
-    let verifiedAddress = payload.action?.interactor?.verifications[0];
+    const verifiedAddress = payload.action?.interactor?.verifications[0];
+    const soldOut = await isNftSoldOut(config.client, config.collectionAddress);
 
     let mintAndConditionResults: number[] = [];
     let mintOrConditionResults: number[] = [];
 
     let mintAndConditionsMet = false;
     let mintOrConditionsMet = false;
+
     let alreadyMinted = true;
 
-    if (verifiedAddress) {
+    if (verifiedAddress && !soldOut) {
         const userAddress = getAddress(verifiedAddress);
         const castHash = payload.action?.cast?.hash;
         const userId = payload.action?.interactor?.fid;
 
-        mintAndConditionsMet = true;
-        mintOrConditionsMet = config.mintOrConditions.length == 0 ? true : false;
-
         // Do this very first, to avoid race condition with mint + refresh
         alreadyMinted = await isNftBalanceAboveThreshold(config.client, config.collectionAddress, userAddress, 0);
 
-        if (!castHash || !userId) {
-            console.error("NO cast hash or user id, should not be possible - ", castHash, userId);
-            return Response.error();
-        }
-        for (const condition of config.mintAndConditions) {
-            const satisfied = await condition.check(userAddress, userId, castHash);
-            mintAndConditionResults.push(satisfied ? 1 : 0);
-            mintAndConditionsMet = mintAndConditionsMet && satisfied;
-        }
+        // Don't bother checking if already minted, doesn't matter
+        if (!alreadyMinted) {
+            mintAndConditionsMet = true;
+            mintOrConditionsMet = config.mintOrConditions.length == 0 ? true : false;
 
-        for (const condition of config.mintOrConditions) {
-            const satisfied = await condition.check(userAddress, userId, castHash);
-            mintOrConditionResults.push(satisfied ? 1 : 0);
-            mintOrConditionsMet = mintOrConditionsMet || satisfied;
+            if (!castHash || !userId) {
+                console.error("NO cast hash or user id, should not be possible - ", castHash, userId);
+                return Response.error();
+            }
+            for (const condition of config.mintAndConditions) {
+                const satisfied = await condition.check(userAddress, userId, castHash);
+                mintAndConditionResults.push(satisfied ? 1 : 0);
+                mintAndConditionsMet = mintAndConditionsMet && satisfied;
+            }
+
+            for (const condition of config.mintOrConditions) {
+                const satisfied = await condition.check(userAddress, userId, castHash);
+                mintOrConditionResults.push(satisfied ? 1 : 0);
+                mintOrConditionsMet = mintOrConditionsMet || satisfied;
+            }
         }
     }
 
     const mintConditionsMet = mintAndConditionsMet && mintOrConditionsMet;
 
-    const soldOut = await isNftSoldOut(config.client, config.collectionAddress);
-
+    // Logging params:
     const username = payload?.action?.interactor?.username;
+    const fid = payload?.action?.interactor?.fid;
 
     const {
         image,
@@ -95,37 +99,38 @@ export async function POST(req: NextRequest, { params }: { params: { collection:
         buttonInfo: [FrameButtonInfo?, FrameButtonInfo?, FrameButtonInfo?, FrameButtonInfo?];
     } = await (async () => {
         if (!verifiedAddress) {
-            console.log("NOT VERIFIED ADDRESS", username);
-            await track("mint-yellow-collective-not-verified-address");
+            console.log("NOT VERIFIED ADDRESS", username, fid);
+            await track(`mint-${params.collection}-not-verified-address`);
             return {
                 image: config.noAddressImage,
                 postUrl: `${process.env.NEXT_PUBLIC_URL}/mint/${params.collection}/terminal-failed`,
                 buttonInfo: [{ title: config.learnMoreName, action: "post_redirect" }],
             };
         } else if (soldOut) {
-            console.log("SOLD OUT", username);
-            await track("mint-yellow-collective-sold-out");
+            console.log("SOLD OUT", username, fid);
+            await track(`mint-${params.collection}-sold-out`);
             return {
                 image: config.soldOutImage,
                 postUrl: `${process.env.NEXT_PUBLIC_URL}/mint/${params.collection}/terminal-failed`,
                 buttonInfo: [{ title: config.learnMoreName, action: "post_redirect" }],
             };
-        } else if (alreadyMinted && config.oneMintPerAddress) {
+        } else if (alreadyMinted) {
             // Already Minted
-            console.log("ALREADY MINTED", username);
-            await track("mint-yellow-collective-already-minted");
+            console.log("ALREADY MINTED", username, fid);
+            await track(`mint-${params.collection}-already-minted`);
             return {
                 image: config.alreadyMintedImage,
                 postUrl: `${process.env.NEXT_PUBLIC_URL}/mint/${params.collection}/terminal-failed`,
                 buttonInfo: [{ title: config.learnMoreName, action: "post_redirect" }],
             };
         } else if (!mintConditionsMet) {
-            console.log("CONDITIONS NOT MET", username, mintAndConditionResults, mintOrConditionResults);
+            console.log("CONDITIONS NOT MET", username, fid, mintAndConditionResults, mintOrConditionResults);
             // Mint conditions not met
-            await track("mint-yellow-collective-conditions-not-met");
+            await track(`mint-${params.collection}-conditions-not-met`);
             const urlParams = new URLSearchParams([
                 ["mintAndConditionResults", mintAndConditionResults.toString()],
                 ["mintOrConditionResults", mintOrConditionResults.toString()],
+                ["rnd", Math.random().toString()],
             ]);
             return {
                 image: `${process.env.NEXT_PUBLIC_URL}/mint/${
@@ -136,9 +141,9 @@ export async function POST(req: NextRequest, { params }: { params: { collection:
             };
         } else {
             // Mint
-            await track("mint-yellow-collective-minting");
-            const mintResp = await mintNftWithSyndicate(request); // just says success or fail for now...
-            console.log("MINTING", username, mintResp);
+            await track(`mint-${params.collection}-minting`);
+            const mintResp = await config.mintCallback(request); // just says success of fail for now...
+            console.log("MINTING", username, fid, mintResp);
             const hash = "0x00"; // TODO: currently the syndicate api doesn't return
             return {
                 image: config.successfulMintImage,

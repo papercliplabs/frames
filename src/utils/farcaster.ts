@@ -62,3 +62,8 @@ export async function getLikedUserIdsForCast(castHash: string): Promise<number[]
         return [];
     }
 }
+
+export async function getUserInfo(fid: number, viewerFid?: number) {
+    const info = await neynarClient.lookupUserByFid(fid, viewerFid);
+    return info;
+}

@@ -1,7 +1,6 @@
 import { NextRequest } from "next/server";
 import { baseImage } from "@/utils/baseImg";
 import { collectionConfigs, SupportedMintCollection } from "@/app/mint/collectionConfig";
-import MintConditionsNotMet from "@/components/MintConditionsNotMet";
 
 export async function GET(req: NextRequest, { params }: { params: { collection: string } }): Promise<Response> {
     const mintAndConditionResults: boolean[] | undefined = req.nextUrl.searchParams
@@ -35,16 +34,8 @@ export async function GET(req: NextRequest, { params }: { params: { collection: 
     });
 
     return await baseImage({
-        content: (
-            <MintConditionsNotMet
-                andConditions={andConditions}
-                orConditions={orConditions}
-                backgroundColor={config.style.backgroundColor}
-                fontColor={config.style.fontColor}
-                icon={config.conditionsNotMetIcon}
-            />
-        ),
-        fontType: config.style.font,
+        content: <config.conditionsNotMetComponent andConditions={andConditions} orConditions={orConditions} />,
+        fontType: config.font,
     });
 }
 

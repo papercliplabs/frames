@@ -1,8 +1,11 @@
 import { Address } from "viem";
-import { CollectionConfig } from "../collectionConfig";
-import { basePublicClient, baseSepoliaPublicClient, mainnetPublicClient, optimismClient } from "@/utils/wallet";
+import { CollectionConfig, MintConditionsNotMetParams } from "../collectionConfig";
+import { basePublicClient, mainnetPublicClient, optimismClient } from "@/utils/wallet";
 import { isNftBalanceAboveThreshold } from "../commonChecks/nftBalance";
 import { isCastLikedByUser, isChannelFollowedByUser } from "../commonChecks/farcaster";
+import { ReactElement } from "react";
+import { FrameRequest } from "@/utils/farcaster";
+import { mintNftWithSyndicate } from "@/utils/syndicate";
 
 async function isYellowChannelFollowedByUser(userAddress: Address, userId: number, castHash: string): Promise<boolean> {
     return isChannelFollowedByUser("yellow", userId);
@@ -42,6 +45,10 @@ async function isNomoNounHolder(userAddress: Address, userId: number, castHash: 
     return isNftBalanceAboveThreshold(optimismClient, "0x1464eBBf9ecd642d42Db8e8827919fdd4A786987", userAddress, 0);
 }
 
+async function mintCallback(request: FrameRequest): Promise<any> {
+    return mintNftWithSyndicate(request, process.env.YELLOW_COLLECTIVE_EDITION_ONE_SYNDICATE_API_KEY!);
+}
+
 export const basedAndYellowFrameEditionOneCollectionConfig: CollectionConfig = {
     client: basePublicClient,
     collectionName: "Based and Yellow Frame Edition",
@@ -61,16 +68,49 @@ export const basedAndYellowFrameEditionOneCollectionConfig: CollectionConfig = {
         { name: "Frame NFT holder", description: "", check: isFrameNftHolder },
         { name: "Frame VR holder", description: "", check: isFrameVrHolder },
     ],
-    oneMintPerAddress: true,
     homePageImage: `${process.env.NEXT_PUBLIC_URL}/images/mint/based-and-yellow-frame-edition-one/home.png`,
     noAddressImage: `${process.env.NEXT_PUBLIC_URL}/images/mint/based-and-yellow-frame-edition-one/no-address.png`,
     soldOutImage: `${process.env.NEXT_PUBLIC_URL}/images/mint/based-and-yellow-frame-edition-one/sold-out.png`,
     alreadyMintedImage: `${process.env.NEXT_PUBLIC_URL}/images/mint/based-and-yellow-frame-edition-one/already-minted.png`,
     successfulMintImage: `${process.env.NEXT_PUBLIC_URL}/images/mint/based-and-yellow-frame-edition-one/mint-successful.png`,
-    conditionsNotMetIcon: `${process.env.NEXT_PUBLIC_URL}/images/mint/based-and-yellow-frame-edition-one/conditions-not-met-icon.png`,
-    style: {
-        backgroundColor: "#FBCB07",
-        fontColor: "black",
-        font: "pally",
-    },
+    conditionsNotMetComponent: MintConditionsNotMet,
+    mintCallback,
+    font: "pally",
 };
+
+function MintConditionsNotMet({ andConditions, orConditions }: MintConditionsNotMetParams): ReactElement {
+    const orMet = orConditions.reduce((acc, cond) => acc || cond.met, false);
+    const andConditionsWithOr = [...andConditions, { name: "One of:", description: "", met: orMet }];
+    return (
+        <div
+            tw="flex flex-row w-full h-full text-[52px] p-[64px]"
+            style={{ backgroundColor: "#FBCB07", color: "black" }}
+        >
+            <span tw="text-[68px] w-[300px] mr-[64px]">Missing Conditions...</span>
+            <span tw="flex flex-col w-[708px] pl-[64px]">
+                <ul tw="flex flex-col">
+                    {andConditionsWithOr.map((condition, i) => {
+                        return (
+                            <li key={i}>
+                                {condition.met ? "🟢 " : "⚪️ "} {condition.name}
+                            </li>
+                        );
+                    })}
+                </ul>
+                <ul tw="flex flex-col pl-[64px] text-[40px]">
+                    {orConditions.map((condition, i) => {
+                        return (
+                            <li key={i}>
+                                {condition.met ? "🟢 " : "⚪️ "} {condition.name}
+                            </li>
+                        );
+                    })}
+                </ul>
+            </span>
+            <img
+                src={`${process.env.NEXT_PUBLIC_URL}/images/mint/based-and-yellow-frame-edition-one/conditions-not-met-icon.png`}
+                style={{ position: "absolute", bottom: 0, left: 64, width: 300 }}
+            />
+        </div>
+    );
+}
