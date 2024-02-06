@@ -11,30 +11,16 @@ async function isBeansChannelFollowedByUser(userAddress: Address, userId: number
     return isChannelFollowedByUser("beans", userId);
 }
 
-async function isNounHolder(userAddress: Address, userId: number, castHash: string): Promise<boolean> {
-    return isNftBalanceAboveThreshold(
-        mainnetPublicClient,
-        "0x9c8ff314c9bc7f6e59a9d9225fb22946427edc03",
-        userAddress,
-        0
-    );
+async function isNounsChannelFollowedByUser(userAddress: Address, userId: number, castHash: string): Promise<boolean> {
+    return isChannelFollowedByUser("nouns", userId);
+}
+
+async function isYellowChannelFollowedByUser(userAddress: Address, userId: number, castHash: string): Promise<boolean> {
+    return isChannelFollowedByUser("yellow", userId);
 }
 
 async function isFollowingBodegacatceo(userAddress: Address, userId: number, castHash: string): Promise<boolean> {
     return isUserFollowedByUser(11555, userId);
-}
-
-async function isYellowCollectiveHolder(userAddress: Address, userId: number, castHash: string): Promise<boolean> {
-    return isNftBalanceAboveThreshold(basePublicClient, "0x220e41499CF4d93a3629a5509410CBf9E6E0B109", userAddress, 0);
-}
-
-async function isBeansHolder(userAddress: Address, userId: number, castHash: string): Promise<boolean> {
-    return isNftBalanceAboveThreshold(
-        mainnetPublicClient,
-        "0x4A458eEA1954EfC6d8acCdaB82af031c33Ef72FE",
-        userAddress,
-        0
-    );
 }
 
 async function mintCallback(request: FrameRequest): Promise<any> {
@@ -54,9 +40,9 @@ export const beansTheAdventureBeginsConfig: CollectionConfig = {
         { name: "Follow @bodegacatceo", description: "test", check: isFollowingBodegacatceo },
     ],
     mintOrConditions: [
-        { name: "Noun DAO member", description: "", check: isNounHolder },
-        { name: "Yellow Collective member", description: "", check: isYellowCollectiveHolder },
-        { name: "BEANSDAO member", description: "", check: isBeansHolder },
+        // { name: "Follow /nouns channel", description: "", check: isNounsChannelFollowedByUser },
+        // { name: "Follow /yellow channel", description: "", check: isYellowChannelFollowedByUser },
+        // { name: "Follow /yellow channel", description: "", check: isYellowChannelFollowedByUser },
     ],
     homePageImage: `${process.env.NEXT_PUBLIC_URL}/images/mint/beans/the-adventure-begins/home.png`,
     noAddressImage: `${process.env.NEXT_PUBLIC_URL}/images/mint/beans/the-adventure-begins/no-address.png`,
@@ -92,7 +78,7 @@ function ConditionIcon({ met }: { met: boolean }) {
 
 function MintConditionsNotMet({ andConditions, orConditions }: MintConditionsNotMetParams): ReactElement {
     const orMet = orConditions.reduce((acc, cond) => acc || cond.met, false);
-    const andConditionsWithOr = [...andConditions, { name: "One of:", description: "", met: orMet }];
+    // const andConditionsWithOr = [...andConditions, { name: "One of:", description: "", met: orMet }];
 
     return (
         <div tw="flex w-full h-full p-[30px] bg-[#609CFF]">
@@ -100,7 +86,7 @@ function MintConditionsNotMet({ andConditions, orConditions }: MintConditionsNot
                 <div tw="flex text-[48px] w-full justify-center text-center">MISSING CONDITIONS</div>
                 <span tw="pl-[416px] pt-[32px] text-[28px] flex flex-col">
                     <ul tw="flex flex-col">
-                        {andConditionsWithOr.map((condition, i) => {
+                        {andConditions.map((condition, i) => {
                             return (
                                 <li key={i} tw="pb-[12px] flex flex-row items-center text-center">
                                     <ConditionIcon met={condition.met} /> <span tw="pb-[4px]">{condition.name}</span>
@@ -108,7 +94,7 @@ function MintConditionsNotMet({ andConditions, orConditions }: MintConditionsNot
                             );
                         })}
                     </ul>
-                    <ul tw="flex flex-col pl-[64px]">
+                    {/* <ul tw="flex flex-col pl-[64px]">
                         {orConditions.map((condition, i) => {
                             return (
                                 <li key={i} tw="pb-[12px] flex flex-row items-center text-center">
@@ -116,7 +102,7 @@ function MintConditionsNotMet({ andConditions, orConditions }: MintConditionsNot
                                 </li>
                             );
                         })}
-                    </ul>
+                    </ul> */}
                 </span>
 
                 <img
