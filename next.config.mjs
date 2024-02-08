@@ -103,6 +103,11 @@ const nextConfig = {
                 destination: "/auction/:dao",
                 permanent: false,
             }, 
+            {
+                source: "/carousel/:slug",
+                destination: "/carousel/:slug/0",
+                permanent: false,
+            },
         ];
       },
 };

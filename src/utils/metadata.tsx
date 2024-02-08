@@ -1,7 +1,9 @@
-export interface FrameButtonInfo {
-    title: string;
-    action: "post" | "post_redirect";
-}
+export type FrameButtonInfo =
+    | {
+          action: "post" | "post_redirect";
+          title: string;
+      }
+    | { action: "link"; title: string; redirectUrl: string };
 
 export interface GenerateFrameMetadataParams {
     image: string;
@@ -32,6 +34,10 @@ export function generateFrameMetadata({
         if (info) {
             metadata[`fc:frame:button:${i + 1}`] = info.title;
             metadata[`fc:frame:button:${i + 1}:action`] = info.action;
+
+            if (info.action == "link") {
+                metadata[`fc:frame:button:${i + 1}:target`] = info.redirectUrl;
+            }
         }
     });
 
