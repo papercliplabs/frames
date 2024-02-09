@@ -3,7 +3,7 @@ import { FrameButtonInfo, generateFrameMetadata } from "@/utils/metadata";
 import { getAddress } from "viem";
 import { FrameRequest, validateFrameAndGetPayload } from "@/utils/farcaster";
 import { SupportedMintCollection, mintConfigs } from "../configs";
-import { extractComposableQueryParams } from "@/utils/composableParams";
+import { extractComposableQueryParams, getComposeResponse } from "@/utils/composableParams";
 
 export async function GET(req: NextRequest, { params }: { params: { collection: string } }): Promise<Response> {
     const config = mintConfigs[params.collection as SupportedMintCollection];
@@ -24,7 +24,7 @@ export async function GET(req: NextRequest, { params }: { params: { collection: 
 
 export async function POST(req: NextRequest, { params }: { params: { collection: string } }): Promise<Response> {
     const config = mintConfigs[params.collection as SupportedMintCollection];
-    const { composeFrameUrl } = extractComposableQueryParams(req.nextUrl.searchParams);
+    const { composeFrameUrl, composing } = extractComposableQueryParams(req.nextUrl.searchParams);
 
     const request: FrameRequest = await req.json();
     const payload = await validateFrameAndGetPayload(request);
@@ -49,7 +49,7 @@ export async function POST(req: NextRequest, { params }: { params: { collection:
     ];
 
     // See README for flow chart diagram of this logic
-    const mintedOut = await config.decisionLogic.mintedOutCheck();
+    const mintedOut = false; //await config.decisionLogic.mintedOutCheck();
     if (mintedOut) {
         image = config.imgSrcs.mintedOut;
     } else {
@@ -67,7 +67,7 @@ export async function POST(req: NextRequest, { params }: { params: { collection:
                     getAddress(verifiedAddress),
                     payload
                 );
-                if (!mintConditionsMet) {
+                if (!mintConditionsMet && false) {
                     const urlParams = checkPayload;
                     urlParams.append("rnd", Math.random().toString());
                     image = `${process.env.NEXT_PUBLIC_URL}/mint/${
@@ -75,8 +75,9 @@ export async function POST(req: NextRequest, { params }: { params: { collection:
                     }/img/conditions-not-met?${urlParams.toString()}`;
                     buttonInfo = [{ title: "Refresh", action: "post" }];
                 } else {
-                    if (composeFrameUrl) {
-                        return Response.redirect(composeFrameUrl);
+                    if (composeFrameUrl && !composing) {
+                        const composeResponse = await getComposeResponse(composeFrameUrl, request);
+                        return new NextResponse(composeResponse);
                     } else {
                         // Mint
                         await config.mint(request, getAddress(verifiedAddress));

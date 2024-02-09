@@ -8,7 +8,6 @@ import { isNftBalanceAboveThreshold } from "../commonChecks/nftBalance";
 import { isCastLikedByUser, isChannelFollowedByUser } from "../commonChecks/farcaster";
 import { mintNftWithSyndicate } from "@/utils/syndicate";
 import { FrameRequest } from "@/utils/farcaster";
-import { CheckConfig } from "../collectionConfig";
 
 const CLIENT = basePublicClient;
 const COLLECTION_ADDRESS = getAddress("0xc75A328b9544eDD315011024c31d988Fc14f5972");
@@ -56,12 +55,12 @@ async function isNomoNounHolder(userAddress: Address, userId: number, castHash: 
     return isNftBalanceAboveThreshold(optimismClient, "0x1464eBBf9ecd642d42Db8e8827919fdd4A786987", userAddress, 0);
 }
 
-const andCheckConfigs: CheckConfig[] = [
+const andCheckConfigs = [
     { name: "Like this cast", check: isCastLikedByUser },
     { name: "Follow /yellow channel", check: isYellowChannelFollowedByUser },
 ];
 
-const orCheckConfigs: CheckConfig[] = [
+const orCheckConfigs = [
     { name: "Noun DAO member", check: isNounHolder },
     { name: "Yellow Collective member", check: isYellowCollectiveHolder },
     { name: "Purple DAO member", check: isPurpleDaoHolder },

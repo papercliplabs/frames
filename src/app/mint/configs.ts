@@ -3,6 +3,8 @@ import { Address } from "viem";
 import { basedAndYellowFrameEditionOneConfig } from "./collectionConfigs/basedAndYellowFrameEditionOne";
 import { FrameRequest } from "@/utils/farcaster";
 import { FontType } from "@/utils/baseImg";
+import { beansTheAdventureBeginsConfig } from "./collectionConfigs/beansTheAdventureBegins";
+import { beansEnteringTheUnknownConfig } from "./collectionConfigs/beansEnteringTheUnknown";
 
 export interface ConditionsNotMetComponentProps {
     checkPayload: URLSearchParams;
@@ -35,8 +37,13 @@ export interface MintConfig<T> {
     font: FontType;
 }
 
-export type SupportedMintCollection = "based-and-yellow-frame-edition-one";
+export type SupportedMintCollection =
+    | "based-and-yellow-frame-edition-one"
+    | "beans-the-adventure-begins"
+    | "beans-entering-the-unknown";
 
 export const mintConfigs: Record<SupportedMintCollection, MintConfig<any>> = {
     "based-and-yellow-frame-edition-one": basedAndYellowFrameEditionOneConfig,
+    "beans-the-adventure-begins": beansTheAdventureBeginsConfig,
+    "beans-entering-the-unknown": beansEnteringTheUnknownConfig,
 };

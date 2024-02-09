@@ -7,25 +7,28 @@ export const beansDungeonConfig: CarouselConfig = {
     },
     itemConfigs: [
         {
-            imgSrc: `${process.env.NEXT_PUBLIC_URL}/images/carousel/beans-dungeon/door-idle.gif`,
+            imgSrc: `${process.env.NEXT_PUBLIC_URL}/images/carousel/beans-dungeon/00-door-idle.gif`,
             navButtonConfigOverrides: {
-                nextButtonLabel: "Unlock the door 🔓",
+                nextButtonLabel: "Conditions met, unlock the door 🔓",
             },
         },
         {
-            imgSrc: `${process.env.NEXT_PUBLIC_URL}/images/carousel/beans-dungeon/door-open.gif`,
+            imgSrc: `${process.env.NEXT_PUBLIC_URL}/images/carousel/beans-dungeon/01-door-open.gif`,
             navButtonConfigOverrides: {
                 nextButtonLabel: "Enter the dungeon ⬆️",
             },
         },
         {
-            imgSrc: `${process.env.NEXT_PUBLIC_URL}/images/carousel/beans-dungeon/boss-1.png`,
+            imgSrc: `${process.env.NEXT_PUBLIC_URL}/images/carousel/beans-dungeon/02-boss.gif`,
         },
         {
-            imgSrc: `${process.env.NEXT_PUBLIC_URL}/images/carousel/beans-dungeon/boss-1.png`,
+            imgSrc: `${process.env.NEXT_PUBLIC_URL}/images/carousel/beans-dungeon/03-boss.gif`,
         },
         {
-            imgSrc: `${process.env.NEXT_PUBLIC_URL}/images/carousel/beans-dungeon/boss-1.png`,
+            imgSrc: `${process.env.NEXT_PUBLIC_URL}/images/carousel/beans-dungeon/04-boss.gif`,
+        },
+        {
+            imgSrc: `${process.env.NEXT_PUBLIC_URL}/images/carousel/beans-dungeon/05-boss.gif`,
         },
     ],
 };

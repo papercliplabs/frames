@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { generateFrameMetadata, FrameButtonInfo } from "@/utils/metadata";
 import { track } from "@vercel/analytics/server";
 import { SupportedAuctionDao, auctionConfigs } from "../daoConfig";
-import { extractComposableQueryParams } from "@/utils/composableParams";
+import { extractComposableQueryParams, getComposeResponse } from "@/utils/composableParams";
 
 export async function GET(req: NextRequest, { params }: { params: { dao: string } }): Promise<Response> {
     const config = auctionConfigs[params.dao as SupportedAuctionDao];
@@ -24,18 +24,21 @@ export async function GET(req: NextRequest, { params }: { params: { dao: string 
 
 export async function POST(req: NextRequest, { params }: { params: { dao: string } }): Promise<Response> {
     const config = auctionConfigs[params.dao as SupportedAuctionDao];
-    const { composeFrameUrl, composeFrameButtonLabel } = extractComposableQueryParams(req.nextUrl.searchParams);
+    const { composeFrameUrl, composeFrameButtonLabel, composing } = extractComposableQueryParams(
+        req.nextUrl.searchParams
+    );
 
     if (!config) {
         console.error("No auction config found - ", params.dao);
     }
 
     try {
-        const reqJson = await req.json();
-        const buttonIndex = reqJson["untrustedData"]["buttonIndex"];
+        const request = await req.json();
+        const buttonIndex = request["untrustedData"]["buttonIndex"];
 
-        if (buttonIndex == 3 && composeFrameUrl && composeFrameButtonLabel) {
-            return Response.redirect(composeFrameUrl);
+        if (buttonIndex == 3 && composeFrameUrl && composeFrameButtonLabel && !composing) {
+            const composeResponse = await getComposeResponse(composeFrameUrl, request);
+            return new NextResponse(composeResponse);
         }
     } catch {}
 
@@ -46,14 +49,9 @@ export async function POST(req: NextRequest, { params }: { params: { dao: string
     const composeButton: FrameButtonInfo | undefined =
         composeFrameUrl && composeFrameButtonLabel ? { title: composeFrameButtonLabel, action: "post" } : undefined;
 
-    // Hack to prevent image caching
-    const rnd = Math.random();
-
     return new NextResponse(
         generateFrameMetadata({
-            image: `${process.env.NEXT_PUBLIC_URL}/auction/${
-                params.dao
-            }/img/status?${req.nextUrl.searchParams.toString()}&rnd=${rnd}`,
+            image: `${process.env.NEXT_PUBLIC_URL}/auction/${params.dao}/img/status?rnd=${Math.random()}`,
             buttonInfo: [
                 { title: "Refresh", action: "post" },
                 { title: "Bid", action: "link", redirectUrl: config.auctionUrl },

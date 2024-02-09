@@ -4,7 +4,7 @@ import { SupportedCarouselSlugs, carouselConfigs } from "../../configs";
 import { getButtonInfoWithActionForCarouselItem } from "../../carouselUtils";
 import { FrameRequest, validateFrameAndGetPayload } from "@/utils/farcaster";
 import { isAllowedCaster, restrictedFrameResponse } from "@/utils/restrictedFrame";
-import { extractComposableQueryParams } from "@/utils/composableParams";
+import { extractComposableQueryParams, getComposeResponse } from "@/utils/composableParams";
 
 export async function GET(req: NextRequest, { params }: { params: { slug: string; page: string } }): Promise<Response> {
     const config = carouselConfigs[params.slug as SupportedCarouselSlugs];
@@ -30,10 +30,12 @@ export async function POST(
     req: NextRequest,
     { params }: { params: { slug: string; page: string } }
 ): Promise<Response> {
-    const request: FrameRequest = await req.json();
+    const request = await req.json();
     const payload = await validateFrameAndGetPayload(request);
 
-    const { composeFrameUrl, composeFrameButtonLabel } = extractComposableQueryParams(req.nextUrl.searchParams);
+    const { composeFrameUrl, composeFrameButtonLabel, composing } = extractComposableQueryParams(
+        req.nextUrl.searchParams
+    );
 
     if (!payload.valid) {
         console.error("Invalid frame - ", request);
@@ -53,13 +55,20 @@ export async function POST(
         return restrictedFrameResponse();
     }
 
-    const carouselAction = getButtonInfoWithActionForCarouselItem(config, page, composeFrameButtonLabel)[buttonIndex]
+    let carouselAction = getButtonInfoWithActionForCarouselItem(config, page, composeFrameButtonLabel)[buttonIndex]
         ?.carouselAction;
+
+    if (composing) {
+        // Ignore when composing
+        carouselAction = undefined;
+    }
 
     if (carouselAction == "compose") {
         const lastItem = page == config.itemConfigs.length - 1;
         const originalComposeUrl = config.itemConfigs[page].composeButtonConfig?.postUrl; // Has to exist if override doesn't, since action is from this frame
-        return Response.redirect(lastItem ? composeFrameUrl ?? originalComposeUrl! : originalComposeUrl!);
+        const url = lastItem ? composeFrameUrl ?? originalComposeUrl! : originalComposeUrl!;
+        const composeResponse = await getComposeResponse(url, request);
+        return new NextResponse(composeResponse);
     }
 
     const newPage = carouselAction == "next" ? page + 1 : carouselAction == "prev" ? page - 1 : page;

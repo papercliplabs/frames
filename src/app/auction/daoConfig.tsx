@@ -13,7 +13,7 @@ import NounAuctionStatus from "./components/NounAuctionStatus";
 import BeansAuctionStatus from "./components/BeansAuctionStatus";
 import { AuctionStatusProps } from "./components/AuctionStatusProps";
 
-interface AuctionConfig {
+export interface AuctionConfig {
     client: PublicClient;
     auctionAddress: Address;
     tokenAddress: Address;

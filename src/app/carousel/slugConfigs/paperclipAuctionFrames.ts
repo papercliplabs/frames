@@ -11,11 +11,18 @@ export const paperclipAuctionFramesConfig: CarouselConfig = {
         },
         {
             imgSrc: `${process.env.NEXT_PUBLIC_URL}/images/nouns-auction-house.png`,
+            // redirectButtonConfig: {
+            //     label: "TEST REDIR",
+            //     url: `${process.env.NEXT_PUBLIC_URL}/auction/nouns?${new URLSearchParams([
+            //         ["compose-frame-button-label", "Back to compilation ↩️"],
+            //         ["compose-frame-url", `${process.env.NEXT_PUBLIC_URL}/carousel/paperclip-auction-frames/1`],
+            //     ]).toString()}`,
+            // },
             composeButtonConfig: {
                 label: "Go To Frame ⬆️",
                 postUrl: `${process.env.NEXT_PUBLIC_URL}/auction/nouns?${new URLSearchParams([
                     ["compose-frame-button-label", "Back to compilation ↩️"],
-                    ["compose-frame-url", `${process.env.NEXT_PUBLIC_URL}/carousel/paperclip-auction-frames/1`],
+                    ["compose-frame-url", `/carousel/paperclip-auction-frames/1`],
                 ]).toString()}`,
             },
         },
@@ -25,7 +32,7 @@ export const paperclipAuctionFramesConfig: CarouselConfig = {
                 label: "Go To Frame ⬆️",
                 postUrl: `${process.env.NEXT_PUBLIC_URL}/auction/lil-nouns?${new URLSearchParams([
                     ["compose-frame-button-label", "Back to compilation ↩️"],
-                    ["compose-frame-url", `${process.env.NEXT_PUBLIC_URL}/carousel/paperclip-auction-frames/2`],
+                    ["compose-frame-url", `/carousel/paperclip-auction-frames/2`],
                 ]).toString()}`,
             },
         },
@@ -35,7 +42,7 @@ export const paperclipAuctionFramesConfig: CarouselConfig = {
                 label: "Go To Frame ⬆️",
                 postUrl: `${process.env.NEXT_PUBLIC_URL}/auction/beans-dao?${new URLSearchParams([
                     ["compose-frame-button-label", "Back to compilation ↩️"],
-                    ["compose-frame-url", `${process.env.NEXT_PUBLIC_URL}/carousel/paperclip-auction-frames/3`],
+                    ["compose-frame-url", `/carousel/paperclip-auction-frames/3`],
                 ]).toString()}`,
             },
         },
@@ -45,7 +52,7 @@ export const paperclipAuctionFramesConfig: CarouselConfig = {
                 label: "Go To Frame ⬆️",
                 postUrl: `${process.env.NEXT_PUBLIC_URL}/auction/yellow-collective?${new URLSearchParams([
                     ["compose-frame-button-label", "Back to compilation ↩️"],
-                    ["compose-frame-url", `${process.env.NEXT_PUBLIC_URL}/carousel/paperclip-auction-frames/4`],
+                    ["compose-frame-url", `/carousel/paperclip-auction-frames/4`],
                 ]).toString()}`,
             },
         },
@@ -55,7 +62,7 @@ export const paperclipAuctionFramesConfig: CarouselConfig = {
                 label: "Go To Frame ⬆️",
                 postUrl: `${process.env.NEXT_PUBLIC_URL}/auction/purple-dao?${new URLSearchParams([
                     ["compose-frame-button-label", "Back to compilation ↩️"],
-                    ["compose-frame-url", `${process.env.NEXT_PUBLIC_URL}/carousel/paperclip-auction-frames/5`],
+                    ["compose-frame-url", `/carousel/paperclip-auction-frames/5`],
                 ]).toString()}`,
             },
         },
@@ -65,7 +72,7 @@ export const paperclipAuctionFramesConfig: CarouselConfig = {
                 label: "Go To Frame ⬆️",
                 postUrl: `${process.env.NEXT_PUBLIC_URL}/auction/builder-dao?${new URLSearchParams([
                     ["compose-frame-button-label", "Back to compilation ↩️"],
-                    ["compose-frame-url", `${process.env.NEXT_PUBLIC_URL}/carousel/paperclip-auction-frames/6`],
+                    ["compose-frame-url", `/carousel/paperclip-auction-frames/6`],
                 ]).toString()}`,
             },
         },
@@ -75,7 +82,7 @@ export const paperclipAuctionFramesConfig: CarouselConfig = {
                 label: "Go To Frame ⬆️",
                 postUrl: `${process.env.NEXT_PUBLIC_URL}/auction/energy-dao?${new URLSearchParams([
                     ["compose-frame-button-label", "Back to compilation ↩️"],
-                    ["compose-frame-url", `${process.env.NEXT_PUBLIC_URL}/carousel/paperclip-auction-frames/7`],
+                    ["compose-frame-url", `/carousel/paperclip-auction-frames/7`],
                 ]).toString()}`,
             },
         },
@@ -85,7 +92,7 @@ export const paperclipAuctionFramesConfig: CarouselConfig = {
                 label: "Go To Frame ⬆️",
                 postUrl: `${process.env.NEXT_PUBLIC_URL}/auction/based-dao?${new URLSearchParams([
                     ["compose-frame-button-label", "Back to compilation ↩️"],
-                    ["compose-frame-url", `${process.env.NEXT_PUBLIC_URL}/carousel/paperclip-auction-frames/8`],
+                    ["compose-frame-url", `/carousel/paperclip-auction-frames/8`],
                 ]).toString()}`,
             },
         },
@@ -95,7 +102,7 @@ export const paperclipAuctionFramesConfig: CarouselConfig = {
                 label: "Go To Frame ⬆️",
                 postUrl: `${process.env.NEXT_PUBLIC_URL}/auction/based-management?${new URLSearchParams([
                     ["compose-frame-button-label", "Back to compilation ↩"],
-                    ["compose-frame-url", `${process.env.NEXT_PUBLIC_URL}/carousel/paperclip-auction-frames/9`],
+                    ["compose-frame-url", `/carousel/paperclip-auction-frames/9`],
                 ]).toString()}`,
             },
         },
@@ -107,5 +114,5 @@ export const paperclipAuctionFramesConfig: CarouselConfig = {
             },
         },
     ],
-    allowedCasterFids: [18655],
+    // allowedCasterFids: [18655],
 };
