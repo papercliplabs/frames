@@ -44,6 +44,11 @@ export interface CollectionConfig {
     font: FontType;
 }
 
+export interface CheckConfig {
+    name: string;
+    check: (userAddress: Address, userFid: number, cashHash: string) => Promise<boolean>;
+}
+
 export const collectionConfigs: Record<SupportedMintCollection, CollectionConfig> = {
     "based-and-yellow-frame-edition-one": basedAndYellowFrameEditionOneCollectionConfig,
     "beans-the-adventure-begins": beansTheAdventureBeginsConfig,
