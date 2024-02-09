@@ -14,5 +14,5 @@ export function restrictedFrameResponse(): NextResponse {
 
 export function isAllowedCaster(payload: ValidateFrameActionResponse, allowedCasterFids?: number[]): boolean {
     const authorFid = payload.action?.cast?.author?.fid;
-    return allowedCasterFids == undefined || (authorFid != undefined && !allowedCasterFids.includes(authorFid));
+    return allowedCasterFids == undefined || (authorFid != undefined && allowedCasterFids.includes(authorFid));
 }

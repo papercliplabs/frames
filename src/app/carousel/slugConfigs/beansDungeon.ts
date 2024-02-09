@@ -7,19 +7,25 @@ export const beansDungeonConfig: CarouselConfig = {
     },
     itemConfigs: [
         {
-            imgSrc: `${process.env.NEXT_PUBLIC_URL}/images/based-dao-auction-house.png`,
+            imgSrc: `${process.env.NEXT_PUBLIC_URL}/images/carousel/beans-dungeon/door-idle.gif`,
+            navButtonConfigOverrides: {
+                nextButtonLabel: "Unlock the door 🔓",
+            },
+        },
+        {
+            imgSrc: `${process.env.NEXT_PUBLIC_URL}/images/carousel/beans-dungeon/door-open.gif`,
             navButtonConfigOverrides: {
                 nextButtonLabel: "Enter the dungeon ⬆️",
             },
         },
         {
-            imgSrc: `${process.env.NEXT_PUBLIC_URL}/images/purple-auction-house.png`,
+            imgSrc: `${process.env.NEXT_PUBLIC_URL}/images/carousel/beans-dungeon/boss-1.png`,
         },
         {
-            imgSrc: `${process.env.NEXT_PUBLIC_URL}/images/nouns-auction-house.png`,
+            imgSrc: `${process.env.NEXT_PUBLIC_URL}/images/carousel/beans-dungeon/boss-1.png`,
         },
         {
-            imgSrc: `${process.env.NEXT_PUBLIC_URL}/images/yellow-auction-house.png`,
+            imgSrc: `${process.env.NEXT_PUBLIC_URL}/images/carousel/beans-dungeon/boss-1.png`,
         },
     ],
 };
