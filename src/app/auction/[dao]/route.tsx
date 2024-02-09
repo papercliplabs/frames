@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { generateFrameMetadata } from "@/utils/metadata";
+import { generateFrameMetadata, FrameButtonInfo } from "@/utils/metadata";
 import { track } from "@vercel/analytics/server";
 import { SupportedAuctionDao, auctionConfigs } from "../daoConfig";
+import { extractComposableQueryParams } from "@/utils/composableParams";
 
 export async function GET(req: NextRequest, { params }: { params: { dao: string } }): Promise<Response> {
     const config = auctionConfigs[params.dao as SupportedAuctionDao];
@@ -14,7 +15,7 @@ export async function GET(req: NextRequest, { params }: { params: { dao: string 
         generateFrameMetadata({
             image: config.firstPageImage,
             buttonInfo: [{ title: "View auction!", action: "post" }],
-            postUrl: `${process.env.NEXT_PUBLIC_URL}/auction/${params.dao}`,
+            postUrl: `${process.env.NEXT_PUBLIC_URL}/auction/${params.dao}?${req.nextUrl.searchParams.toString()}`,
             ogTitle: config.title,
             ogDescription: config.description,
         })
@@ -23,6 +24,7 @@ export async function GET(req: NextRequest, { params }: { params: { dao: string 
 
 export async function POST(req: NextRequest, { params }: { params: { dao: string } }): Promise<Response> {
     const config = auctionConfigs[params.dao as SupportedAuctionDao];
+    const { composeFrameUrl, composeFrameButtonLabel } = extractComposableQueryParams(req.nextUrl.searchParams);
 
     if (!config) {
         console.error("No auction config found - ", params.dao);
@@ -32,11 +34,8 @@ export async function POST(req: NextRequest, { params }: { params: { dao: string
         const reqJson = await req.json();
         const buttonIndex = reqJson["untrustedData"]["buttonIndex"];
 
-        if (buttonIndex == 2) {
-            await track("auction-bid", {
-                dao: params.dao,
-            });
-            return Response.redirect(`${process.env.NEXT_PUBLIC_URL}/redirects/${config.auctionUrl}`, 302);
+        if (buttonIndex == 3 && composeFrameUrl && composeFrameButtonLabel) {
+            return Response.redirect(composeFrameUrl);
         }
     } catch {}
 
@@ -44,17 +43,23 @@ export async function POST(req: NextRequest, { params }: { params: { dao: string
         dao: params.dao,
     });
 
+    const composeButton: FrameButtonInfo | undefined =
+        composeFrameUrl && composeFrameButtonLabel ? { title: composeFrameButtonLabel, action: "post" } : undefined;
+
     // Hack to prevent image caching
     const rnd = Math.random();
 
     return new NextResponse(
         generateFrameMetadata({
-            image: `${process.env.NEXT_PUBLIC_URL}/auction/${params.dao}/img/status?${rnd}`,
+            image: `${process.env.NEXT_PUBLIC_URL}/auction/${
+                params.dao
+            }/img/status?${req.nextUrl.searchParams.toString()}&rnd=${rnd}`,
             buttonInfo: [
                 { title: "Refresh", action: "post" },
-                { title: "Bid", action: "post_redirect" },
+                { title: "Bid", action: "link", redirectUrl: config.auctionUrl },
+                composeButton,
             ],
-            postUrl: `${process.env.NEXT_PUBLIC_URL}/auction/${params.dao}`,
+            postUrl: `${process.env.NEXT_PUBLIC_URL}/auction/${params.dao}?${req.nextUrl.searchParams.toString()}`,
             ogTitle: config.title,
             ogDescription: config.description,
         })

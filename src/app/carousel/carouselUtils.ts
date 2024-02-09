@@ -23,7 +23,7 @@ export function getButtonInfoWithActionForCarouselItem(
     }
 
     if (
-        !config.navButtonConfig.disablePrevNavigation &&
+        !config.navButtonConfig?.disablePrevNavigation &&
         !configItem.navButtonConfigOverrides?.disablePrevNavigation &&
         itemNumber != 0
     ) {
@@ -31,7 +31,7 @@ export function getButtonInfoWithActionForCarouselItem(
         frameButtons.push({
             action: "post",
             title:
-                configItem.navButtonConfigOverrides?.prevButtonLabel ?? config.navButtonConfig.prevButtonLabel ?? "<-",
+                configItem.navButtonConfigOverrides?.prevButtonLabel ?? config.navButtonConfig?.prevButtonLabel ?? "⬅️",
             carouselAction: "prev",
         });
     }
@@ -41,7 +41,7 @@ export function getButtonInfoWithActionForCarouselItem(
         frameButtons.push({
             action: "post",
             title:
-                configItem.navButtonConfigOverrides?.nextButtonLabel ?? config.navButtonConfig.nextButtonLabel ?? "->",
+                configItem.navButtonConfigOverrides?.nextButtonLabel ?? config.navButtonConfig?.nextButtonLabel ?? "➡️",
             carouselAction: "next",
         });
     }

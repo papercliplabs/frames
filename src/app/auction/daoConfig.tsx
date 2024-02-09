@@ -52,7 +52,7 @@ export const auctionConfigs: Record<SupportedAuctionDao, AuctionConfig> = {
         auctionStatusComponent: NounAuctionStatus,
         title: "Nouns DAO",
         description: "One Noun everyday, forever!",
-        auctionUrl: "nouns.wtf",
+        auctionUrl: "https://nouns.wtf",
         tokenNamePrefix: "Noun ",
         style: {
             backgroundColor: "white",
@@ -70,7 +70,7 @@ export const auctionConfigs: Record<SupportedAuctionDao, AuctionConfig> = {
         title: "The Yellow Collective",
         description:
             "An onchain club on the BASE Ethereum L2 network, designed to support and empower artists and creatives in the Nouns and Superchain ecosystems.",
-        auctionUrl: "yellowcollective.xyz",
+        auctionUrl: "https://yellowcollective.xyz",
         tokenNamePrefix: "Collective Noun #",
         style: {
             backgroundColor: "#FBCB07",
@@ -87,7 +87,7 @@ export const auctionConfigs: Record<SupportedAuctionDao, AuctionConfig> = {
         auctionStatusComponent: NounAuctionStatus,
         title: "Purple DAO",
         description: "Purple is a DAO whose goal is to proliferate and expand the Farcaster protocol and ecosystem.",
-        auctionUrl: "purple.construction",
+        auctionUrl: "https://purple.construction",
         tokenNamePrefix: "Purple #",
         style: {
             backgroundColor: "#7649C7",
@@ -105,7 +105,7 @@ export const auctionConfigs: Record<SupportedAuctionDao, AuctionConfig> = {
         title: "BASED DAO",
         description:
             "Our mission is to ignite identity, foster a vibrant community, establish effective governance, and cultivate a robust treasury that empowers and benefits our collective",
-        auctionUrl: "nouns.build/dao/base/0x10a5676ec8ae3d6b1f36a6f1a1526136ba7938bf",
+        auctionUrl: "https://nouns.build/dao/base/0x10a5676ec8ae3d6b1f36a6f1a1526136ba7938bf",
         tokenNamePrefix: "BASED DAO #",
         style: {
             backgroundColor: "#334afb",
@@ -123,7 +123,7 @@ export const auctionConfigs: Record<SupportedAuctionDao, AuctionConfig> = {
         title: "BASED DAO",
         description:
             "Builder DAO is dedicated to the creation and development of free and accessible DAO infrastructure as a public good.",
-        auctionUrl: "nouns.build/dao/ethereum/0xdf9b7d26c8fc806b1ae6273684556761ff02d422/408",
+        auctionUrl: "https://nouns.build/dao/ethereum/0xdf9b7d26c8fc806b1ae6273684556761ff02d422/408",
         tokenNamePrefix: "Builder #",
         style: {
             backgroundColor: "#0088ff",
@@ -140,7 +140,7 @@ export const auctionConfigs: Record<SupportedAuctionDao, AuctionConfig> = {
         auctionStatusComponent: NounAuctionStatus,
         title: "Based Management One",
         description: "Based Management is the culture layer of the Base chain.",
-        auctionUrl: "nouns.build/dao/base/0xB78b89EB81303a11CC597B4519035079453d8E31",
+        auctionUrl: "https://nouns.build/dao/base/0xB78b89EB81303a11CC597B4519035079453d8E31",
         tokenNamePrefix: "Based Management One #",
         style: {
             backgroundColor: "#135eff",
@@ -157,7 +157,7 @@ export const auctionConfigs: Record<SupportedAuctionDao, AuctionConfig> = {
         auctionStatusComponent: NounAuctionStatus,
         title: "Lil Nouns",
         description: "Lil Nouns are just like Nouns, but Lil!",
-        auctionUrl: "lilnouns.wtf",
+        auctionUrl: "https://lilnouns.wtf",
         tokenNamePrefix: "Lil Noun ",
         style: {
             backgroundColor: "#7cc5f2",
@@ -175,7 +175,7 @@ export const auctionConfigs: Record<SupportedAuctionDao, AuctionConfig> = {
         title: "Energy DAO",
         description:
             "ENERGY is a creative grants collective. We fund creative arts and engineering projects on Zora Network.",
-        auctionUrl: "nouns.build/dao/zora/0x32297b7416294b1acf404b6148a3c58107ba8afd",
+        auctionUrl: "https://nouns.build/dao/zora/0x32297b7416294b1acf404b6148a3c58107ba8afd",
         tokenNamePrefix: "Energy #",
         style: {
             backgroundColor: "white",
@@ -192,7 +192,7 @@ export const auctionConfigs: Record<SupportedAuctionDao, AuctionConfig> = {
         auctionStatusComponent: BeansAuctionStatus,
         title: "Beans DAO",
         description: "Beans are an experimental attempt to improve the formation of on-chain avatar communities.",
-        auctionUrl: "beans.wtf",
+        auctionUrl: "https://beans.wtf",
         tokenNamePrefix: "BEAN #",
         style: {
             backgroundColor: "black",

@@ -1,4 +1,5 @@
 import { beansDungeonConfig } from "./slugConfigs/beansDungeon";
+import { paperclipAuctionFramesConfig } from "./slugConfigs/paperclipAuctionFrames";
 
 export interface CarouselNavButtonConfig {
     disablePrevNavigation?: boolean; // Disabled backward navigation in the carousel
@@ -22,13 +23,14 @@ export interface CarouselItemConfig {
 }
 
 export interface CarouselConfig {
-    navButtonConfig: CarouselNavButtonConfig;
+    navButtonConfig?: CarouselNavButtonConfig;
     itemConfigs: [CarouselItemConfig, CarouselItemConfig, ...CarouselItemConfig[]]; // Min length of 2
     allowedCasterFids?: number[]; // Restricts who is allowed to cast this frame, no restrictions if undefined
 }
 
-export type SupportedCarouselSlugs = "beans-dungeon";
+export type SupportedCarouselSlugs = "beans-dungeon" | "paperclip-auction-frames";
 
 export const carouselConfigs: Record<SupportedCarouselSlugs, CarouselConfig> = {
     "beans-dungeon": beansDungeonConfig,
+    "paperclip-auction-frames": paperclipAuctionFramesConfig,
 };

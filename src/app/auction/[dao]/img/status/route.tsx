@@ -1,6 +1,5 @@
 import { NextRequest } from "next/server";
 import { baseImage } from "@/utils/baseImg";
-import NounAuctionStatus from "@/app/auction/components/NounAuctionStatus";
 import { auctionConfigs, SupportedAuctionDao } from "../../../daoConfig";
 
 export async function GET(req: NextRequest, { params }: { params: { dao: string } }): Promise<Response> {

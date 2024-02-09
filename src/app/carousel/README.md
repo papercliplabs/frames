@@ -20,8 +20,8 @@ See [configs.ts](./configs.ts) for how to configure, each page has a unique imag
 There is also additional query parameter, which can override composability on the last page of the carousel.
 This allows another frame to use the carousel, and at the end go back, or go to the another frame! 
 That is next level composability! 
-* `completion-compose-label`: override for the last page compose button label for the carousel
-* `completion-compose-url`: override for last page compose post url for the carousel 
+* `compose-frame-button-label`: override for the last page compose button label for the carousel
+* `compose-frame-url`: override for last page compose post url for the carousel 
 Note: you need to make sure the entire url is <256 characters 
 
 If you don't want to allow composability, or want to restrict which users can cast this frame, you can add FID's to the `allowedCasterFids` array. If the caster is not in this array, the frame will show an error upon first interaction.
