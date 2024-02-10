@@ -1,36 +1,37 @@
 import { ImageResponse } from "next/og";
 import { ReactElement } from "react";
 
-export type FontType = "londrina" | "pally" | "inter" | "druk";
+export type FontType = "londrina" | "pally" | "inter" | "druk" | "graphik" | "graphikBold";
 
 interface BaseImageParameters {
     content: ReactElement;
-    fontType: FontType;
+    fontTypes: FontType[];
 }
 
-const fontLookup: Record<FontType, string> = {
-    londrina: "fonts/LondrinaSolid-NNS.ttf",
-    pally: "fonts/Pally-Bold.ttf",
-    inter: "fonts/Inter-Bold.ttf",
-    druk: "fonts/Druk-Wide-Medium.ttf",
+const fontLookup: Record<FontType, { path: string; style: string }> = {
+    londrina: { path: "fonts/LondrinaSolid-NNS.ttf", style: "normal" },
+    pally: { path: "fonts/Pally-Bold.ttf", style: "normal" },
+    inter: { path: "fonts/Inter-Bold.ttf", style: "normal" },
+    druk: { path: "fonts/Druk-Wide-Medium.ttf", style: "normal" },
+    graphik: { path: "fonts/GraphikRegular.otf", style: "normal" },
+    graphikBold: { path: "fonts/GraphikBold.otf", style: "bold" },
 };
 
-export async function baseImage({ content, fontType }: BaseImageParameters): Promise<ImageResponse> {
-    const fontUrl = fontLookup[fontType];
+export async function baseImage({ content, fontTypes }: BaseImageParameters): Promise<ImageResponse> {
+    const fetches = fontTypes.map((type) =>
+        fetch(new URL(`${process.env.NEXT_PUBLIC_URL}/${fontLookup[type].path}`, import.meta.url), {
+            cache: "force-cache",
+        }).then((res) => res.arrayBuffer())
+    );
+    const resp = await Promise.all(fetches);
 
-    let fonts = undefined;
-    if (fontUrl) {
-        const fontArrayBuffer = await fetch(new URL(`${process.env.NEXT_PUBLIC_URL}/${fontUrl}`, import.meta.url)).then(
-            (res) => res.arrayBuffer()
-        );
-        fonts = [
-            {
-                name: "pal",
-                data: fontArrayBuffer,
-                style: "normal",
-            },
-        ];
-    }
+    const fonts = fontTypes.map((type, i) => {
+        return {
+            name: type,
+            data: resp[i],
+            style: "normal",
+        };
+    });
 
     return new ImageResponse(content, {
         width: 1200,

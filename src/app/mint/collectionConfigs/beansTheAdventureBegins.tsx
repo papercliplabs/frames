@@ -129,5 +129,5 @@ export const beansTheAdventureBeginsConfig: MintConfig<any> = {
         label: "BEANSDAO",
         redirectUrl: "https://beans.wft",
     },
-    font: "druk",
+    fonts: ["druk"],
 };

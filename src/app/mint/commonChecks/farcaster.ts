@@ -12,5 +12,6 @@ export async function isChannelFollowedByUser(channelId: string, userId: number)
 }
 
 export async function isUserFollowedByUser(userId: number, userIdToCheckIfFollowing: number): Promise<boolean> {
-    return (await getUserInfo(userId, userIdToCheckIfFollowing)).result.user.viewerContext?.following ?? false;
+    const isFollowing = (await getUserInfo(userId, userIdToCheckIfFollowing)).viewer_context?.following;
+    return userId == userIdToCheckIfFollowing || (isFollowing ?? false);
 }

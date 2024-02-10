@@ -183,5 +183,5 @@ export const basedAndYellowFrameEditionOneConfig: MintConfig<any> = {
         label: "Yellow Collective 🌕",
         redirectUrl: "https://yellowcollective.xyz",
     },
-    font: "pally",
+    fonts: ["pally"],
 };

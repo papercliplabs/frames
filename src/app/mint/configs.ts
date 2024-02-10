@@ -34,7 +34,8 @@ export interface MintConfig<T> {
         label: string;
         redirectUrl: string;
     };
-    font: FontType;
+    fonts: FontType[];
+    allowedCasterFids?: number[];
 }
 
 export type SupportedMintCollection =
