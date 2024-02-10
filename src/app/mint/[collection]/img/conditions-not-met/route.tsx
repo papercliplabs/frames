@@ -12,7 +12,7 @@ export async function GET(req: NextRequest, { params }: { params: { collection: 
 
     return await baseImage({
         content: <config.conditionsNotMetComponent checkPayload={req.nextUrl.searchParams} />,
-        fontType: config.font,
+        fontTypes: config.fonts,
     });
 }
 

@@ -30,7 +30,7 @@ export async function GET(req: NextRequest, { params }: { params: { dao: string 
                 highlightTextColor={dynamicTextColor ?? config.style.textColor}
             />
         ),
-        fontType: config.style.fontType,
+        fontTypes: [config.style.fontType],
     });
 }
 

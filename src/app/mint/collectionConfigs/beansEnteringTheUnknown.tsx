@@ -10,11 +10,11 @@ import { mintNftWithSyndicate } from "@/utils/syndicate";
 import { FrameRequest } from "@/utils/farcaster";
 
 const CLIENT = basePublicClient;
-const COLLECTION_ADDRESS = getAddress("0x9D2c6e62fcd5C71E5CCa63F2c1aAB5bb9DFcB515");
+const COLLECTION_ADDRESS = getAddress("0x2E5d5CDbE5b434D616b9b8597109f100A33dbebE");
 
 async function mint(request: FrameRequest, address: Address) {
-    console.log("WOULD MINT");
-    // return mintNftWithSyndicate(request, process.env.BEANS_THE_ADVENTURE_SYNDICATE_API_KEY!);
+    // console.log("WOULD MINT");
+    return mintNftWithSyndicate(request, process.env.BEANS_ENTERING_THE_UNKNOWN_SYNDICATE_API_KEY!);
 }
 
 async function isBeansChannelFollowedByUser(userAddress: Address, userId: number, castHash: string): Promise<boolean> {
@@ -91,26 +91,30 @@ function MintConditionsNotMetComponent({ checkPayload }: ConditionsNotMetCompone
     }
 
     return (
-        <div tw="flex w-full h-full p-[30px] bg-[#609CFF]">
-            <div tw="flex flex-col w-full h-full bg-black rounded-[36px] text-white p-[54px] ">
-                <div tw="flex text-[48px] w-full justify-center text-center">MISSING CONDITIONS</div>
-                <span tw="pl-[416px] pt-[32px] text-[28px] flex flex-col">
-                    <ul tw="flex flex-col">
-                        {mintConditions.map((condition, i) => {
-                            return (
-                                <li key={i} tw="pb-[12px] flex flex-row items-center text-center">
-                                    <ConditionIcon met={condition.passed} /> <span tw="pb-[4px]">{condition.name}</span>
-                                </li>
-                            );
-                        })}
-                    </ul>
-                </span>
-
-                <img
-                    src={`${process.env.NEXT_PUBLIC_URL}/images/mint/beans/common/conditions-not-met-icon.png`}
-                    style={{ position: "absolute", bottom: 0, left: 0, width: 380 }}
-                />
-            </div>
+        <div tw="flex w-full h-full relative">
+            <img
+                src={`${process.env.NEXT_PUBLIC_URL}/images/mint/beans/common/conditions-not-met.png`}
+                style={{ position: "absolute", top: 0, left: 0, width: 1200, height: 630 }}
+            />
+            <ul tw="flex flex-col absolute top-[180px] left-[500px] w-[670px] text-white text-[42px]">
+                {mintConditions.map((condition, i) => {
+                    const boldName = condition.name.substring(0, condition.name.indexOf(" ")); // "72"
+                    const normalName = condition.name.substring(condition.name.indexOf(" ") + 1);
+                    return (
+                        <li key={i} tw="pb-[12px] flex flex-row items-center text-center">
+                            <b>
+                                <ConditionIcon met={condition.passed} />{" "}
+                                <span tw="flex items-center text-center flex-row">
+                                    <span tw="pr-2" style={{ fontFamily: "graphikBold" }}>
+                                        {boldName}
+                                    </span>
+                                    <span>{normalName}</span>
+                                </span>
+                            </b>
+                        </li>
+                    );
+                })}
+            </ul>
         </div>
     );
 }
@@ -118,7 +122,7 @@ function MintConditionsNotMetComponent({ checkPayload }: ConditionsNotMetCompone
 export const beansEnteringTheUnknownConfig: MintConfig<any> = {
     imgSrcs: {
         home: `${process.env.NEXT_PUBLIC_URL}/images/mint/beans/entering-the-unknown/home.png`,
-        mintedOut: `${process.env.NEXT_PUBLIC_URL}/images/mint/beans/entering-the-unknown/sold-out.png`,
+        mintedOut: `${process.env.NEXT_PUBLIC_URL}/images/mint/beans/entering-the-unknown/sold-out.gif`,
         alreadyMinted: `${process.env.NEXT_PUBLIC_URL}/images/mint/beans/common/already-minted.png`,
         noAddress: `${process.env.NEXT_PUBLIC_URL}/images/mint/beans/common/no-address.png`,
         successfulMint: `${process.env.NEXT_PUBLIC_URL}/images/mint/beans/entering-the-unknown/mint-successful.gif`,
@@ -132,7 +136,8 @@ export const beansEnteringTheUnknownConfig: MintConfig<any> = {
     mint,
     learnMoreButtonConfig: {
         label: "BEANSDAO",
-        redirectUrl: "https://beans.wft",
+        redirectUrl: "https://beans.wtf",
     },
-    font: "druk",
+    fonts: ["graphik", "graphikBold"],
+    allowedCasterFids: [3362, 18655, 318911],
 };

@@ -1,4 +1,5 @@
 import { NeynarAPIClient } from "@neynar/nodejs-sdk";
+import { BulkUsersResponse, User } from "@neynar/nodejs-sdk/build/neynar-api/v2";
 
 const NEYNAR_KEY = process.env.NEYNAR_API_KEY!;
 
@@ -58,12 +59,12 @@ export async function getLikedUserIdsForCast(castHash: string): Promise<number[]
         const likes = resp["result"]["casts"][0]["reactions"]["likes"] as Array<any>;
         return likes.map((like: any) => like["fid"]);
     } catch (e) {
-        console.error("getLikedUserIdsForCast: api error - ", e);
+        // console.error("getLikedUserIdsForCast: api error - ", e);
         return [];
     }
 }
 
-export async function getUserInfo(fid: number, viewerFid?: number) {
-    const info = await neynarClient.lookupUserByFid(fid, viewerFid);
+export async function getUserInfo(fid: number, viewerFid?: number): Promise<User> {
+    const info = (await neynarClient.fetchBulkUsers([fid], { viewerFid })).users[0];
     return info;
 }

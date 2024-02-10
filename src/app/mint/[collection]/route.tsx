@@ -4,6 +4,8 @@ import { getAddress } from "viem";
 import { FrameRequest, validateFrameAndGetPayload } from "@/utils/farcaster";
 import { SupportedMintCollection, mintConfigs } from "../configs";
 import { extractComposableQueryParams, getComposeResponse } from "@/utils/composableParams";
+import { track } from "@vercel/analytics/server";
+import { isAllowedCaster, restrictedFrameResponse } from "@/utils/restrictedFrame";
 
 export async function GET(req: NextRequest, { params }: { params: { collection: string } }): Promise<Response> {
     const config = mintConfigs[params.collection as SupportedMintCollection];
@@ -39,6 +41,10 @@ export async function POST(req: NextRequest, { params }: { params: { collection:
         return Response.error();
     }
 
+    if (!isAllowedCaster(payload, config.allowedCasterFids)) {
+        return restrictedFrameResponse();
+    }
+
     let image = config.imgSrcs.home;
     let buttonInfo: [FrameButtonInfo?, FrameButtonInfo?, FrameButtonInfo?, FrameButtonInfo?] = [
         {
@@ -48,17 +54,28 @@ export async function POST(req: NextRequest, { params }: { params: { collection:
         },
     ];
 
+    await track("mint-interaction", {
+        dao: params.collection,
+    });
+
+    // Logging params:
+    const username = payload?.action?.interactor?.username;
+    const fid = payload?.action?.interactor?.fid;
+
     // See README for flow chart diagram of this logic
-    const mintedOut = false; //await config.decisionLogic.mintedOutCheck();
+    const mintedOut = await config.decisionLogic.mintedOutCheck();
     if (mintedOut) {
+        console.log("MINTED OUT", username, fid);
         image = config.imgSrcs.mintedOut;
     } else {
         let verifiedAddress = payload.action?.interactor?.verifications[0];
         if (verifiedAddress == undefined) {
+            console.log("NOT VERIFIED ADDRESS", username, fid);
             image = config.imgSrcs.noAddress;
         } else {
             const alreadyMinted = await config.decisionLogic.alreadyMintedCheck(getAddress(verifiedAddress));
             if (alreadyMinted) {
+                console.log("ALREADY MINTED", username, fid);
                 image = config.imgSrcs.alreadyMinted;
             } else {
                 const { passed: mintConditionsMet, checkPayload } = await config.decisionLogic.mintConditionsCheck(
@@ -67,20 +84,22 @@ export async function POST(req: NextRequest, { params }: { params: { collection:
                     getAddress(verifiedAddress),
                     payload
                 );
-                if (!mintConditionsMet && false) {
+                if (!mintConditionsMet) {
+                    console.log("MINT CONDITIONS NOT MET", username, fid, checkPayload);
                     const urlParams = checkPayload;
-                    urlParams.append("rnd", Math.random().toString());
                     image = `${process.env.NEXT_PUBLIC_URL}/mint/${
                         params.collection
                     }/img/conditions-not-met?${urlParams.toString()}`;
                     buttonInfo = [{ title: "Refresh", action: "post" }];
                 } else {
                     if (composeFrameUrl && !composing) {
+                        console.log("COMPOSING", username, fid);
                         const composeResponse = await getComposeResponse(composeFrameUrl, request);
                         return new NextResponse(composeResponse);
                     } else {
                         // Mint
-                        await config.mint(request, getAddress(verifiedAddress));
+                        const resp = await config.mint(request, getAddress(verifiedAddress));
+                        console.log("MINTING", username, fid, resp);
                         image = config.imgSrcs.successfulMint;
                     }
                 }

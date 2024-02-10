@@ -9,11 +9,11 @@ export const beansDungeonConfig: CarouselConfig = {
         {
             imgSrc: `${process.env.NEXT_PUBLIC_URL}/images/carousel/beans-dungeon/00-door-idle.gif`,
             navButtonConfigOverrides: {
-                nextButtonLabel: "Conditions met, unlock the door 🔓",
+                nextButtonLabel: "Quests complete, open door",
             },
         },
         {
-            imgSrc: `${process.env.NEXT_PUBLIC_URL}/images/carousel/beans-dungeon/01-door-open.gif`,
+            imgSrc: `${process.env.NEXT_PUBLIC_URL}/images/carousel/beans-dungeon/01-door-open5.gif`,
             navButtonConfigOverrides: {
                 nextButtonLabel: "Enter the dungeon ⬆️",
             },
