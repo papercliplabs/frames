@@ -1,4 +1,5 @@
 import { beansDungeonConfig } from "./slugConfigs/beansDungeon";
+import { beansDungeonNoMintConfig } from "./slugConfigs/beansDungeonNoMint";
 import { paperclipAuctionFramesConfig } from "./slugConfigs/paperclipAuctionFrames";
 
 export interface CarouselNavButtonConfig {
@@ -28,9 +29,10 @@ export interface CarouselConfig {
     allowedCasterFids?: number[]; // Restricts who is allowed to cast this frame, no restrictions if undefined
 }
 
-export type SupportedCarouselSlugs = "beans-dungeon" | "paperclip-auction-frames";
+export type SupportedCarouselSlugs = "beans-dungeon" | "beans-dungeon-no-mint" | "paperclip-auction-frames";
 
 export const carouselConfigs: Record<SupportedCarouselSlugs, CarouselConfig> = {
     "beans-dungeon": beansDungeonConfig,
+    "beans-dungeon-no-mint": beansDungeonNoMintConfig,
     "paperclip-auction-frames": paperclipAuctionFramesConfig,
 };
