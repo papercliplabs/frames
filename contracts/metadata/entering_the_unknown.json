@@ -1,0 +1,24 @@
+{
+    "name": "Entering the Unknown",
+    "description": "Here is a non-fungible token of our appreciation for saving the Bean Team! BEANSDAO recently launched to mainnet and was confronted by daily bosses that are known as gas fees. Thank you for helping us defeat them! We are now stepping into the unknown and migrating the adventure to Base. www.beans.wtf",
+    "external_url": "https://www.beans.wtf",
+    "image": "ipfs://QmeXwkJf9HHa3QWNd9wJgq5Kcm2xS5we3Cof4fCara3ZsK",
+    "attributes": [
+        {
+            "trait_type": "Chain",
+            "value": "Base"
+        },
+        {
+            "trait_type": "Gas",
+            "value": "Sponsored by Base"
+        },
+        {
+            "trait_type": "Artist",
+            "value": "Jack Maschka"
+        },
+        {
+            "trait_type": "Title",
+            "value": "Entering the Unknown"
+        }
+    ]
+}
