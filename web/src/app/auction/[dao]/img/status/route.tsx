@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import { baseImage } from "@/utils/baseImg";
-import { auctionConfigs, SupportedAuctionDao } from "../../../daoConfig";
+import { auctionConfigs, SupportedAuctionDao } from "@/app/auction/daoConfig";
 
 export async function GET(req: NextRequest, { params }: { params: { dao: string } }): Promise<Response> {
     const config = auctionConfigs[params.dao as SupportedAuctionDao];

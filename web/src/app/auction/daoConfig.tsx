@@ -1,4 +1,4 @@
-import { Address, PublicClient, formatEther } from "viem";
+import { Address, PublicClient } from "viem";
 import { basePublicClient, mainnetPublicClient, zoraPublicClient } from "@/utils/wallet";
 import { FontType } from "@/utils/baseImg";
 import {
@@ -8,7 +8,7 @@ import {
     getNounBuilderAuctionDetails,
     getNounOgAuctionDetails,
 } from "./getAuctionDetails";
-import React, { ReactElement } from "react";
+import React from "react";
 import NounAuctionStatus from "./components/NounAuctionStatus";
 import BeansAuctionStatus from "./components/BeansAuctionStatus";
 import { AuctionStatusProps } from "./components/AuctionStatusProps";

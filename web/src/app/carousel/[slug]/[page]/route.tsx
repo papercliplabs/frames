@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { generateFrameMetadata } from "@/utils/metadata";
-import { SupportedCarouselSlugs, carouselConfigs } from "../../configs";
-import { getButtonInfoWithActionForCarouselItem } from "../../carouselUtils";
-import { FrameRequest, validateFrameAndGetPayload } from "@/utils/farcaster";
+import { SupportedCarouselSlugs, carouselConfigs } from "@/app/carousel/configs";
+import { getButtonInfoWithActionForCarouselItem } from "@/app/carousel/carouselUtils";
+import { validateFrameAndGetPayload } from "@/utils/farcaster";
 import { isAllowedCaster, restrictedFrameResponse } from "@/utils/restrictedFrame";
 import { extractComposableQueryParams, getComposeResponse } from "@/utils/composableParams";
 

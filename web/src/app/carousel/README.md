@@ -9,7 +9,7 @@ The general idea is that the user navigates through your pages like:
 
 ## Configuration 
 
-![](../../../public/images/docs/carousel-example.png)
+![](@/public/images/docs/carousel-example.png)
 
 See [configs.ts](./configs.ts) for how to configure, each page has a unique image, and can have up to 4 buttons:
 1. Previous navigation: configurable label and also ability to disable prev navigation, not present on the first page
