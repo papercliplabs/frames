@@ -1,0 +1,24 @@
+{
+    "name": "Gensler Coin",
+    "description": "The Main Characters are here! To celebrate the launch of Main Characters. One mint per wallet, which coin will you get? Different coins have different rarities, and they earn you points on the Main Characters app.",
+    "external_url": "https://maincharacters.app/gensler",
+    "image": "ipfs://bafkreih2uwfewfqk6seeuy5pm6u6o34k723ercj3vcegktr26kg5h4k6ye",
+    "attributes": [
+        {
+            "trait_type": "Chain",
+            "value": "Base"
+        },
+        {
+            "trait_type": "Gas",
+            "value": "Sponsored by Base"
+        },
+        {
+            "trait_type": "Artist",
+            "value": "Anonymous"
+        },
+        {
+            "trait_type": "Rarity",
+            "value": "Mythic"
+        }
+    ]
+}

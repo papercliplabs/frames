@@ -1,0 +1,20 @@
+{
+    "name": "Based and Yellow Frame Edition",
+    "description": "The Yellow Collective is an onchain club on the BASE Ethereum L2 network, designed to support and empower artists and creatives in the Nouns and Superchain ecosystems. Learn more or Bid at yellowcollective.xyz. Frame Edition Art by @jollymaw",
+    "external_url": "https://www.yellowcollective.xyz/",
+    "image": "ipfs://QmUWtJf95mCfCkVKezJzRLmQkynXgfbYan8YSbpSTeZfYU",
+    "attributes": [
+        {
+            "trait_type": "Background",
+            "value": "Yellow"
+        },
+        {
+            "trait_type": "Chain",
+            "value": "Base"
+        },
+        {
+            "trait_type": "Gas",
+            "value": "Sponsored by Base"
+        }
+    ]
+}

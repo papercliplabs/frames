@@ -2,10 +2,10 @@
 pragma solidity ^0.8.18;
 
 import {Test, console} from "forge-std/Test.sol";
-import {MainCharactersERC721} from "../src/MainCharactersERC721.sol";
+import {PointsERC721} from "../src/PointsERC721.sol";
 
-contract MainCharactersERC721Test is Test {
-    MainCharactersERC721 public nft;
+contract PointsERC721Test is Test {
+    PointsERC721 public nft;
     address deployer;
     address otherUser;
 
@@ -19,7 +19,7 @@ contract MainCharactersERC721Test is Test {
         otherUser = vm.addr(2);
 
         vm.prank(deployer);
-        nft = new MainCharactersERC721(EXPECTED_NAME, EXPECTED_SYMBOL, EXPECTED_DEFAULT_URI, EXPECTED_MAX_SUPPLY);
+        nft = new PointsERC721(EXPECTED_NAME, EXPECTED_SYMBOL, EXPECTED_DEFAULT_URI, EXPECTED_MAX_SUPPLY);
     }
 
     function test_Init() public {
