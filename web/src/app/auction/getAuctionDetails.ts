@@ -1,5 +1,5 @@
 import { Address, PublicClient, formatEther } from "viem";
-import { readContract, multicall } from "viem/actions";
+import { readContract } from "viem/actions";
 import { ImageData, getNounData } from "@nouns/assets";
 import { buildSVG } from "@nouns/sdk";
 import { getWalletName } from "@/utils/wallet";
