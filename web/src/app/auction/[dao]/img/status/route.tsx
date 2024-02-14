@@ -17,7 +17,7 @@ export async function GET(req: NextRequest, { params }: { params: { dao: string 
                 auctionAddress: config.auctionAddress,
                 tokenAddress: config.tokenAddress,
             }),
-        ["get-auction-details"],
+        [`get-auction-details-${params.dao}`],
         {
             revalidate: 2,
         }
