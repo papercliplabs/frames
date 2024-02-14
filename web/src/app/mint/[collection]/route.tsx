@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { FrameButtonInfo, generateFrameMetadata } from "@/utils/metadata";
 import { getAddress } from "viem";
-import { FrameRequest, validateFrameAndGetPayload } from "@/utils/farcaster";
+import { getFrameMessageWithNeynarApiKey } from "@/utils/farcaster";
 import { SupportedMintCollection, mintConfigs } from "../configs";
 import { extractComposableQueryParams, getComposeResponse } from "@/utils/composableParams";
 import { track } from "@vercel/analytics/server";
 import { isAllowedCaster, restrictedFrameResponse } from "@/utils/restrictedFrame";
+import { FrameButtonMetadata, FrameRequest, getFrameHtmlResponse } from "@coinbase/onchainkit";
 
 export async function GET(req: NextRequest, { params }: { params: { collection: string } }): Promise<Response> {
     const config = mintConfigs[params.collection as SupportedMintCollection];
@@ -16,9 +16,9 @@ export async function GET(req: NextRequest, { params }: { params: { collection: 
     }
 
     return new NextResponse(
-        generateFrameMetadata({
+        getFrameHtmlResponse({
             image: config.imgSrcs.home,
-            buttonInfo: [{ title: "Free Mint!", action: "post" }],
+            buttons: [{ label: "Free Mint!", action: "post" }],
             postUrl: `${process.env.NEXT_PUBLIC_URL}/mint/${params.collection}?${req.nextUrl.searchParams.toString()}`,
         })
     );
@@ -28,29 +28,36 @@ export async function POST(req: NextRequest, { params }: { params: { collection:
     const config = mintConfigs[params.collection as SupportedMintCollection];
     const { composeFrameUrl, composing } = extractComposableQueryParams(req.nextUrl.searchParams);
 
-    const request: FrameRequest = await req.json();
-    const payload = await validateFrameAndGetPayload(request);
+    const frameRequest: FrameRequest = await req.json();
+    const frameValidationResponse = await getFrameMessageWithNeynarApiKey(frameRequest);
 
-    const castHash = payload?.action?.cast?.hash;
-    const userFid = payload?.action?.interactor?.fid;
+    if (!frameValidationResponse.isValid) {
+        console.error("Invalid frame request - ", frameRequest);
+        return Response.error();
+    }
 
-    if (!config || !payload.valid || castHash == undefined || userFid == undefined) {
+    const framePayload = frameValidationResponse.message;
+
+    const castHash = framePayload.raw.action?.cast?.hash;
+    const userFid = framePayload.raw.action?.interactor?.fid;
+
+    if (!config || castHash == undefined || userFid == undefined) {
         console.error(
-            `Error: collection=${params.collection} config=${config} valid=${payload.valid} castHash=${castHash} userFid=${userFid}`
+            `Error: collection=${params.collection} config=${config} castHash=${castHash} userFid=${userFid}`
         );
         return Response.error();
     }
 
-    if (!isAllowedCaster(payload, config.allowedCasterFids)) {
+    if (!isAllowedCaster(framePayload, config.allowedCasterFids)) {
         return restrictedFrameResponse();
     }
 
     let image = config.imgSrcs.home;
-    let buttonInfo: [FrameButtonInfo?, FrameButtonInfo?, FrameButtonInfo?, FrameButtonInfo?] = [
+    let buttons: [FrameButtonMetadata, ...FrameButtonMetadata[]] = [
         {
-            title: config.learnMoreButtonConfig.label,
+            label: config.learnMoreButtonConfig.label,
             action: "link",
-            redirectUrl: config.learnMoreButtonConfig.redirectUrl,
+            target: config.learnMoreButtonConfig.redirectUrl,
         },
     ];
 
@@ -59,8 +66,8 @@ export async function POST(req: NextRequest, { params }: { params: { collection:
     });
 
     // Logging params:
-    const username = payload?.action?.interactor?.username;
-    const fid = payload?.action?.interactor?.fid;
+    const username = framePayload.raw.action?.interactor?.username;
+    const fid = framePayload.interactor.fid;
 
     // See README for flow chart diagram of this logic
     const mintedOut = await config.decisionLogic.mintedOutCheck();
@@ -68,7 +75,7 @@ export async function POST(req: NextRequest, { params }: { params: { collection:
         console.log("MINTED OUT", username, fid);
         image = config.imgSrcs.mintedOut;
     } else {
-        let verifiedAddress = payload.action?.interactor?.verifications[0];
+        let verifiedAddress = framePayload.interactor.verified_accounts[0];
         if (verifiedAddress == undefined) {
             console.log("NOT VERIFIED ADDRESS", username, fid);
             image = config.imgSrcs.noAddress;
@@ -82,7 +89,7 @@ export async function POST(req: NextRequest, { params }: { params: { collection:
                     castHash,
                     userFid,
                     getAddress(verifiedAddress),
-                    payload
+                    framePayload
                 );
                 if (!mintConditionsMet) {
                     console.log("MINT CONDITIONS NOT MET", username, fid, checkPayload);
@@ -90,15 +97,15 @@ export async function POST(req: NextRequest, { params }: { params: { collection:
                     image = `${process.env.NEXT_PUBLIC_URL}/mint/${
                         params.collection
                     }/img/conditions-not-met?${urlParams.toString()}`;
-                    buttonInfo = [{ title: "Refresh", action: "post" }];
+                    buttons = [{ label: "Refresh", action: "post" }];
                 } else {
                     if (composeFrameUrl && !composing) {
                         console.log("COMPOSING", username, fid);
-                        const composeResponse = await getComposeResponse(composeFrameUrl, request);
+                        const composeResponse = await getComposeResponse(composeFrameUrl, frameRequest);
                         return new NextResponse(composeResponse);
                     } else {
                         // Mint
-                        const resp = await config.mint(request, getAddress(verifiedAddress));
+                        const resp = await config.mint(frameRequest, getAddress(verifiedAddress));
                         console.log("MINTING", username, fid, resp);
                         image = config.imgSrcs.successfulMint;
                     }
@@ -108,9 +115,9 @@ export async function POST(req: NextRequest, { params }: { params: { collection:
     }
 
     return new NextResponse(
-        generateFrameMetadata({
+        getFrameHtmlResponse({
             image,
-            buttonInfo,
+            buttons,
             postUrl: `${process.env.NEXT_PUBLIC_URL}/mint/${params.collection}?${req.nextUrl.searchParams.toString()}`,
         })
     );

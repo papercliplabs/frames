@@ -1,25 +1,20 @@
-import { FrameButtonInfo } from "@/utils/metadata";
 import { CarouselConfig } from "./configs";
+import { FrameButtonMetadata } from "@coinbase/onchainkit";
 
-type FrameButtonInfoWithAction = FrameButtonInfo & { carouselAction: "prev" | "next" | "redirect" | "compose" };
+type FrameButtonInfoWithAction = FrameButtonMetadata & { carouselAction: "prev" | "next" | "redirect" | "compose" };
 
-export function getButtonInfoWithActionForCarouselItem(
+export function getButtonsWithActionForCarouselItem(
     config: CarouselConfig,
     itemNumber: number,
     completionComposeLabelOverride?: string
-): [FrameButtonInfoWithAction?, FrameButtonInfoWithAction?, FrameButtonInfoWithAction?, FrameButtonInfoWithAction?] {
-    const frameButtons: [
-        FrameButtonInfoWithAction?,
-        FrameButtonInfoWithAction?,
-        FrameButtonInfoWithAction?,
-        FrameButtonInfoWithAction?
-    ] = [];
+): [FrameButtonInfoWithAction, ...FrameButtonInfoWithAction[]] | undefined {
+    const frameButtons: FrameButtonInfoWithAction[] = [];
 
     const configItem = config.itemConfigs[itemNumber];
 
     if (!configItem) {
         console.error("getButtonInfoForCarouselItem - index out of bounds, ", itemNumber);
-        return [];
+        return undefined;
     }
 
     if (
@@ -30,29 +25,29 @@ export function getButtonInfoWithActionForCarouselItem(
         // Prev
         frameButtons.push({
             action: "post",
-            title:
+            label:
                 configItem.navButtonConfigOverrides?.prevButtonLabel ?? config.navButtonConfig?.prevButtonLabel ?? "⬅️",
             carouselAction: "prev",
-        });
+        } as FrameButtonInfoWithAction);
     }
 
     if (itemNumber != config.itemConfigs.length - 1) {
         // Next
         frameButtons.push({
             action: "post",
-            title:
+            label:
                 configItem.navButtonConfigOverrides?.nextButtonLabel ?? config.navButtonConfig?.nextButtonLabel ?? "➡️",
             carouselAction: "next",
-        });
+        } as FrameButtonInfoWithAction);
     }
 
     if (configItem.redirectButtonConfig != undefined) {
         frameButtons.push({
             action: "link",
-            title: configItem.redirectButtonConfig.label,
-            redirectUrl: configItem.redirectButtonConfig.url,
+            label: configItem.redirectButtonConfig.label,
+            target: configItem.redirectButtonConfig.url,
             carouselAction: "redirect",
-        });
+        } as FrameButtonInfoWithAction);
     }
 
     const lastItem = itemNumber == config.itemConfigs.length - 1;
@@ -62,10 +57,12 @@ export function getButtonInfoWithActionForCarouselItem(
             : configItem.composeButtonConfig!.label;
         frameButtons.push({
             action: "post",
-            title: title,
+            label: title,
             carouselAction: "compose",
-        });
+        } as FrameButtonInfoWithAction);
     }
 
-    return frameButtons;
+    return frameButtons.length == 0
+        ? undefined
+        : (frameButtons as [FrameButtonInfoWithAction, ...FrameButtonInfoWithAction[]]);
 }

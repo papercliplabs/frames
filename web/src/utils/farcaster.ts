@@ -1,19 +1,10 @@
+import { FrameRequest, getFrameMessage } from "@coinbase/onchainkit";
 import { NeynarAPIClient } from "@neynar/nodejs-sdk";
-import { BulkUsersResponse, User } from "@neynar/nodejs-sdk/build/neynar-api/v2";
+import { User } from "@neynar/nodejs-sdk/build/neynar-api/v2";
 
 const NEYNAR_KEY = process.env.NEYNAR_API_KEY!;
 
 export const neynarClient = new NeynarAPIClient(NEYNAR_KEY);
-
-export interface FrameRequest {
-    trustedData: {
-        messageBytes: string;
-    };
-}
-
-export async function validateFrameAndGetPayload(request: FrameRequest) {
-    return await neynarClient.validateFrameAction(request.trustedData.messageBytes);
-}
 
 export async function getFollowerUserIdsForChannel(channelId: string): Promise<number[]> {
     async function makePagenatedRequest(cursor: string | undefined) {
@@ -67,4 +58,10 @@ export async function getLikedUserIdsForCast(castHash: string): Promise<number[]
 export async function getUserInfo(fid: number, viewerFid?: number): Promise<User> {
     const info = (await neynarClient.fetchBulkUsers([fid], { viewerFid })).users[0];
     return info;
+}
+
+export async function getFrameMessageWithNeynarApiKey(frameRequest: FrameRequest) {
+    return getFrameMessage(frameRequest, {
+        neynarApiKey: NEYNAR_KEY,
+    });
 }

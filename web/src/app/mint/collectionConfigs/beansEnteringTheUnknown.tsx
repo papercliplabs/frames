@@ -7,7 +7,7 @@ import { basePublicClient } from "@/utils/wallet";
 import { isNftBalanceAboveThreshold } from "../commonChecks/nftBalance";
 import { isCastLikedByUser, isChannelFollowedByUser, isUserFollowedByUser } from "../commonChecks/farcaster";
 import { mintNftWithSyndicate } from "@/utils/syndicate";
-import { FrameRequest } from "@/utils/farcaster";
+import { FrameRequest, FrameValidationData } from "@coinbase/onchainkit";
 
 const CLIENT = basePublicClient;
 const COLLECTION_ADDRESS = getAddress("0x2E5d5CDbE5b434D616b9b8597109f100A33dbebE");
@@ -40,7 +40,7 @@ async function mintConditionsCheck(
     castHash: string,
     userFid: number,
     userAddress: Address,
-    payload: ValidateFrameActionResponse
+    payload: FrameValidationData
 ): Promise<{ passed: boolean; checkPayload: URLSearchParams }> {
     let checkResults = (
         await Promise.all(checkConfigs.map((config) => config.check(userAddress, userFid, castHash)))

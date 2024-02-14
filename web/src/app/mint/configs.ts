@@ -1,10 +1,9 @@
-import { ValidateFrameActionResponse } from "@neynar/nodejs-sdk/build/neynar-api/v2";
 import { Address } from "viem";
 import { basedAndYellowFrameEditionOneConfig } from "./collectionConfigs/basedAndYellowFrameEditionOne";
-import { FrameRequest } from "@/utils/farcaster";
 import { FontType } from "@/utils/baseImg";
 import { beansTheAdventureBeginsConfig } from "./collectionConfigs/beansTheAdventureBegins";
 import { beansEnteringTheUnknownConfig } from "./collectionConfigs/beansEnteringTheUnknown";
+import { FrameRequest, FrameValidationData } from "@coinbase/onchainkit";
 
 export interface ConditionsNotMetComponentProps {
     checkPayload: URLSearchParams;
@@ -26,7 +25,7 @@ export interface MintConfig<T> {
             castHash: string,
             userFid: number,
             userAddress: Address,
-            payload: ValidateFrameActionResponse
+            payload: FrameValidationData
         ) => Promise<{ passed: boolean; checkPayload: URLSearchParams }>;
     };
     mint: (request: FrameRequest, address: Address) => Promise<void>;

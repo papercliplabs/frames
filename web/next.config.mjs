@@ -107,10 +107,14 @@ const nextConfig = {
                 source: "/carousel/:slug",
                 destination: "/carousel/:slug/0",
                 permanent: false,
-            },
+            }
         ];
       },
-      
+      logging: {
+        fetches: {
+            fullUrl: true
+        }
+      }
 };
 
 export default nextConfig;

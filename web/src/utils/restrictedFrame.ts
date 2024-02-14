@@ -1,18 +1,16 @@
 import { NextResponse } from "next/server";
-import { generateFrameMetadata } from "./metadata";
-import { ValidateFrameActionResponse } from "@neynar/nodejs-sdk/build/neynar-api/v2";
+import { FrameValidationData, getFrameHtmlResponse } from "@coinbase/onchainkit";
 
 export function restrictedFrameResponse(): NextResponse {
     return new NextResponse(
-        generateFrameMetadata({
+        getFrameHtmlResponse({
             image: `${process.env.NEXT_PUBLIC_URL}/images/frame-restricted.png`,
-            buttonInfo: [{ action: "link", title: "Paperclip Labs", redirectUrl: "https://paperclip.xyz" }],
-            postUrl: "",
+            buttons: [{ label: "Paperclip Labs", action: "link", target: "https://paperclip.xyz" }],
         })
     );
 }
 
-export function isAllowedCaster(payload: ValidateFrameActionResponse, allowedCasterFids?: number[]): boolean {
-    const authorFid = payload.action?.cast?.author?.fid;
-    return allowedCasterFids == undefined || (authorFid != undefined && allowedCasterFids.includes(authorFid));
+export function isAllowedCaster(payload: FrameValidationData, allowedCasterFids?: number[]): boolean {
+    const casterFid = payload.raw.action?.cast?.author?.fid;
+    return allowedCasterFids == undefined || (casterFid != undefined && allowedCasterFids.includes(casterFid));
 }
