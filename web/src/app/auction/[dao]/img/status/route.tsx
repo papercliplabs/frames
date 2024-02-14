@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 import { baseImage } from "@/utils/baseImg";
 import { auctionConfigs, SupportedAuctionDao } from "@/app/auction/daoConfig";
+import { unstable_cache } from "next/cache";
 
 export async function GET(req: NextRequest, { params }: { params: { dao: string } }): Promise<Response> {
     const config = auctionConfigs[params.dao as SupportedAuctionDao];
@@ -9,12 +10,18 @@ export async function GET(req: NextRequest, { params }: { params: { dao: string 
         console.error("No auction config found - ", params.dao);
     }
 
-    const { nounId, nounImgSrc, timeRemaining, bidFormatted, bidder, dynamicTextColor } =
-        await config.getAuctionDetails({
-            client: config.client,
-            auctionAddress: config.auctionAddress,
-            tokenAddress: config.tokenAddress,
-        });
+    const { nounId, nounImgSrc, timeRemaining, bidFormatted, bidder, dynamicTextColor } = await unstable_cache(
+        () =>
+            config.getAuctionDetails({
+                client: config.client,
+                auctionAddress: config.auctionAddress,
+                tokenAddress: config.tokenAddress,
+            }),
+        ["get-auction-details"],
+        {
+            revalidate: 2,
+        }
+    )();
 
     return await baseImage({
         content: (
@@ -33,5 +40,3 @@ export async function GET(req: NextRequest, { params }: { params: { dao: string 
         fontTypes: [config.style.fontType],
     });
 }
-
-export const dynamic = "force-dynamic";

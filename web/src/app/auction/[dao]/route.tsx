@@ -1,20 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
-import { generateFrameMetadata, FrameButtonInfo } from "@/utils/metadata";
 import { track } from "@vercel/analytics/server";
 import { SupportedAuctionDao, auctionConfigs } from "../daoConfig";
 import { extractComposableQueryParams, getComposeResponse } from "@/utils/composableParams";
+import { FrameButtonMetadata, getFrameHtmlResponse } from "@coinbase/onchainkit";
 
 export async function GET(req: NextRequest, { params }: { params: { dao: string } }): Promise<Response> {
     const config = auctionConfigs[params.dao as SupportedAuctionDao];
 
     if (!config) {
         console.error("No auction config found - ", params.dao);
+        return Response.error();
     }
 
     return new NextResponse(
-        generateFrameMetadata({
+        getFrameHtmlResponse({
             image: config.firstPageImage,
-            buttonInfo: [{ title: "View auction!", action: "post" }],
+            buttons: [
+                {
+                    label: "View auction!",
+                    action: "post",
+                },
+            ],
             postUrl: `${process.env.NEXT_PUBLIC_URL}/auction/${params.dao}?${req.nextUrl.searchParams.toString()}`,
             ogTitle: config.title,
             ogDescription: config.description,
@@ -30,6 +36,7 @@ export async function POST(req: NextRequest, { params }: { params: { dao: string
 
     if (!config) {
         console.error("No auction config found - ", params.dao);
+        return Response.error();
     }
 
     try {
@@ -46,16 +53,16 @@ export async function POST(req: NextRequest, { params }: { params: { dao: string
         dao: params.dao,
     });
 
-    const composeButton: FrameButtonInfo | undefined =
-        composeFrameUrl && composeFrameButtonLabel ? { title: composeFrameButtonLabel, action: "post" } : undefined;
+    const composeButton: FrameButtonMetadata | undefined =
+        composeFrameUrl && composeFrameButtonLabel ? { label: composeFrameButtonLabel, action: "post" } : undefined;
 
     return new NextResponse(
-        generateFrameMetadata({
-            image: `${process.env.NEXT_PUBLIC_URL}/auction/${params.dao}/img/status?rnd=${Math.random()}`,
-            buttonInfo: [
-                { title: "Refresh", action: "post" },
-                { title: "Bid", action: "link", redirectUrl: config.auctionUrl },
-                composeButton,
+        getFrameHtmlResponse({
+            image: `${process.env.NEXT_PUBLIC_URL}/auction/${params.dao}/img/status?t=${Date.now()}`,
+            buttons: [
+                { label: "Refresh", action: "post" },
+                { label: "Bid", action: "link", target: config.auctionUrl },
+                ...(composeButton ? [composeButton] : []),
             ],
             postUrl: `${process.env.NEXT_PUBLIC_URL}/auction/${params.dao}?${req.nextUrl.searchParams.toString()}`,
             ogTitle: config.title,
@@ -63,5 +70,3 @@ export async function POST(req: NextRequest, { params }: { params: { dao: string
         })
     );
 }
-
-export const dynamic = "force-dynamic";

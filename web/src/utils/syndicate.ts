@@ -1,4 +1,4 @@
-import { FrameRequest } from "./farcaster";
+import { FrameRequest } from "@coinbase/onchainkit";
 
 export async function mintNftWithSyndicate(request: FrameRequest, apiKey: string) {
     const syndicateMintRes = await fetch("https://frame.syndicate.io/api/mint", {
