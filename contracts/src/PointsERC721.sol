@@ -4,7 +4,7 @@ pragma solidity ^0.8.19;
 
 import {SyndicateFrameERC721} from "./SyndicateFrameERC721.sol";
 
-contract MainCharactersERC721 is SyndicateFrameERC721 {
+contract PointsERC721 is SyndicateFrameERC721 {
     ////
     // Storage
     ////

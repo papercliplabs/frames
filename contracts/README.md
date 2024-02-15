@@ -24,10 +24,16 @@ forge install <github_name>/<repo_name> --no-commit
 ### Deploy contract
 Base
 ```
-source .env; forge create --rpc-url $BASE_RPC_URL --private-key $PRIVATE_KEY  src/SyndicateFrameERC721.sol:SyndicateFrameERC721
+source .env; forge create \
+    --rpc-url $BASE_RPC_URL \
+    --private-key $PRIVATE_KEY \
+    --constructor-args <collection_name> <collection_symbol> <metadata_uri> <max_supply> \
+    --verify \ 
+    --etherscan-api-key $ETHERSCAN_API_KEY \
+    src/SyndicateFrameERC721.sol:SyndicateFrameERC721
 ```
 
-Base Sepiloa
+Base Sepolia
 ```
 source .env; forge create \
     --rpc-url $BASE_SEPOLIA_RPC_URL \
@@ -39,7 +45,7 @@ source .env; forge create \
     src/SyndicateFrameERC721.sol:SyndicateFrameERC721
 ```
 
-### Verify Contract on Blockscout
+### Verify After Deploy 
 Base
 ```
 source .env; forge verify-contract --chain-id 8453 <contract_address> --etherscan-api-key $ETHERSCAN_API_KEY src/SyndicateFrameERC721.sol:SyndicateFrameERC721   
@@ -51,9 +57,20 @@ forge verify-contract --chain-id 84532 <contract_address> src/SyndicateFrameERC7
 ```
 
 ## Register with Syndicate Frame API
-```
+
+For mint(address): 
+```bash
 curl --request POST \
   --url https://frame.syndicate.io/api/register \
   --header 'Authorization: Bearer <api_key>' \
-  --data '{"contractAddress":"<contract_address>"}'
+  --data '{"contractAddress":"<contract_address>", "functionSignature":"mint(address)"}'
 ```
+
+For mint(address,string) for custom metadata uri: 
+```bash
+curl --request POST \
+  --url https://frame.syndicate.io/api/register \
+  --header 'Authorization: Bearer <api_key>' \
+  --data '{"contractAddress":"<contract_address>", "functionSignature": "mint(address,string)"}'
+```
+
