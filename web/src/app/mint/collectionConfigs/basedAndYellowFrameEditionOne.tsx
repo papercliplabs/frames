@@ -165,14 +165,30 @@ function MintConditionsNotMetComponent({ checkPayload }: ConditionsNotMetCompone
 }
 
 export const basedAndYellowFrameEditionOneConfig: MintConfig<any> = {
-    imgSrcs: {
-        home: `${process.env.NEXT_PUBLIC_URL}/images/mint/based-and-yellow-frame-edition-one/home.png`,
-        mintedOut: `${process.env.NEXT_PUBLIC_URL}/images/mint/based-and-yellow-frame-edition-one/sold-out.png`,
-        alreadyMinted: `${process.env.NEXT_PUBLIC_URL}/images/mint/based-and-yellow-frame-edition-one/already-minted.png`,
-        noAddress: `${process.env.NEXT_PUBLIC_URL}/images/mint/based-and-yellow-frame-edition-one/no-address.png`,
-        successfulMint: `${process.env.NEXT_PUBLIC_URL}/images/mint/based-and-yellow-frame-edition-one/mint-successful.png`,
+    images: {
+        home: {
+            src: `${process.env.NEXT_PUBLIC_URL}/images/mint/based-and-yellow-frame-edition-one/home.png`,
+            aspectRatio: "1.91:1",
+        },
+        mintedOut: {
+            src: `${process.env.NEXT_PUBLIC_URL}/images/mint/based-and-yellow-frame-edition-one/sold-out.png`,
+            aspectRatio: "1.91:1",
+        },
+        alreadyMinted: {
+            src: `${process.env.NEXT_PUBLIC_URL}/images/mint/based-and-yellow-frame-edition-one/already-minted.png`,
+            aspectRatio: "1.91:1",
+        },
+        noAddress: {
+            src: `${process.env.NEXT_PUBLIC_URL}/images/mint/based-and-yellow-frame-edition-one/no-address.png`,
+            aspectRatio: "1.91:1",
+        },
+        successfulMint: {
+            src: `${process.env.NEXT_PUBLIC_URL}/images/mint/based-and-yellow-frame-edition-one/mint-successful.png`,
+            aspectRatio: "1.91:1",
+        },
     },
     conditionsNotMetComponent: MintConditionsNotMetComponent,
+    conditionsNotMetAspectRatio: "1.91:1",
     decisionLogic: {
         mintedOutCheck: () => isNftSoldOut(CLIENT, COLLECTION_ADDRESS),
         alreadyMintedCheck: (address) => isNftBalanceAboveThreshold(CLIENT, COLLECTION_ADDRESS, address, 0),

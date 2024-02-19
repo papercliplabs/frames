@@ -1,0 +1,28 @@
+{
+    "name": "Bean Boogie",
+    "description": "Five beans engage in a daily ritual, the Bean Boogie. What is the purpose? What do they summon? Perhaps... tomorrow's bean?\n\nArtwork by Jack Maschka and bodegacatceo for BEANSDAO\n\nwww.beans.wtf",
+    "external_url": "https://www.beans.wtf",
+    "image": "ipfs://QmTmWrjxQSHxyMe8Bj3BXnyAJ586rBTZXGznoWhXvHXjEq",
+    "attributes": [
+        {
+            "trait_type": "Chain",
+            "value": "Base"
+        },
+        {
+            "trait_type": "Gas",
+            "value": "Sponsored by Base"
+        },
+        {
+            "trait_type": "Artist",
+            "value": "Jack Maschka"
+        },
+        {
+            "trait_type": "Artist",
+            "value": "bodegacatceo"
+        },
+        {
+            "trait_type": "Title",
+            "value": "Bean Boogie"
+        }
+    ]
+}

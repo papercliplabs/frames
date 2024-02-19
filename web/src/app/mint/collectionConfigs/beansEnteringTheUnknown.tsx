@@ -13,8 +13,8 @@ const CLIENT = basePublicClient;
 const COLLECTION_ADDRESS = getAddress("0x2E5d5CDbE5b434D616b9b8597109f100A33dbebE");
 
 async function mint(request: FrameRequest, address: Address) {
-    // console.log("WOULD MINT");
-    return mintNftWithSyndicate(request, process.env.BEANS_ENTERING_THE_UNKNOWN_SYNDICATE_API_KEY!);
+    console.log("WOULD MINT");
+    // return mintNftWithSyndicate(request, process.env.BEANS_ENTERING_THE_UNKNOWN_SYNDICATE_API_KEY!);
 }
 
 async function isBeansChannelFollowedByUser(userAddress: Address, userId: number, castHash: string): Promise<boolean> {
@@ -120,14 +120,30 @@ function MintConditionsNotMetComponent({ checkPayload }: ConditionsNotMetCompone
 }
 
 export const beansEnteringTheUnknownConfig: MintConfig<any> = {
-    imgSrcs: {
-        home: `${process.env.NEXT_PUBLIC_URL}/images/mint/beans/entering-the-unknown/home.png`,
-        mintedOut: `${process.env.NEXT_PUBLIC_URL}/images/mint/beans/entering-the-unknown/sold-out.gif`,
-        alreadyMinted: `${process.env.NEXT_PUBLIC_URL}/images/mint/beans/common/already-minted.png`,
-        noAddress: `${process.env.NEXT_PUBLIC_URL}/images/mint/beans/common/no-address.png`,
-        successfulMint: `${process.env.NEXT_PUBLIC_URL}/images/mint/beans/entering-the-unknown/mint-successful.gif`,
+    images: {
+        home: {
+            src: `${process.env.NEXT_PUBLIC_URL}/images/mint/beans/entering-the-unknown/home.png`,
+            aspectRatio: "1.91:1",
+        },
+        mintedOut: {
+            src: `${process.env.NEXT_PUBLIC_URL}/images/mint/beans/entering-the-unknown/sold-out.gif`,
+            aspectRatio: "1.91:1",
+        },
+        alreadyMinted: {
+            src: `${process.env.NEXT_PUBLIC_URL}/images/mint/beans/common/already-minted.png`,
+            aspectRatio: "1.91:1",
+        },
+        noAddress: {
+            src: `${process.env.NEXT_PUBLIC_URL}/images/mint/beans/common/no-address.png`,
+            aspectRatio: "1.91:1",
+        },
+        successfulMint: {
+            src: `${process.env.NEXT_PUBLIC_URL}/images/mint/beans/entering-the-unknown/mint-successful.gif`,
+            aspectRatio: "1.91:1",
+        },
     },
     conditionsNotMetComponent: MintConditionsNotMetComponent,
+    conditionsNotMetAspectRatio: "1.91:1",
     decisionLogic: {
         mintedOutCheck: () => isNftSoldOut(CLIENT, COLLECTION_ADDRESS),
         alreadyMintedCheck: (address) => isNftBalanceAboveThreshold(CLIENT, COLLECTION_ADDRESS, address, 0),

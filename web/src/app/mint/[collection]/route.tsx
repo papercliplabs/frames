@@ -17,7 +17,7 @@ export async function GET(req: NextRequest, { params }: { params: { collection: 
 
     return new NextResponse(
         getFrameHtmlResponse({
-            image: config.imgSrcs.home,
+            image: config.images.home,
             buttons: [{ label: "Free Mint!", action: "post" }],
             postUrl: `${process.env.NEXT_PUBLIC_URL}/mint/${params.collection}?${req.nextUrl.searchParams.toString()}`,
         })
@@ -52,7 +52,7 @@ export async function POST(req: NextRequest, { params }: { params: { collection:
         return restrictedFrameResponse();
     }
 
-    let image = config.imgSrcs.home;
+    let image = config.images.home;
     let buttons: [FrameButtonMetadata, ...FrameButtonMetadata[]] = [
         {
             label: config.learnMoreButtonConfig.label,
@@ -73,17 +73,17 @@ export async function POST(req: NextRequest, { params }: { params: { collection:
     const mintedOut = await config.decisionLogic.mintedOutCheck();
     if (mintedOut) {
         console.log("MINTED OUT", username, fid);
-        image = config.imgSrcs.mintedOut;
+        image = config.images.mintedOut;
     } else {
         let verifiedAddress = framePayload.interactor.verified_accounts[0];
         if (verifiedAddress == undefined) {
             console.log("NOT VERIFIED ADDRESS", username, fid);
-            image = config.imgSrcs.noAddress;
+            image = config.images.noAddress;
         } else {
             const alreadyMinted = await config.decisionLogic.alreadyMintedCheck(getAddress(verifiedAddress));
             if (alreadyMinted) {
                 console.log("ALREADY MINTED", username, fid);
-                image = config.imgSrcs.alreadyMinted;
+                image = config.images.alreadyMinted;
             } else {
                 const { passed: mintConditionsMet, checkPayload } = await config.decisionLogic.mintConditionsCheck(
                     castHash,
@@ -94,20 +94,27 @@ export async function POST(req: NextRequest, { params }: { params: { collection:
                 if (!mintConditionsMet) {
                     console.log("MINT CONDITIONS NOT MET", username, fid, checkPayload);
                     const urlParams = checkPayload;
-                    image = `${process.env.NEXT_PUBLIC_URL}/mint/${
-                        params.collection
-                    }/img/conditions-not-met?${urlParams.toString()}`;
+                    image = {
+                        src: `${process.env.NEXT_PUBLIC_URL}/mint/${
+                            params.collection
+                        }/img/conditions-not-met?${urlParams.toString()}`,
+                        aspectRatio: config.conditionsNotMetAspectRatio,
+                    };
                     buttons = [{ label: "Refresh", action: "post" }];
                 } else {
                     if (composeFrameUrl && !composing) {
                         console.log("COMPOSING", username, fid);
-                        const composeResponse = await getComposeResponse(composeFrameUrl, frameRequest);
-                        return new NextResponse(composeResponse);
+                        if (config.composeToGetRequest) {
+                            return Response.redirect(composeFrameUrl);
+                        } else {
+                            const composeResponse = await getComposeResponse(composeFrameUrl, frameRequest);
+                            return new NextResponse(composeResponse);
+                        }
                     } else {
                         // Mint
                         const resp = await config.mint(frameRequest, getAddress(verifiedAddress));
                         console.log("MINTING", username, fid, resp);
-                        image = config.imgSrcs.successfulMint;
+                        image = config.images.successfulMint;
                     }
                 }
             }
