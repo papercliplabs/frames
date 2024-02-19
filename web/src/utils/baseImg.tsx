@@ -5,6 +5,7 @@ export type FontType = "londrina" | "pally" | "inter" | "druk" | "graphik" | "gr
 
 interface BaseImageParameters {
     content: ReactElement;
+    aspectRatio?: "1:1" | "1.91:1";
     fontTypes: FontType[];
 }
 
@@ -17,7 +18,7 @@ const fontLookup: Record<FontType, { path: string; style: string }> = {
     graphikBold: { path: "fonts/GraphikBold.otf", style: "bold" },
 };
 
-export async function baseImage({ content, fontTypes }: BaseImageParameters): Promise<ImageResponse> {
+export async function baseImage({ content, aspectRatio, fontTypes }: BaseImageParameters): Promise<ImageResponse> {
     const fetches = fontTypes.map((type) =>
         fetch(new URL(`${process.env.NEXT_PUBLIC_URL}/${fontLookup[type].path}`, import.meta.url), {
             cache: "force-cache",
@@ -35,7 +36,7 @@ export async function baseImage({ content, fontTypes }: BaseImageParameters): Pr
 
     return new ImageResponse(content, {
         width: 1200,
-        height: 630,
+        height: aspectRatio == "1:1" ? 1200 : 630,
         fonts: fonts as any,
     });
 }

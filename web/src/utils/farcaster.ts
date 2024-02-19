@@ -3,6 +3,7 @@ import { NeynarAPIClient } from "@neynar/nodejs-sdk";
 import { User } from "@neynar/nodejs-sdk/build/neynar-api/v2";
 
 const NEYNAR_KEY = process.env.NEYNAR_API_KEY!;
+const REVALIDATION_TIME_S = 10;
 
 export const neynarClient = new NeynarAPIClient(NEYNAR_KEY);
 
@@ -15,6 +16,9 @@ export async function getFollowerUserIdsForChannel(channelId: string): Promise<n
             {
                 headers: {
                     api_key: NEYNAR_KEY,
+                },
+                next: {
+                    revalidate: REVALIDATION_TIME_S,
                 },
             }
         );
@@ -44,6 +48,9 @@ export async function getLikedUserIdsForCast(castHash: string): Promise<number[]
         const req = await fetch(`https://api.neynar.com/v2/farcaster/casts?casts=${castHash}`, {
             headers: {
                 api_key: NEYNAR_KEY,
+            },
+            next: {
+                revalidate: REVALIDATION_TIME_S,
             },
         });
         const resp = await req.json();

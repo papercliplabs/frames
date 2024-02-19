@@ -12,8 +12,7 @@ export async function GET(req: NextRequest, { params }: { params: { collection: 
 
     return await baseImage({
         content: <config.conditionsNotMetComponent checkPayload={req.nextUrl.searchParams} />,
+        aspectRatio: config.conditionsNotMetAspectRatio,
         fontTypes: config.fonts,
     });
 }
-
-export const dynamic = "force-dynamic";

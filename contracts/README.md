@@ -48,7 +48,7 @@ source .env; forge create \
 ### Verify After Deploy 
 Base
 ```
-source .env; forge verify-contract --chain-id 8453 <contract_address> --etherscan-api-key $ETHERSCAN_API_KEY src/SyndicateFrameERC721.sol:SyndicateFrameERC721   
+source .env; forge verify-contract --chain-id 8453 <contract_address> src/SyndicateFrameERC721.sol:SyndicateFrameERC721 --verifier blockscout --verifier-url https://base.blockscout.com/api\?
 ```
 
 Base Sepolia 
