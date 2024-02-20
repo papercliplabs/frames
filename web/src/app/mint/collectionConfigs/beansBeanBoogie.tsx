@@ -156,5 +156,5 @@ export const beansBeanBoogieConfig: MintConfig<any> = {
     },
     fonts: ["graphik", "graphikBold"],
     composeToGetRequest: true,
-    allowedCasterFids: [3362, 1555, 18655, 318911],
+    // allowedCasterFids: [3362, 1555, 18655, 318911],
 };
