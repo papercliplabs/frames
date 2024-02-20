@@ -27,11 +27,7 @@ export async function isUserFollowedByUser(userId: number, userIdToCheckIfFollow
     return userId == userIdToCheckIfFollowing || (isFollowing ?? false);
 }
 
-export async function doesUserHaveActiveBadge(
-    userAddress: Address,
-    userId: number,
-    castHash: string
-): Promise<boolean> {
+export async function doesUserHaveActiveBadge(userId: number, inclusionIds: number[]): Promise<boolean> {
     const status = (await getUserInfo(userId)).active_status;
-    return status == "active";
+    return status == "active" || inclusionIds.includes(userId);
 }

@@ -37,13 +37,17 @@ async function isFollowingPaperclipLabs(userAddress: Address, userId: number, ca
     return isUserFollowedByUser(318911, userId);
 }
 
+async function activeBadgeOrSpecialUser(userAddress: Address, userId: number, castHash: string): Promise<boolean> {
+    return doesUserHaveActiveBadge(userId, [1551, 2750, 3009, 2813, 4110]);
+}
+
 const checkConfigs = [
     { name: "Like this cast", check: isCastLikedByUser },
     { name: "Follow /beans channel", check: isBeansChannelFollowedByUser },
     { name: "Follow @maschka", check: isFollowingJack },
     { name: "Follow @bodegacatceo", check: isFollowingBodegacatceo },
     { name: "Follow @papercliplabs", check: isFollowingPaperclipLabs },
-    { name: "Active badge", check: doesUserHaveActiveBadge },
+    { name: "Active badge", check: activeBadgeOrSpecialUser },
 ];
 
 async function mintConditionsCheck(
@@ -152,5 +156,5 @@ export const beansBeanBoogieConfig: MintConfig<any> = {
     },
     fonts: ["graphik", "graphikBold"],
     composeToGetRequest: true,
-    allowedCasterFids: [3362, 11555, 18655, 318911],
+    allowedCasterFids: [3362, 1555, 18655, 318911],
 };
