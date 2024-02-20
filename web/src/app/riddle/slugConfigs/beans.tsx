@@ -83,5 +83,5 @@ export const beansRiddleConfig: RiddleConfig = {
         target: "https://beans.wtf",
     },
     fonts: ["graphik"],
-    // allowedCasterFids: [3362, 11555, 18655, 318911],
+    allowedCasterFids: [3362, 11555, 18655, 318911],
 };
