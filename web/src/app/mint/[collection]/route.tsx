@@ -26,7 +26,8 @@ export async function GET(req: NextRequest, { params }: { params: { collection: 
 
 export async function POST(req: NextRequest, { params }: { params: { collection: string } }): Promise<Response> {
     const config = mintConfigs[params.collection as SupportedMintCollection];
-    const { composeFrameUrl, composing } = extractComposableQueryParams(req.nextUrl.searchParams);
+    let { composeFrameUrl, composing } = extractComposableQueryParams(req.nextUrl.searchParams);
+    composeFrameUrl = composeFrameUrl?.split(" ")[0];
 
     const frameRequest: FrameRequest = await req.json();
     const frameValidationResponse = await getFrameMessageWithNeynarApiKey(frameRequest);

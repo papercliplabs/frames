@@ -22,7 +22,7 @@ async function mint(request: FrameRequest, address: Address) {
 }
 
 async function isBeansChannelFollowedByUser(userAddress: Address, userId: number, castHash: string): Promise<boolean> {
-    return isChannelFollowedByUser("beans", userId);
+    return true; //isChannelFollowedByUser("beans", userId);
 }
 
 async function isFollowingJack(userAddress: Address, userId: number, castHash: string): Promise<boolean> {
