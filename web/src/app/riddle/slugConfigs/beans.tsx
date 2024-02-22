@@ -74,7 +74,7 @@ export const beansRiddleConfig: RiddleConfig = {
     images: {
         home: { src: `${process.env.NEXT_PUBLIC_URL}/images/riddle/beans/home.gif`, aspectRatio: "1:1" },
         riddle: { src: `${process.env.NEXT_PUBLIC_URL}/images/riddle/beans/riddle.png`, aspectRatio: "1:1" },
-        correct: { src: `${process.env.NEXT_PUBLIC_URL}/images/riddle/beans/correct.png`, aspectRatio: "1:1" },
+        correct: { src: `${process.env.NEXT_PUBLIC_URL}/images/riddle/beans/correct.gif`, aspectRatio: "1:1" },
     },
     riddleContent,
     getRiddle,
