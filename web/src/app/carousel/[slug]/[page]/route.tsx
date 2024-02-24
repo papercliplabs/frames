@@ -17,7 +17,7 @@ export async function GET(req: NextRequest, { params }: { params: { slug: string
 
     return new NextResponse(
         getFrameHtmlResponse({
-            image: config.itemConfigs[page].imgSrc,
+            image: config.itemConfigs[page].image,
             buttons: getButtonsWithActionForCarouselItem(config, page),
             postUrl: `${process.env.NEXT_PUBLIC_URL}/carousel/${params.slug}/${
                 params.page
@@ -34,9 +34,7 @@ export async function POST(
 
     const frameRequest: FrameRequest = await req.json();
 
-    const { composeFrameUrl, composeFrameButtonLabel, composing } = extractComposableQueryParams(
-        req.nextUrl.searchParams
-    );
+    const { composing } = extractComposableQueryParams(req.nextUrl.searchParams);
 
     let buttonIndex = frameRequest.untrustedData.buttonIndex - 1;
     if (config.allowedCasterFids) {
@@ -64,8 +62,8 @@ export async function POST(
         return Response.error();
     }
 
-    let carouselAction = getButtonsWithActionForCarouselItem(config, page, composeFrameButtonLabel)?.[buttonIndex]
-        ?.carouselAction;
+    const button = getButtonsWithActionForCarouselItem(config, page)?.[buttonIndex];
+    let carouselAction = button?.carouselAction;
 
     if (composing) {
         // Ignore when composing
@@ -73,9 +71,7 @@ export async function POST(
     }
 
     if (carouselAction == "compose") {
-        const lastItem = page == config.itemConfigs.length - 1;
-        const originalComposeUrl = config.itemConfigs[page].composeButtonConfig?.postUrl; // Has to exist if override doesn't, since action is from this frame
-        const url = lastItem ? composeFrameUrl ?? originalComposeUrl! : originalComposeUrl!;
+        const url = (button as any)["target"];
         const composeResponse = await getComposeResponse(url, frameRequest);
         return new NextResponse(composeResponse);
     }
@@ -84,8 +80,8 @@ export async function POST(
 
     return new NextResponse(
         getFrameHtmlResponse({
-            image: config.itemConfigs[newPage].imgSrc,
-            buttons: getButtonsWithActionForCarouselItem(config, newPage, composeFrameButtonLabel),
+            image: config.itemConfigs[newPage].image,
+            buttons: getButtonsWithActionForCarouselItem(config, newPage),
             postUrl: `${process.env.NEXT_PUBLIC_URL}/carousel/${
                 params.slug
             }/${newPage}?${req.nextUrl.searchParams.toString()}`,
