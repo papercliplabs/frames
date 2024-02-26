@@ -1,6 +1,10 @@
+import { FrameButtonMetadata, FrameImageMetadata } from "@coinbase/onchainkit";
 import { beansDungeonConfig } from "./slugConfigs/beansDungeon";
 import { beansDungeonNoMintConfig } from "./slugConfigs/beansDungeonNoMint";
 import { paperclipAuctionFramesConfig } from "./slugConfigs/paperclipAuctionFrames";
+import { nounsDenverCarrouselConfig } from "./slugConfigs/nounsDenver";
+
+type Action = "link" | "mint" | "compose";
 
 export interface CarouselNavButtonConfig {
     disablePrevNavigation?: boolean; // Disabled backward navigation in the carousel
@@ -9,18 +13,10 @@ export interface CarouselNavButtonConfig {
 }
 
 export interface CarouselItemConfig {
-    imgSrc: string; // Image source for this item
+    image: FrameImageMetadata;
     navButtonConfigOverrides?: CarouselNavButtonConfig; // Overrides, these will take priority over the global config
-    redirectButtonConfig?: {
-        // If specified, adds a redirection button to an external link to the item page
-        label: string; // Label for the button
-        url: string; // Url to redirect to
-    };
-    composeButtonConfig?: {
-        // If specified, adds a button to compose frames by navigating to a new frame
-        label: string; // Label for this button
-        postUrl: string; // New frames url
-    };
+    buttonThreeConfig?: { label: string; target: string; action: Action };
+    buttonFourConfig?: { label: string; target: string; action: Action };
 }
 
 export interface CarouselConfig {
@@ -29,10 +25,15 @@ export interface CarouselConfig {
     allowedCasterFids?: number[]; // Restricts who is allowed to cast this frame, no restrictions if undefined
 }
 
-export type SupportedCarouselSlugs = "beans-dungeon" | "beans-dungeon-no-mint" | "paperclip-auction-frames";
+export type SupportedCarouselSlugs =
+    | "beans-dungeon"
+    | "beans-dungeon-no-mint"
+    | "paperclip-auction-frames"
+    | "nouns-denver";
 
 export const carouselConfigs: Record<SupportedCarouselSlugs, CarouselConfig> = {
     "beans-dungeon": beansDungeonConfig,
     "beans-dungeon-no-mint": beansDungeonNoMintConfig,
     "paperclip-auction-frames": paperclipAuctionFramesConfig,
+    "nouns-denver": nounsDenverCarrouselConfig,
 };

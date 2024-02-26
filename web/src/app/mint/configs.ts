@@ -6,6 +6,7 @@ import { beansEnteringTheUnknownConfig } from "./collectionConfigs/beansEntering
 import { FrameImageMetadata, FrameRequest, FrameValidationData } from "@coinbase/onchainkit";
 import { mainCharactersGenslerCoinConfig } from "./collectionConfigs/mainCharactersGenslerCoin";
 import { beansBeanBoogieConfig } from "./collectionConfigs/beansBeanBoogie";
+import { nounsDenverConfig } from "./collectionConfigs/nounsDenver";
 
 export interface ConditionsNotMetComponentProps {
     checkPayload: URLSearchParams;
@@ -46,7 +47,8 @@ export type SupportedMintCollection =
     | "beans-the-adventure-begins"
     | "beans-entering-the-unknown"
     | "maincharacters-gensler-coin"
-    | "beans-bean-boogie";
+    | "beans-bean-boogie"
+    | "nouns-denver";
 
 export const mintConfigs: Record<SupportedMintCollection, MintConfig<any>> = {
     "based-and-yellow-frame-edition-one": basedAndYellowFrameEditionOneConfig,
@@ -54,4 +56,5 @@ export const mintConfigs: Record<SupportedMintCollection, MintConfig<any>> = {
     "beans-entering-the-unknown": beansEnteringTheUnknownConfig,
     "maincharacters-gensler-coin": mainCharactersGenslerCoinConfig,
     "beans-bean-boogie": beansBeanBoogieConfig,
+    "nouns-denver": nounsDenverConfig,
 };

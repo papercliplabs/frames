@@ -1,12 +1,11 @@
 import { CarouselConfig } from "./configs";
 import { FrameButtonMetadata } from "@coinbase/onchainkit";
 
-type FrameButtonInfoWithAction = FrameButtonMetadata & { carouselAction: "prev" | "next" | "redirect" | "compose" };
+type FrameButtonInfoWithAction = FrameButtonMetadata & { carouselAction?: "prev" | "next" | "compose" };
 
 export function getButtonsWithActionForCarouselItem(
     config: CarouselConfig,
-    itemNumber: number,
-    completionComposeLabelOverride?: string
+    itemNumber: number
 ): [FrameButtonInfoWithAction, ...FrameButtonInfoWithAction[]] | undefined {
     const frameButtons: FrameButtonInfoWithAction[] = [];
 
@@ -17,6 +16,7 @@ export function getButtonsWithActionForCarouselItem(
         return undefined;
     }
 
+    // Not the first page, and didn't disable back nav
     if (
         !config.navButtonConfig?.disablePrevNavigation &&
         !configItem.navButtonConfigOverrides?.disablePrevNavigation &&
@@ -31,6 +31,7 @@ export function getButtonsWithActionForCarouselItem(
         } as FrameButtonInfoWithAction);
     }
 
+    // Not the last page
     if (itemNumber != config.itemConfigs.length - 1) {
         // Next
         frameButtons.push({
@@ -41,24 +42,21 @@ export function getButtonsWithActionForCarouselItem(
         } as FrameButtonInfoWithAction);
     }
 
-    if (configItem.redirectButtonConfig != undefined) {
+    if (configItem.buttonThreeConfig != undefined) {
         frameButtons.push({
-            action: "link",
-            label: configItem.redirectButtonConfig.label,
-            target: configItem.redirectButtonConfig.url,
-            carouselAction: "redirect",
+            action: configItem.buttonThreeConfig.action == "compose" ? "post" : configItem.buttonThreeConfig.action,
+            label: configItem.buttonThreeConfig.label,
+            target: configItem.buttonThreeConfig.target,
+            carouselAction: configItem.buttonThreeConfig.action == "compose" ? "compose" : undefined,
         } as FrameButtonInfoWithAction);
     }
 
-    const lastItem = itemNumber == config.itemConfigs.length - 1;
-    if (configItem.composeButtonConfig != undefined || (lastItem && completionComposeLabelOverride != undefined)) {
-        const title = lastItem
-            ? completionComposeLabelOverride ?? configItem.composeButtonConfig!.label
-            : configItem.composeButtonConfig!.label;
+    if (configItem.buttonFourConfig != undefined) {
         frameButtons.push({
-            action: "post",
-            label: title,
-            carouselAction: "compose",
+            action: configItem.buttonFourConfig.action == "compose" ? "post" : configItem.buttonFourConfig.action,
+            label: configItem.buttonFourConfig.label,
+            target: configItem.buttonFourConfig.target,
+            carouselAction: configItem.buttonFourConfig.action == "compose" ? "compose" : undefined,
         } as FrameButtonInfoWithAction);
     }
 
