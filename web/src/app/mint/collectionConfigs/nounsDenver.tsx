@@ -61,7 +61,7 @@ export const nounsDenverConfig: MintConfig<any> = {
     mint,
     learnMoreButtonConfig: {
         label: "Nouns Denver",
-        redirectUrl: "https://warpcast.com/~/channel/nounsdenver",
+        redirectUrl: "https://warpcast.com/toadyhawk.eth/0x66ea0477",
     },
     fonts: ["druk"],
 };
