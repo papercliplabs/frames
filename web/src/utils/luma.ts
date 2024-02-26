@@ -29,10 +29,11 @@ export async function isEventSoldOut(eventId: string, maxCapacity: number): Prom
 export async function registerGuestForEvent(
     eventId: string,
     ticketTypeId: string,
+    name: string,
     guestEmail: string
 ): Promise<"success" | "invalid-email"> {
     const payload = JSON.stringify({
-        name: " ",
+        name: name != "" ? name : " ",
         email: guestEmail,
         event_api_id: eventId,
         ticket_type_api_id_to_info: { [ticketTypeId]: { count: 1, amount: 0 } },

@@ -50,6 +50,9 @@ export async function POST(req: NextRequest, { params }: { params: { slug: strin
     const framePayload = frameValidationResponse.message;
     const email = framePayload.input;
     const buttonNumber = framePayload.button;
+    const displayName = framePayload.raw.action.interactor.username;
+    const fid = framePayload.interactor.fid;
+    const name = displayName + "-" + fid;
 
     const validEmail = isEmailValid(email);
 
@@ -103,13 +106,13 @@ export async function POST(req: NextRequest, { params }: { params: { slug: strin
             } else {
                 const meetsApprovalCriteria = await config.checkApprovalCriteria(framePayload);
                 if (meetsApprovalCriteria) {
-                    await registerGuestForEvent(config.eventId, config.ticketTypeId, email);
+                    await registerGuestForEvent(config.eventId, config.ticketTypeId, name, email);
                     await approveGuestForEvent(config.eventId, email);
                     image = config.images.registered;
                 } else {
                     const isActive = framePayload.raw.action.interactor.active_status == "active";
                     if (isActive) {
-                        await registerGuestForEvent(config.eventId, config.ticketTypeId, email);
+                        await registerGuestForEvent(config.eventId, config.ticketTypeId, name, email);
                         image = config.images.pendingApproval;
                     } else {
                         image = config.images.ineligible;
