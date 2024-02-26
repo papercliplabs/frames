@@ -1,0 +1,28 @@
+{
+    "name": "691 /paltry/ likes",
+    "description": "a celebration of online community building",
+    "external_url": "https://warpcast.com/wake/0x4aed023b",
+    "image": "ipfs://QmVFwZqCxXg9mtG8omTpySRV6qLeaHKDKuJA47hSfXRdba",
+    "attributes": [
+        {
+            "trait_type": "Chain",
+            "value": "Base"
+        },
+        {
+            "trait_type": "Gas",
+            "value": "Sponsored by Base"
+        },
+        {
+            "trait_type": "Artist",
+            "value": "Jack Maschka"
+        },
+        {
+            "trait_type": "Artist",
+            "value": "proxystudio"
+        },
+        {
+            "trait_type": "Title",
+            "value": "691 /paltry/ likes"
+        }
+    ]
+}

@@ -7,6 +7,7 @@ import { FrameImageMetadata, FrameRequest, FrameValidationData } from "@coinbase
 import { mainCharactersGenslerCoinConfig } from "./collectionConfigs/mainCharactersGenslerCoin";
 import { beansBeanBoogieConfig } from "./collectionConfigs/beansBeanBoogie";
 import { nounsDenverConfig } from "./collectionConfigs/nounsDenver";
+import { paltryLikesConfig } from "./collectionConfigs/paltryLikes";
 
 export interface ConditionsNotMetComponentProps {
     checkPayload: URLSearchParams;
@@ -48,7 +49,8 @@ export type SupportedMintCollection =
     | "beans-entering-the-unknown"
     | "maincharacters-gensler-coin"
     | "beans-bean-boogie"
-    | "nouns-denver";
+    | "nouns-denver"
+    | "paltry-likes";
 
 export const mintConfigs: Record<SupportedMintCollection, MintConfig<any>> = {
     "based-and-yellow-frame-edition-one": basedAndYellowFrameEditionOneConfig,
@@ -57,4 +59,5 @@ export const mintConfigs: Record<SupportedMintCollection, MintConfig<any>> = {
     "maincharacters-gensler-coin": mainCharactersGenslerCoinConfig,
     "beans-bean-boogie": beansBeanBoogieConfig,
     "nouns-denver": nounsDenverConfig,
+    "paltry-likes": paltryLikesConfig,
 };
