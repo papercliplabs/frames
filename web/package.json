@@ -10,7 +10,7 @@
         "lint": "next lint"
     },
     "dependencies": {
-        "@coinbase/onchainkit": "^0.6.1",
+        "@coinbase/onchainkit": "^0.9.4",
         "@hookform/resolvers": "^3.3.4",
         "@neynar/nodejs-sdk": "^1.9.4",
         "@nouns/assets": "^0.5.0",

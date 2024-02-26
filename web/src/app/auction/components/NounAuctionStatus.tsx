@@ -17,6 +17,12 @@ export default function NounAuctionStatus({
             tw="flex w-full h-full justify-center items-center text-[64px]"
             style={{ backgroundColor: backgroundColor ?? "white", color: baseTextColor ?? "black" }}
         >
+            <div
+                tw="absolute top-[10px] left-0 w-[1200px] flex items-center justify-center text-center text-[32px]"
+                className="top-1/2 translate-x-1/2"
+            >
+                Made with ❤️ by Paperclip Labs
+            </div>
             <img
                 src={imgSrc ?? ""}
                 width={420}
