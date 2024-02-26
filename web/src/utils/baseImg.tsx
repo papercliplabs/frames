@@ -38,5 +38,8 @@ export async function baseImage({ content, aspectRatio, fontTypes }: BaseImagePa
         width: 1200,
         height: aspectRatio == "1:1" ? 1200 : 630,
         fonts: fonts as any,
+        headers: {
+            "Cache-Control": "max-age=0, must-revalidate",
+        },
     });
 }

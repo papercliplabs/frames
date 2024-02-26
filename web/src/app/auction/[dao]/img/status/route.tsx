@@ -40,3 +40,5 @@ export async function GET(req: NextRequest, { params }: { params: { dao: string 
         fontTypes: [config.style.fontType],
     });
 }
+
+export const dynamic = "force-dynamic";
