@@ -43,19 +43,21 @@ export function getButtonsWithActionForCarouselItem(
     }
 
     if (configItem.buttonThreeConfig != undefined) {
+        const isCompose = configItem.buttonThreeConfig.action == "compose";
         frameButtons.push({
-            action: configItem.buttonThreeConfig.action == "compose" ? "post" : configItem.buttonThreeConfig.action,
+            action: isCompose ? "post" : configItem.buttonThreeConfig.action,
             label: configItem.buttonThreeConfig.label,
-            target: configItem.buttonThreeConfig.target,
+            target: configItem.buttonThreeConfig.target + (isCompose ? "?composing=1" : ""),
             carouselAction: configItem.buttonThreeConfig.action == "compose" ? "compose" : undefined,
         } as FrameButtonInfoWithAction);
     }
 
     if (configItem.buttonFourConfig != undefined) {
+        const isCompose = configItem.buttonFourConfig.action == "compose";
         frameButtons.push({
             action: configItem.buttonFourConfig.action == "compose" ? "post" : configItem.buttonFourConfig.action,
             label: configItem.buttonFourConfig.label,
-            target: configItem.buttonFourConfig.target,
+            target: configItem.buttonFourConfig.target + (isCompose ? "?composing=1" : ""),
             carouselAction: configItem.buttonFourConfig.action == "compose" ? "compose" : undefined,
         } as FrameButtonInfoWithAction);
     }

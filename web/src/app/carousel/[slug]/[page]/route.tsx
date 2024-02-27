@@ -70,12 +70,6 @@ export async function POST(
         carouselAction = undefined;
     }
 
-    if (carouselAction == "compose") {
-        const url = (button as any)["target"];
-        const composeResponse = await getComposeResponse(url, frameRequest);
-        return new NextResponse(composeResponse);
-    }
-
     const newPage = carouselAction == "next" ? page + 1 : carouselAction == "prev" ? page - 1 : page;
 
     return new NextResponse(

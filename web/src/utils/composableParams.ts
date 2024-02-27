@@ -25,6 +25,7 @@ export function extractComposableQueryParams(searchParams: URLSearchParams): {
 export async function getComposeResponse(url: string, request: FrameRequest): Promise<string> {
     const searchParams = new URL(url).searchParams;
     searchParams.append("composing", "1");
+
     const resp = await fetch(url.split("?")[0] + `?${searchParams.toString()}`, {
         method: "POST",
         body: JSON.stringify(request),
