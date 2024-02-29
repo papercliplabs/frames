@@ -107,7 +107,7 @@ export async function POST(req: NextRequest, { params }: { params: { slug: strin
                 const meetsApprovalCriteria = await config.checkApprovalCriteria(framePayload);
                 if (meetsApprovalCriteria) {
                     await registerGuestForEvent(config.eventId, config.ticketTypeId, name, email);
-                    await approveGuestForEvent(config.eventId, email);
+                    // await approveGuestForEvent(config.eventId, email);
                     image = config.images.registered;
                 } else {
                     const isActive = framePayload.raw.action.interactor.active_status == "active";
