@@ -1,4 +1,4 @@
-import { Address, PublicClient, formatEther } from "viem";
+import { Address, Client, formatEther } from "viem";
 import { readContract } from "viem/actions";
 import { ImageData, getNounData } from "@nouns/assets";
 import { buildSVG } from "@nouns/sdk";
@@ -14,7 +14,7 @@ const parseBase64String = (val: string) => {
 };
 
 export interface GetAuctionDetailsParams {
-    client: PublicClient;
+    client: Client;
     auctionAddress: Address;
     tokenAddress: Address;
 }

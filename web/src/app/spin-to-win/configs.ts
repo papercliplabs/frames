@@ -5,11 +5,11 @@ import { FrameImageMetadata, FrameValidationData } from "@coinbase/onchainkit";
 export interface SpinToWinConfig {
     isSoldOut: () => Promise<boolean>;
     didAlreadySpin: (fid: number) => Promise<boolean>;
-    runSpin: (frameData: Exclude<FrameContext["frameData"], undefined>) => Promise<FrameImageData>; // Returns the spin gif
+    runSpin: (frameData: FrameValidationData) => Promise<FrameImageMetadata>; // Returns the spin gif
     images: {
-        home: FrameImageData;
-        soldOut: FrameImageData;
-        alreadySpun: FrameImageData;
+        home: FrameImageMetadata;
+        soldOut: FrameImageMetadata;
+        alreadySpun: FrameImageMetadata;
     };
     externalLinkConfig: {
         title: string;
