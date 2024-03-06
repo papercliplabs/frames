@@ -2742,10 +2742,10 @@ fraction.js@^4.3.7:
   resolved "https://registry.yarnpkg.com/fraction.js/-/fraction.js-4.3.7.tgz#06ca0085157e42fda7f9e726e79fefc4068840f7"
   integrity sha512-ZsDfxO51wGAXREY55a7la9LScWpwv9RxIrYABrlvOFBlH/ShPnrtsXeuUIfXKKOVicNxQ+o8JTbJvjS4M89yew==
 
-frog@^0.2.12:
-  version "0.2.12"
-  resolved "https://registry.yarnpkg.com/frog/-/frog-0.2.12.tgz#bb49b8f0a66e4c926d186f620f7197e0e8ee3310"
-  integrity sha512-pVu5aPbR/ABnQaXnCeVIZg6dwcm4iHWJdrg//9Ecbf6Uci/W+zAWJBOyJzOmXi9SVBQQNu7tpI+rS5xvZoo9Kw==
+frog@^0.4.1:
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/frog/-/frog-0.4.1.tgz#2b249e7c3baa4f8f1204fdb7c8a1f6c4864a0730"
+  integrity sha512-FA/oOssKKAaofDcaorbnUafJqeZnBMS0IfeCm7ugRy6Q5u74JlzeO8x+qgjbkUQc0BqjCX46LWkjR8uECqSaLw==
   dependencies:
     "@bufbuild/protobuf" "^1.7.2"
     "@farcaster/core" "^0.13.7"
