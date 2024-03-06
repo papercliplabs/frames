@@ -82,7 +82,7 @@ async function isSoldOut(): Promise<boolean> {
         throw error;
     }
 
-    return data.length >= MAX_NUMBER_OF_SPINS;
+    return false; //data.length >= MAX_NUMBER_OF_SPINS;
 }
 
 async function didAlreadySpin(fid: number): Promise<boolean> {
@@ -92,7 +92,7 @@ async function didAlreadySpin(fid: number): Promise<boolean> {
         throw error;
     }
 
-    return data.length != 0;
+    return false; //data.length != 0;
 }
 
 function getRandomOutcome() {
