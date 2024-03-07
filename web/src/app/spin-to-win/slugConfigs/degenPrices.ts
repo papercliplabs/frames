@@ -142,7 +142,7 @@ export const degenPricesSlugConfig: SpinToWinConfig = {
         },
     },
     externalLinkConfig: {
-        title: "View /degenprice",
+        title: "Go to /degenprice",
         href: "https://warpcast.com/~/channel/degenprice",
     },
 };
