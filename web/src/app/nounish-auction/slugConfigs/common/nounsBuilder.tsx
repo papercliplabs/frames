@@ -140,7 +140,7 @@ export function NounBuilderAuctionStatus({
     colors,
 }: NounsBuilderAuctionData) {
     const rowEntries: { name: string; value: string }[] = [
-        { name: "Current bid", value: bid },
+        { name: "Current bid", value: bid + " ETH" },
         { name: "Time left", value: timeRemaining },
         { name: "Highest bid", value: bidder },
     ];

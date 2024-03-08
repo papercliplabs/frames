@@ -4,8 +4,9 @@ import { SupportedNounishAuctionSlug, nounishAuctionConfigs } from "../configs";
 import { unstable_cache } from "next/cache";
 import { getFrameMessageWithNeynarApiKey } from "@/utils/farcaster";
 import { parseEther } from "viem";
+import { detect } from "detect-browser";
 
-async function response(slug: string, frameRequest?: FrameRequest): Promise<Response> {
+async function response(req: NextRequest, slug: string, frameRequest?: FrameRequest): Promise<Response> {
     const config = nounishAuctionConfigs[slug as SupportedNounishAuctionSlug];
 
     if (!config) {
@@ -13,11 +14,19 @@ async function response(slug: string, frameRequest?: FrameRequest): Promise<Resp
         return Response.error();
     }
 
+    // Handle redirect if clicked on frame
+    const browser = detect(req.headers.get("user-agent") ?? "");
+    if (browser?.name) {
+        return Response.redirect(config.auctionUrl);
+    }
+
     const data = await unstable_cache(config.getAuctionData, ["nounish-auction", slug], {
         revalidate: 2,
     })();
 
-    let inputText = `Bid Ξ${data.nextBidMin} or more`;
+    // GET request frameRequest will be undefined, so this will be the placeholder
+    // Warpcast caches the input text, and there is not way to bust it
+    let inputText = "Enter ETH bid amount";
     if (frameRequest && frameRequest.untrustedData.buttonIndex == 2) {
         const frameValidationResponse = await getFrameMessageWithNeynarApiKey(frameRequest);
         if (!frameValidationResponse.isValid) {
@@ -35,13 +44,13 @@ async function response(slug: string, frameRequest?: FrameRequest): Promise<Resp
                     return Response.redirect(
                         `${process.env.NEXT_PUBLIC_URL}/nounish-auction/${slug}/review/${bidAmountInputParsed}`
                     );
-                } else {
-                    inputText = "Error - " + inputText;
                 }
-            } catch (e) {
-                inputText = "Error - " + inputText;
+            } catch {
+                // Nothing, invalid bid
             }
         }
+
+        inputText = `Invalid, bid ${data.nextBidMin} ETH or more`;
     }
 
     return new NextResponse(
@@ -66,11 +75,11 @@ async function response(slug: string, frameRequest?: FrameRequest): Promise<Resp
 }
 
 export async function GET(req: NextRequest, { params }: { params: { slug: string } }): Promise<Response> {
-    return await response(params.slug, undefined);
+    return await response(req, params.slug, undefined);
 }
 
 export async function POST(req: NextRequest, { params }: { params: { slug: string } }): Promise<Response> {
-    return await response(params.slug, await req.json());
+    return await response(req, params.slug, await req.json());
 }
 
 export const dynamic = "force-dynamic";

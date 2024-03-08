@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getFrameHtmlResponse } from "@coinbase/onchainkit";
 import { SupportedNounishAuctionSlug, nounishAuctionConfigs } from "../../../configs";
 import { unstable_cache } from "next/cache";
+import { detect } from "detect-browser";
 
 // Only get request, since we just redirect to here, and this is terminal
 async function response(slug: string, bidAmount: string): Promise<Response> {

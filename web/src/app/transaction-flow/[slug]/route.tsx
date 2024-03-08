@@ -1,10 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { FrameButtonMetadata, FrameRequest, getFrameHtmlResponse } from "@coinbase/onchainkit";
 import { transactionFlowConfigs, SupportedTransactionFlowSlug } from "../config";
-import { getTransaction, getTransactionConfirmations, getTransactionReceipt } from "viem/actions";
+import { getTransactionReceipt } from "viem/actions";
 import { Hex } from "viem";
 
 export async function GET(req: NextRequest, { params }: { params: { slug: string; hash: string } }): Promise<Response> {
+    const config = transactionFlowConfigs[params.slug as SupportedTransactionFlowSlug];
+
+    if (!config) {
+        console.error("No config found - ", params.slug);
+        return Response.error();
+    }
+
     // Only for testing, should never hit here
     return new NextResponse(
         getFrameHtmlResponse({
