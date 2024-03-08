@@ -1,4 +1,4 @@
-import { Address, PublicClient } from "viem";
+import { Address, Client } from "viem";
 import { basePublicClient, mainnetPublicClient, zoraPublicClient } from "@/utils/wallet";
 import { FontType } from "@/utils/baseImg";
 import {
@@ -14,7 +14,7 @@ import BeansAuctionStatus from "./components/BeansAuctionStatus";
 import { AuctionStatusProps } from "./components/AuctionStatusProps";
 
 export interface AuctionConfig {
-    client: PublicClient;
+    client: Client;
     auctionAddress: Address;
     tokenAddress: Address;
     getAuctionDetails: (params: GetAuctionDetailsParams) => Promise<AuctionDetails>;

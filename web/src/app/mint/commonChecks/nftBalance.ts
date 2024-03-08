@@ -1,8 +1,8 @@
-import { Address, PublicClient } from "viem";
+import { Address, Client } from "viem";
 import { readContract } from "viem/actions";
 import { erc721Abi } from "viem";
 
-async function getOwnerNftBalance(client: PublicClient, collectionAddress: Address, owner: Address): Promise<number> {
+async function getOwnerNftBalance(client: Client, collectionAddress: Address, owner: Address): Promise<number> {
     return Number(
         (
             await readContract(client, {
@@ -16,7 +16,7 @@ async function getOwnerNftBalance(client: PublicClient, collectionAddress: Addre
 }
 
 export async function isNftBalanceBelowThreshold(
-    client: PublicClient,
+    client: Client,
     collectionAddress: Address,
     owner: Address,
     threshold: number
@@ -26,7 +26,7 @@ export async function isNftBalanceBelowThreshold(
 }
 
 export async function isNftBalanceAboveThreshold(
-    client: PublicClient,
+    client: Client,
     collectionAddress: Address,
     owner: Address,
     threshold: number
