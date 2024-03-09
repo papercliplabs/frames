@@ -23,7 +23,7 @@ const COLORS_FOR_BACKGROUND_ATTRIBUTE: Record<PermittedBackgroundAttribute, Colo
         text: { primary: "#212529", secondary: "rgba(33, 37, 41, 0.70)" },
     },
     yellow: {
-        background: { primary: "#FCF0DB", secondary: "#FBcB07" },
+        background: { primary: "#FCEFBC", secondary: "#FBcB07" },
         text: { primary: "#212529", secondary: "rgba(33, 37, 41, 0.70)" },
     },
 };
