@@ -73,7 +73,7 @@ export const baseTestConfig: NounishAuctionConfig<NounsBuilderAuctionData> = {
     auctionStatusComponent: NounBuilderAuctionStatus,
     reviewBidComponent: NounBuilderReviewBid,
     getBidTransactionData,
-    getSettleTransactionData,
+    // getSettleTransactionData,
     auctionUrl: "https://nouns.wtf",
     fonts: ["pally", "pt-root-ui"],
     transactionFlowSlug: "yellow-collective-auction",

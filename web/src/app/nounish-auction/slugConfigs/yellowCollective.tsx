@@ -73,7 +73,7 @@ export const yellowCollectiveAuctionConfig: NounishAuctionConfig<NounsBuilderAuc
     auctionStatusComponent: NounBuilderAuctionStatus,
     reviewBidComponent: NounBuilderReviewBid,
     getBidTransactionData,
-    getSettleTransactionData,
+    // getSettleTransactionData,
     auctionUrl: "https://yellowcollective.xyz",
     fonts: ["pally", "pt-root-ui"],
     transactionFlowSlug: "yellow-collective-auction",

@@ -15,7 +15,7 @@ export async function GET(req: NextRequest, { params }: { params: { slug: string
     return new ImageResponse(
         (
             <div
-                tw="flex flex-col w-full h-full justify-center items-center relative"
+                tw="flex flex-col w-full h-full justify-center items-center relative p-[80px] text-center"
                 style={{ backgroundColor: config.style.backgroundColor }}
             >
                 <img

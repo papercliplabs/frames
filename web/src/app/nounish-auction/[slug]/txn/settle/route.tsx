@@ -9,8 +9,9 @@ export async function POST(req: NextRequest, { params }: { params: { slug: strin
         return Response.error();
     }
 
-    const txn = config.getSettleTransactionData();
-    return Response.json(txn);
+    // const txn = config.getSettleTransactionData();
+    // return Response.json(txn);
+    return Response.error();
 }
 
 export const dynamic = "force-dynamic";

@@ -1325,10 +1325,10 @@
     satori "0.10.9"
     yoga-wasm-web "0.3.3"
 
-"@wevm/vercel-og@~0.6.11":
-  version "0.6.11"
-  resolved "https://registry.yarnpkg.com/@wevm/vercel-og/-/vercel-og-0.6.11.tgz#de2e2970a8a932bc24e6803ef32b860b60e6065c"
-  integrity sha512-TMiWcnKruntlFKE1G1MYZYitNKBbUdJB5U0btf0vjWrBcakQMtBCTRRnD5b1soBeRAUR/n0voVge+CrJbSmbOA==
+"@wevm/vercel-og@~0.6.12":
+  version "0.6.12"
+  resolved "https://registry.yarnpkg.com/@wevm/vercel-og/-/vercel-og-0.6.12.tgz#4ed4deb7c0a652f8678b92b7d59a68725c6caf73"
+  integrity sha512-gaFbJR7fV7oFega1/8omhpp/cTHWpZkFpuiIaevDil6HroQYhX1RBFNse3uYeSbnhb3pHnAm85tjYuOi/wB6EQ==
   dependencies:
     "@resvg/resvg-wasm" "2.4.0"
     satori "0.10.9"
@@ -2810,10 +2810,10 @@ fraction.js@^4.3.7:
   resolved "https://registry.yarnpkg.com/fraction.js/-/fraction.js-4.3.7.tgz#06ca0085157e42fda7f9e726e79fefc4068840f7"
   integrity sha512-ZsDfxO51wGAXREY55a7la9LScWpwv9RxIrYABrlvOFBlH/ShPnrtsXeuUIfXKKOVicNxQ+o8JTbJvjS4M89yew==
 
-frog@^0.4.8:
-  version "0.4.8"
-  resolved "https://registry.yarnpkg.com/frog/-/frog-0.4.8.tgz#f99d583ec92bcfde9ef23e703b1efda2a4b9ac27"
-  integrity sha512-hxNUiV6X7/gDQvfWfcGEK3uUpjQx1U+lltOHChgK7YcZkF+Ix4P2cEl+LzUER7tjpj+JIuZddiZbiVCSp3wOsw==
+frog@^0.5.5:
+  version "0.5.5"
+  resolved "https://registry.yarnpkg.com/frog/-/frog-0.5.5.tgz#a6568d1de114758ee0d237833c11dbc89f0edf4d"
+  integrity sha512-GTbqbf3vcftFxG/kcjJv0568n46JWuwRU67Rkl/4ggtRvxu8SFfKlM0oalMpJDHriwpEgLbb0vVscezJva+Xrg==
   dependencies:
     "@bufbuild/protobuf" "^1.7.2"
     "@farcaster/core" "^0.13.7"
@@ -2826,8 +2826,9 @@ frog@^0.4.8:
     fast-glob "3.3.2"
     fs-extra "^11.2.0"
     happy-dom "^13.3.8"
-    hono-og "0.0.21"
+    hono-og "0.0.22"
     jose "^5.2.2"
+    lz-string "^1.5.0"
     path-browserify "^1.0.1"
     qrcode "^1.5.3"
     viem "^2.7.10"
@@ -3104,13 +3105,13 @@ hmac-drbg@^1.0.1:
     minimalistic-assert "^1.0.0"
     minimalistic-crypto-utils "^1.0.1"
 
-hono-og@0.0.21:
-  version "0.0.21"
-  resolved "https://registry.yarnpkg.com/hono-og/-/hono-og-0.0.21.tgz#4cd895bd169f325ef7bf34dda4eb14ae9db7b97b"
-  integrity sha512-DWU58MIoDAPznvqiZ3DPuk4VzQBBFiCF4QTNGG7Z9gUwqGQUnIVnYoWlswPk5laPJpFJbVjJ9Whllw2NTCE+OA==
+hono-og@0.0.22:
+  version "0.0.22"
+  resolved "https://registry.yarnpkg.com/hono-og/-/hono-og-0.0.22.tgz#fdab52d0321946374717558ddc2985bceeb8e331"
+  integrity sha512-fq04Nhhbtyto4WL8r9+ozUB9e0PKUD/G+bdI7+NkU7+H4ZqkiTjTSAg94FDq1Kdz9Bql4ZaqyOkGo7cmVFo84g==
   dependencies:
     "@vercel/og" "~0.6.2"
-    "@wevm/vercel-og" "~0.6.11"
+    "@wevm/vercel-og" "~0.6.12"
     workers-og "~0.0.20"
 
 hono@^4.0.9:
@@ -3619,6 +3620,11 @@ lucide-react@^0.320.0:
   version "0.320.0"
   resolved "https://registry.yarnpkg.com/lucide-react/-/lucide-react-0.320.0.tgz#c0be9134bd01619bdbea7d426e4312cc7187aefb"
   integrity sha512-HuMmfmFiWwctDkN27wklKVZr8UpwP2TTekLZ3xiLCEjx/STG1k0KLWMbBfIJ/lnNJQDfSjztDZSVU316xA+AQg==
+
+lz-string@^1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/lz-string/-/lz-string-1.5.0.tgz#c1ab50f77887b712621201ba9fd4e3a6ed099941"
+  integrity sha512-h5bgJWpxJNswbU7qCrV0tIKQCaS3blPDrqKWx+QxzuzL1zGUzij9XCWLrSLsJPu5t+eWA/ycetzYAO5IOMcWAQ==
 
 md5@^2.3.0:
   version "2.3.0"

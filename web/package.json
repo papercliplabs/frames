@@ -25,7 +25,7 @@
         "class-variance-authority": "^0.7.0",
         "clsx": "^2.1.0",
         "detect-browser": "^5.3.0",
-        "frog": "^0.4.8",
+        "frog": "^0.5.5",
         "git": "^0.1.5",
         "hono": "^4.0.9",
         "lucide-react": "^0.320.0",
