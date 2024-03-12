@@ -19,12 +19,12 @@ app.frame("/hello", (c) => {
         ),
         action: `${process.env.NEXT_PUBLIC_URL}/frog-test/hello`,
         intents: [
-            <Button value="apple" action={`${process.env.NEXT_PUBLIC_URL}/frog-test/hello`}>
-                Apple
-            </Button>,
-            <Button value="banana">Banana</Button>,
-            <Button value="mango">Mango</Button>,
-            <Button.Transaction target="/send-ether">SEND</Button.Transaction>,
+            // <Button value="apple" action={`${process.env.NEXT_PUBLIC_URL}/frog-test/hello`}>
+            //     Apple
+            // </Button>,
+            // <Button value="banana">Banana</Button>,
+            // <Button value="mango">Mango</Button>,
+            // <Button.Transaction target="/send-ether">SEND</Button.Transaction>,
         ],
     });
 });

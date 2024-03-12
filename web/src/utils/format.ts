@@ -36,7 +36,7 @@ export function formatNumber(num: number | string | undefined, decimals: number 
     }
 
     if (formattedNum < 10 ** -decimals && formattedNum > 0) {
-        formattedNum = "<" + prefix + 10 ** -decimals;
+        formattedNum = "<" + prefix + (10 ** -decimals).toFixed(decimals);
     } else {
         let nf = new Intl.NumberFormat("en-US", { maximumFractionDigits: decimals });
         formattedNum = prefix + nf.format(formattedNum);
