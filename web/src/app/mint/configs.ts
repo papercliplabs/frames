@@ -8,6 +8,7 @@ import { mainCharactersGenslerCoinConfig } from "./collectionConfigs/mainCharact
 import { beansBeanBoogieConfig } from "./collectionConfigs/beansBeanBoogie";
 import { nounsDenverConfig } from "./collectionConfigs/nounsDenver";
 import { paltryLikesConfig } from "./collectionConfigs/paltryLikes";
+import { beansBaseGrantConfig } from "./collectionConfigs/beansBaseGrant";
 
 export interface ConditionsNotMetComponentProps {
     checkPayload: URLSearchParams;
@@ -50,7 +51,8 @@ export type SupportedMintCollection =
     | "maincharacters-gensler-coin"
     | "beans-bean-boogie"
     | "nouns-denver"
-    | "paltry-likes";
+    | "paltry-likes"
+    | "beans-base-grant";
 
 export const mintConfigs: Record<SupportedMintCollection, MintConfig<any>> = {
     "based-and-yellow-frame-edition-one": basedAndYellowFrameEditionOneConfig,
@@ -60,4 +62,5 @@ export const mintConfigs: Record<SupportedMintCollection, MintConfig<any>> = {
     "beans-bean-boogie": beansBeanBoogieConfig,
     "nouns-denver": nounsDenverConfig,
     "paltry-likes": paltryLikesConfig,
+    "beans-base-grant": beansBaseGrantConfig,
 };

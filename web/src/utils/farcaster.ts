@@ -3,7 +3,7 @@ import { NeynarAPIClient } from "@neynar/nodejs-sdk";
 import { User } from "@neynar/nodejs-sdk/build/neynar-api/v2";
 
 const NEYNAR_KEY = process.env.NEYNAR_API_KEY!;
-const REVALIDATION_TIME_S = 10;
+const REVALIDATION_TIME_S = 15;
 
 export const neynarClient = new NeynarAPIClient(NEYNAR_KEY);
 
@@ -28,12 +28,12 @@ export async function getFollowerUserIdsForChannel(channelId: string): Promise<n
     let cursor = undefined;
     let followerIds: number[] = [];
     do {
+        const followersResponse = await makePagenatedRequest(cursor);
         try {
-            const followersResponse = await makePagenatedRequest(cursor);
             followerIds = followerIds.concat(followersResponse["users"].map((user: any) => user["fid"]));
             cursor = followersResponse["next"]["cursor"];
         } catch (e) {
-            console.error("getFollowerUserIdsForChannel: api error - ", e);
+            console.error("getFollowerUserIdsForChannel: api error - ", e, followersResponse);
             cursor = undefined;
         }
     } while (cursor != undefined);
