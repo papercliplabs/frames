@@ -1,11 +1,15 @@
 import { FrameRequest, getFrameMessage } from "@coinbase/onchainkit";
 import { NeynarAPIClient } from "@neynar/nodejs-sdk";
-import { User } from "@neynar/nodejs-sdk/build/neynar-api/v2";
+import { User as FarcasterUser } from "@neynar/nodejs-sdk/build/neynar-api/v2";
 
 const NEYNAR_KEY = process.env.NEYNAR_API_KEY!;
-const REVALIDATION_TIME_S = 10;
+const REVALIDATION_TIME_S = 15;
 
 export const neynarClient = new NeynarAPIClient(NEYNAR_KEY);
+
+interface User extends FarcasterUser {
+    power_badge: boolean;
+}
 
 export async function getFollowerUserIdsForChannel(channelId: string): Promise<number[]> {
     async function makePagenatedRequest(cursor: string | undefined) {
@@ -28,12 +32,12 @@ export async function getFollowerUserIdsForChannel(channelId: string): Promise<n
     let cursor = undefined;
     let followerIds: number[] = [];
     do {
+        const followersResponse = await makePagenatedRequest(cursor);
         try {
-            const followersResponse = await makePagenatedRequest(cursor);
             followerIds = followerIds.concat(followersResponse["users"].map((user: any) => user["fid"]));
             cursor = followersResponse["next"]["cursor"];
         } catch (e) {
-            console.error("getFollowerUserIdsForChannel: api error - ", e);
+            console.error("getFollowerUserIdsForChannel: api error - ", e, followersResponse);
             cursor = undefined;
         }
     } while (cursor != undefined);
@@ -63,8 +67,22 @@ export async function getLikedUserIdsForCast(castHash: string): Promise<number[]
 }
 
 export async function getUserInfo(fid: number, viewerFid?: number): Promise<User> {
-    const info = (await neynarClient.fetchBulkUsers([fid], { viewerFid })).users[0];
-    return info;
+    const url = `https://api.neynar.com/v2/farcaster/user/bulk?fids=${fid}${
+        viewerFid != undefined && "&viewer_fid=" + viewerFid
+    }`;
+    const req = await fetch(url, {
+        headers: {
+            api_key: NEYNAR_KEY,
+        },
+        next: {
+            revalidate: REVALIDATION_TIME_S,
+        },
+    });
+
+    const resp = await req.json();
+    const user = resp["users"][0] as User;
+
+    return user;
 }
 
 export async function getFrameMessageWithNeynarApiKey(frameRequest: FrameRequest) {

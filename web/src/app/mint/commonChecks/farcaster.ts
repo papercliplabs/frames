@@ -28,6 +28,8 @@ export async function isUserFollowedByUser(userId: number, userIdToCheckIfFollow
 }
 
 export async function doesUserHaveActiveBadge(userId: number, inclusionIds: number[]): Promise<boolean> {
-    const status = (await getUserInfo(userId)).active_status;
-    return status == "active" || inclusionIds.includes(userId);
+    const user = await getUserInfo(userId);
+    const active = user.active_status == "active";
+    const power = user.power_badge;
+    return active || power || inclusionIds.includes(userId);
 }

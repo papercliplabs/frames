@@ -3,6 +3,7 @@ import { beansDungeonConfig } from "./slugConfigs/beansDungeon";
 import { beansDungeonNoMintConfig } from "./slugConfigs/beansDungeonNoMint";
 import { paperclipAuctionFramesConfig } from "./slugConfigs/paperclipAuctionFrames";
 import { nounsDenverCarrouselConfig } from "./slugConfigs/nounsDenver";
+import { beansBaseGrantConfig } from "./slugConfigs/beansBaseGrant";
 
 type Action = "link" | "mint" | "compose";
 
@@ -29,11 +30,13 @@ export type SupportedCarouselSlugs =
     | "beans-dungeon"
     | "beans-dungeon-no-mint"
     | "paperclip-auction-frames"
-    | "nouns-denver";
+    | "nouns-denver"
+    | "beans-base-grant";
 
 export const carouselConfigs: Record<SupportedCarouselSlugs, CarouselConfig> = {
     "beans-dungeon": beansDungeonConfig,
     "beans-dungeon-no-mint": beansDungeonNoMintConfig,
     "paperclip-auction-frames": paperclipAuctionFramesConfig,
     "nouns-denver": nounsDenverCarrouselConfig,
+    "beans-base-grant": beansBaseGrantConfig,
 };
