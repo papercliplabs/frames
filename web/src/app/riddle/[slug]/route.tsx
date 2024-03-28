@@ -61,7 +61,7 @@ export async function POST(req: NextRequest, { params }: { params: { slug: strin
     riddleId = riddleAndAnswer.id.toString();
     searchParams.set("id", riddleId);
 
-    const correct = input.toLowerCase() == riddleAndAnswer.answer.toLowerCase();
+    const correct = input?.toLowerCase() == riddleAndAnswer.answer.toLowerCase();
 
     return new NextResponse(
         correct
