@@ -59,3 +59,13 @@ Run locally
 ```bash
 yarn dev
 ```
+
+Watch and rebuild graphql codegen (run in other terminal)
+```bash
+yarn watch
+```
+
+Start frog local debugger
+```bash
+npx frog
+```

@@ -1,6 +1,6 @@
 import { ImageResponseOptions } from "next/server";
 
-export type FontType = "londrina" | "pt-root-ui" | "pally" | "druk" | "graphik";
+export type FontType = "londrina" | "pt-root-ui" | "pally" | "druk" | "graphik" | "inter";
 
 interface FontConfig {
     path: string;
@@ -60,6 +60,18 @@ const fontConfigs: Record<FontType, FontConfig[]> = {
         },
         {
             path: "fonts/GraphikBold.otf",
+            weight: 700,
+            style: "normal",
+        },
+    ],
+    inter: [
+        {
+            path: "fonts/Inter-Regular.ttf",
+            weight: 400,
+            style: "normal",
+        },
+        {
+            path: "fonts/Inter-Bold.ttf",
             weight: 700,
             style: "normal",
         },
