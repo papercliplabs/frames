@@ -110,7 +110,14 @@ const nextConfig = {
             }
         ];
       },
-      logging: {
+      images: {
+        remotePatterns: [
+          {
+            protocol: "https",
+            hostname: "**",
+          },
+        ],
+      },      logging: {
         fetches: {
             fullUrl: true
         },

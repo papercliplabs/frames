@@ -1,10 +1,11 @@
 import { CodegenConfig } from "@graphql-codegen/cli";
 
-const config: CodegenConfig = {
+const config: CodegenConfig = 
+    {
     schema: "https://api.rare.xyz/v1/graphql",
-    documents: ["src/**/*.{ts,tsx}"],
+    documents: ["src/data/superrare/**/*.{ts,tsx}"],
     generates: {
-        "./src/graphql/generated/": {
+        "./src/data/superrare/generated/": {
             preset: "client",
             plugins: [],
             presetConfig: {
@@ -13,6 +14,7 @@ const config: CodegenConfig = {
         },
     },
     ignoreNoDocuments: false,
-};
+    }
+;
 
 export default config;
