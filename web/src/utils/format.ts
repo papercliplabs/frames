@@ -6,53 +6,53 @@
  * @returns nicely formatted number, for example if number is 11023 this will return 1.10K
  */
 export function formatNumber(num: number | string | undefined, decimals: number = 2, prefix: string = ""): string {
-    const suffixes = ["", "", "M", "B", "T"];
+  const suffixes = ["", "", "M", "B", "T"];
 
-    let formattedNum = num;
+  let formattedNum = num;
 
-    if (formattedNum == undefined || isNaN(Number(num))) {
-        return "--";
+  if (formattedNum == undefined || isNaN(Number(num))) {
+    return "--";
+  }
+
+  // If it is represented as a sting, convert to number first
+  if (typeof formattedNum === "string") {
+    formattedNum = parseFloat(formattedNum);
+
+    if (isNaN(formattedNum)) {
+      return num as string; // It isn't a number
     }
+  }
 
-    // If it is represented as a sting, convert to number first
-    if (typeof formattedNum === "string") {
-        formattedNum = parseFloat(formattedNum);
+  let suffixIndex = Math.floor((formattedNum.toFixed(0).toString().length - 1) / 3);
 
-        if (isNaN(formattedNum)) {
-            return num as string; // It isn't a number
-        }
-    }
+  // Clamp to max suffix
+  if (suffixIndex >= suffixes.length) {
+    suffixIndex = 0;
+  }
 
-    let suffixIndex = Math.floor((formattedNum.toFixed(0).toString().length - 1) / 3);
+  // Don't format below 1M
+  if (formattedNum > 1e6) {
+    formattedNum /= 10 ** (3 * suffixIndex);
+  }
 
-    // Clamp to max suffix
-    if (suffixIndex >= suffixes.length) {
-        suffixIndex = 0;
-    }
+  if (formattedNum < 10 ** -decimals && formattedNum > 0) {
+    formattedNum = "<" + prefix + (10 ** -decimals).toFixed(decimals);
+  } else {
+    let nf = new Intl.NumberFormat("en-US", { maximumFractionDigits: decimals });
+    formattedNum = prefix + nf.format(formattedNum);
+  }
 
-    // Don't format below 1M
-    if (formattedNum > 1e6) {
-        formattedNum /= 10 ** (3 * suffixIndex);
-    }
-
-    if (formattedNum < 10 ** -decimals && formattedNum > 0) {
-        formattedNum = "<" + prefix + (10 ** -decimals).toFixed(decimals);
-    } else {
-        let nf = new Intl.NumberFormat("en-US", { maximumFractionDigits: decimals });
-        formattedNum = prefix + nf.format(formattedNum);
-    }
-
-    return formattedNum + suffixes[suffixIndex];
+  return formattedNum + suffixes[suffixIndex];
 }
 
 export function formatTimeLeft(seconds: number): string {
-    const hours = Math.floor(seconds / 3600);
-    const mins = Math.floor((seconds % 3600) / 60);
-    const secs = Math.floor(seconds % 60);
+  const hours = Math.floor(seconds / 3600);
+  const mins = Math.floor((seconds % 3600) / 60);
+  const secs = Math.floor(seconds % 60);
 
-    const hoursString = hours > 0 ? hours.toString() + "h " : "";
-    const minsString = mins > 0 ? mins.toString() + "m " : "";
-    const secsString = secs + "s";
+  const hoursString = hours > 0 ? hours.toString() + "h " : "";
+  const minsString = mins > 0 ? mins.toString() + "m " : "";
+  const secsString = secs + "s";
 
-    return hoursString + minsString + secsString;
+  return hoursString + minsString + secsString;
 }

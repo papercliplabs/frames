@@ -1,9 +1,10 @@
 # Gated Minting
 
 ## Flow
+
 ```mermaid
 flowchart TD
-    A[Home] --> B{Minted\nout} 
+    A[Home] --> B{Minted\nout}
     B --"yes"--> C[Minted out]
     B --"no"--> D{Has\nAddress}
     D --"yes"--> E{Already\nminted}
@@ -17,6 +18,7 @@ flowchart TD
 ```
 
 ## Pages
+
 - Home: static
 - Minted out: static
 - Already minted: static
@@ -25,10 +27,12 @@ flowchart TD
 - Minted: static
 
 ## Custom logic
+
 - Minted out: boolean
 - Already minted: boolean
 - Conditions met: boolean + payload for dynamic conditions not met page
-- Mint: void 
+- Mint: void
 
 ## Compose query params
-* `compose-frame-url`: url to push to instead of minting of it exists
+
+- `compose-frame-url`: url to push to instead of minting of it exists

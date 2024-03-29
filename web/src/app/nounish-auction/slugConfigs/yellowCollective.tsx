@@ -18,10 +18,7 @@ const AUCTION_ADDRESS = "0x0aa23a7e112889c965010558803813710becf263";
 const TOKEN_ADDRESS = "0x220e41499CF4d93a3629a5509410CBf9E6E0B109";
 const METADATA_ADDRESS = "0x10907e788Ad02A81beF81e4Ae560664cED3b0818";
 const CLIENT = basePublicClient;
-const COLORS_FOR_BACKGROUND_ATTRIBUTE: Record<
-  PermittedBackgroundAttribute,
-  ColorConfig
-> = {
+const COLORS_FOR_BACKGROUND_ATTRIBUTE: Record<PermittedBackgroundAttribute, ColorConfig> = {
   based: {
     background: { primary: "#DCE5FE", secondary: "#FBcB07" },
     text: { primary: "#212529", secondary: "rgba(33, 37, 41, 0.70)" },
@@ -44,14 +41,9 @@ async function getAuctionData(): Promise<NounsBuilderAuctionData> {
 
   const backgroundAttribute = data.attributes["0-backgrounds"];
 
-  const colors =
-    COLORS_FOR_BACKGROUND_ATTRIBUTE[
-      backgroundAttribute as PermittedBackgroundAttribute
-    ];
+  const colors = COLORS_FOR_BACKGROUND_ATTRIBUTE[backgroundAttribute as PermittedBackgroundAttribute];
   if (!colors) {
-    throw Error(
-      `No colors found for background attribute=${backgroundAttribute}`
-    );
+    throw Error(`No colors found for background attribute=${backgroundAttribute}`);
   }
 
   return {
@@ -62,10 +54,7 @@ async function getAuctionData(): Promise<NounsBuilderAuctionData> {
   };
 }
 
-function getBidTransactionData(
-  nounId: bigint,
-  bidAmount: bigint
-): FrameTransactionResponse {
+function getBidTransactionData(nounId: bigint, bidAmount: bigint): FrameTransactionResponse {
   return getNounsBuilderBidTransactionData({
     client: CLIENT,
     auctionAddress: AUCTION_ADDRESS,
@@ -83,14 +72,13 @@ function getSettleTransactionData(): FrameTransactionResponse {
   });
 }
 
-export const yellowCollectiveAuctionConfig: NounishAuctionConfig<NounsBuilderAuctionData> =
-  {
-    getAuctionData,
-    auctionStatusComponent: NounBuilderAuctionStatus,
-    reviewBidComponent: NounBuilderReviewBid,
-    getBidTransactionData,
-    // getSettleTransactionData,
-    auctionUrl: "https://yellowcollective.xyz",
-    fonts: ["pally", "pt-root-ui"],
-    transactionFlowSlug: "yellow-collective-auction",
-  };
+export const yellowCollectiveAuctionConfig: NounishAuctionConfig<NounsBuilderAuctionData> = {
+  getAuctionData,
+  auctionStatusComponent: NounBuilderAuctionStatus,
+  reviewBidComponent: NounBuilderReviewBid,
+  getBidTransactionData,
+  // getSettleTransactionData,
+  auctionUrl: "https://yellowcollective.xyz",
+  fonts: ["pally", "pt-root-ui"],
+  transactionFlowSlug: "yellow-collective-auction",
+};
