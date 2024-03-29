@@ -3,7 +3,7 @@ import { Button, Frog } from "frog";
 import { handle } from "frog/next";
 import { devtools } from "frog/dev";
 import { serveStatic } from "frog/serve-static";
-import { SUPERRARE_BASE_URL, getSuperrareLiveAuctionDetails } from "@/utils/superrare";
+import { SUPERRARE_BASE_URL, getSuperrareLiveAuctionDetails } from "@/data/superrare/queries/getSuperrareLiveAuctionDetails";
 import { getDefaultSquareImageOptions } from "@/utils/imageOptions";
 import { detect } from "detect-browser";
 

@@ -1,9 +1,9 @@
-import { getSuperrareApolloClient } from "@/graphql/apolloClient";
-import { gql } from "@/graphql/generated";
+import { getSuperrareApolloClient } from "@/data/superrare/client";
+import { gql } from "../generated";
 import { Address, getAddress } from "viem";
-import { shortenAddress } from "./wallet";
-import { CurrencyType } from "@/graphql/generated/graphql";
-import { formatNumber, formatTimeLeft } from "./format";
+import { CurrencyType } from "../generated/graphql";
+import { shortenAddress } from "@/utils/wallet";
+import { formatNumber, formatTimeLeft } from "@/utils/format";
 
 export const SUPERRARE_BASE_URL = "https://superrare.com";
 
