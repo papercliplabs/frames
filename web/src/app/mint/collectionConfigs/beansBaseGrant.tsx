@@ -117,7 +117,7 @@ export const beansBaseGrantConfig: MintConfig<any> = {
   conditionsNotMetComponent: MintConditionsNotMetComponent,
   conditionsNotMetAspectRatio: "1:1",
   decisionLogic: {
-    mintedOutCheck: () => isNftSoldOut(CLIENT, COLLECTION_ADDRESS),
+    mintedOutCheck: async () => true, //isNftSoldOut(CLIENT, COLLECTION_ADDRESS),
     alreadyMintedCheck: (address) => isNftBalanceAboveThreshold(CLIENT, COLLECTION_ADDRESS, address, 0),
     mintConditionsCheck,
   },
