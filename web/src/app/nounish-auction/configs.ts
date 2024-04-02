@@ -1,9 +1,9 @@
 import { FontType } from "@/utils/imageOptions";
 import { yellowCollectiveAuctionConfig } from "./slugConfigs/yellowCollective";
 import { FrameTransactionResponse } from "@coinbase/onchainkit/frame";
-import { baseTestConfig } from "./slugConfigs/baseTest";
 import { SupportedTransactionFlowSlug } from "../transaction-flow/config";
 import { beansConfig } from "./slugConfigs/beans";
+import { nounsAuctionConfig } from "./slugConfigs/nouns";
 
 type GenericNounishAuctionData<Data> = { nounId: number; nextBidMin: string; requiresSettlement: boolean } & Data;
 
@@ -18,10 +18,10 @@ export interface NounishAuctionConfig<Data> {
   transactionFlowSlug: SupportedTransactionFlowSlug;
 }
 
-export type SupportedNounishAuctionSlug = "yellow-collective" | "base-test" | "beans";
+export type SupportedNounishAuctionSlug = "yellow-collective" | "nouns" | "beans";
 
 export const nounishAuctionConfigs: Record<SupportedNounishAuctionSlug, NounishAuctionConfig<any>> = {
   "yellow-collective": yellowCollectiveAuctionConfig,
-  "base-test": baseTestConfig,
+  nouns: nounsAuctionConfig,
   beans: beansConfig,
 };
