@@ -51,6 +51,7 @@ export async function getSuperrareLiveAuctionDetails(utid: string): Promise<Live
           metadata {
             title
             proxyImageMediumUri
+            originalMediaUri
           }
           creator {
             primaryProfile {
@@ -84,9 +85,11 @@ export async function getSuperrareLiveAuctionDetails(utid: string): Promise<Live
 
   const auction = data.auctionByUtid[0];
 
+  console.log("AUCTION", auction)
+
   const startTime = auction?.startTime;
   const endTime = auction?.endTime;
-  const imageSrc = auction?.nft?.metadata?.proxyImageMediumUri;
+  const imageSrc = auction?.nft?.metadata?.proxyImageMediumUri ?? auction?.nft?.metadata?.originalMediaUri;
   const title = auction?.nft?.metadata?.title;
   const creator = auction?.nft?.creator;
   const bidder = auction?.bid?.bidder;
@@ -112,6 +115,7 @@ export async function getSuperrareLiveAuctionDetails(utid: string): Promise<Live
   const highestBidderAvatarSrc =
     bidder?.primaryProfile.sr?.srAvatarUri ?? bidder?.primaryProfile.ens?.ensAvatarUri ?? undefined;
 
+    console.log(contractAddress, tokenId, title, imageSrc, startTime, endTime, creatorName, highestBid, highestBidderName, currencyType);
   if (
     contractAddress == undefined ||
     tokenId == undefined ||
@@ -151,7 +155,7 @@ export async function getSuperrareLiveAuctionDetails(utid: string): Promise<Live
     tokenId,
     title,
     imageSrc,
-    link: SUPERRARE_BASE_URL + `/${contractAddress}/${tokenId}`,
+    link: (SUPERRARE_BASE_URL + `/${contractAddress}/${tokenId}`).toLowerCase(),
     timeFormatted,
     creatorName,
     creatorAvatarSrc,
