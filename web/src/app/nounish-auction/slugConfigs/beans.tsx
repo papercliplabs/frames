@@ -230,7 +230,6 @@ export function BeansAuctionStatus({
 }
 
 export function BeansReviewBid({ bid, dynamicColors, newBidAmount }: BeansAuctionData & { newBidAmount: string }) {
-  console.log(newBidAmount);
   return (
     <div tw="flex flex-col w-full h-full justify-center items-center w-[1200px] h-[1200px] p-[80px] bg-black text-white">
       <div tw="text-[65px] font-bold tracking-[3.9px]">REVIEW YOUR BID</div>
