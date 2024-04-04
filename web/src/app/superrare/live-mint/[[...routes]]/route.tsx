@@ -8,6 +8,8 @@ import { getSuperrareLiveMintData } from "@/data/superrare/queries/getSuperrareL
 import { getAddress } from "viem";
 import { detect } from "detect-browser";
 import { SUPERRARE_BASE_URL } from "../../constants";
+import Image, { getImageProps } from "next/image";
+import ServerImage from "@/components/ServerImage";
 
 const app = new Frog({
   basePath: "/superrare/live-mint",
@@ -27,27 +29,40 @@ app.frame("/:collection-address", async (c) => {
 
   return c.res({
     image: data ? (
-      <div tw="flex flex-col w-[1200px] h-[1200px] text-[40px] items-center justify-between text-[#FFFFFF] bg-[#232323] antialiased">
-        <div tw="flex flex-col items-center p-[80px] h-2/3">
-          <img src={data.nextNft.image} tw="rounded-[16px] h-full shadow-2xl" style={{ objectFit: "cover" }} />
+      <div
+        tw="flex flex-col w-[600px] h-[600px] text-[20px] items-center justify-between text-[#FFFFFF] bg-[#232323]"
+        style={{ WebkitFontSmoothing: "antialiased" }}
+      >
+        <div tw="flex flex-col items-center p-[40px] h-2/3">
+          <ServerImage
+            src={data.nextNft.image}
+            height={300}
+            width={300}
+            quality={50}
+            tw="rounded-[6px] h-full shadow-2xl"
+            style={{ objectFit: "cover" }}
+            alt=""
+          />
         </div>
-        <div tw="flex flex-col bg-black w-full h-1/3 p-[40px]" style={{ gap: "40px" }}>
-          <div tw="flex w-full border-4 border-white h-[20px] rounded-full shadow-none">
+        <div tw="flex flex-col bg-black w-full h-1/3 p-[20px]" style={{ gap: "20px" }}>
+          <div tw="flex w-full border-2 border-white h-[10px] rounded-full shadow-none">
             <div
               tw="flex bg-white h-full"
               style={{ width: `${(Number(data.currentSupply) / Number(data.supplyCap)) * 100}%` }}
             />
           </div>
           <div tw="flex w-full justify-between">
-            <div tw="flex" style={{ gap: "16px" }}>
+            <div tw="flex" style={{ gap: "8px" }}>
               {data.previousNfts.map((nft, i) => (
-                <img
+                <ServerImage
                   src={nft.image}
-                  width={250}
-                  height={250}
+                  width={125}
+                  height={125}
+                  quality={50}
                   style={{ objectFit: "cover" }}
-                  tw="rounded-[16px]"
+                  tw="rounded-[8px]"
                   key={i}
+                  alt=""
                 />
               ))}
             </div>
@@ -60,15 +75,14 @@ app.frame("/:collection-address", async (c) => {
         </div>
       </div>
     ) : (
-      <div tw="flex flex-col w-[1200px] h-[1200px] p-[80px] text-[48px] items-center justify-between text-[#FFFFFF] bg-[#232323]">
+      <div tw="flex flex-col w-[600px] h-[600px] p-[80px] text-[30px] items-center justify-between text-[#FFFFFF] bg-[#232323]">
         No mint data found
       </div>
     ),
-    imageOptions: await getDefaultSquareImageOptions(["inter"]),
+    imageOptions: await getDefaultSquareImageOptions(["inter"], 600),
     imageAspectRatio: "1:1",
     intents: [
-      <Button key={1}>Refresh</Button>,
-      <Button.Link key={2} href={link}>
+      <Button.Link key={1} href={link}>
         Mint
       </Button.Link>,
     ],

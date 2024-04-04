@@ -80,7 +80,10 @@ const fontConfigs: Record<FontType, FontConfig[]> = {
 
 export const allFonts = Object.keys(fontConfigs);
 
-export async function getDefaultSquareImageOptions(fontTypes: FontType[]): Promise<ImageResponseOptions> {
+export async function getDefaultSquareImageOptions(
+  fontTypes: FontType[],
+  size: number = 1200
+): Promise<ImageResponseOptions> {
   const fetches = [];
 
   for (let type of fontTypes) {
@@ -110,8 +113,8 @@ export async function getDefaultSquareImageOptions(fontTypes: FontType[]): Promi
   }
 
   return {
-    width: 1200,
-    height: 1200,
+    width: size,
+    height: size,
     headers: {
       "Cache-Control": "max-age=0, must-revalidate",
     },
