@@ -85,11 +85,9 @@ export async function getSuperrareLiveAuctionDetails(utid: string): Promise<Live
 
   const auction = data.auctionByUtid[0];
 
-  console.log("AUCTION", auction)
-
   const startTime = auction?.startTime;
   const endTime = auction?.endTime;
-  const imageSrc = auction?.nft?.metadata?.proxyImageMediumUri ?? auction?.nft?.metadata?.originalMediaUri;
+  const imageSrc = auction?.nft?.metadata?.originalMediaUri ?? auction?.nft?.metadata?.proxyImageMediumUri;
   const title = auction?.nft?.metadata?.title;
   const creator = auction?.nft?.creator;
   const bidder = auction?.bid?.bidder;

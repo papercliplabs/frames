@@ -19,8 +19,6 @@ app.frame("/:utid", async (c) => {
   const utid = c.req.param("utid");
   const auction = await getSuperrareLiveAuctionDetails(utid);
 
-  console.log(auction)
-
   // Handle redirect if clicked on frame
   const browser = detect(c.req.header("user-agent") ?? "");
   if (browser?.name) {
@@ -51,21 +49,20 @@ app.frame("/:utid", async (c) => {
                 {auction.highestBidderAvatarSrc && (
                   <img src={auction.highestBidderAvatarSrc} width={80} height={80} tw="rounded-full mr-[24px]" />
                 )}
-                <div tw="flex text-ellipsis overflow-hidden whitespace-nowrap min-w-0">
+                <div tw="flex overflow-hidden min-w-0">
                   {auction.highestBidderName ?? "N/A"}
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div tw="flex text-[#6B6B6B] max-w-full overflow-hidden text-wrap block" >
-            {auction.title} by {auction.creatorName}
+        <div tw="flex text-[#6B6B6B] w-full overflow-hidden justify-start" style={{textWrap: "wrap"}}>
+            {auction.title} by {auction.creatorName} 
         </div>
       </div>
     ) : (
       <div tw="flex flex-col w-full h-full text-[#FFFFFF] bg-[#0A0A0A] justify-center items-center text-[48px] ">
-        <div>API ERROR</div>
-        <div>missing auction details</div>
+        <div>No auction data found</div>
       </div>
     ),
     imageOptions: await getDefaultSquareImageOptions(["inter"]),
