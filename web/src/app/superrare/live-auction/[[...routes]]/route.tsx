@@ -3,12 +3,10 @@ import { Button, Frog } from "frog";
 import { handle } from "frog/next";
 import { devtools } from "frog/dev";
 import { serveStatic } from "frog/serve-static";
-import {
-  SUPERRARE_BASE_URL,
-  getSuperrareLiveAuctionDetails,
-} from "@/data/superrare/queries/getSuperrareLiveAuctionDetails";
+import { getSuperrareLiveAuctionDetails } from "@/data/superrare/queries/getSuperrareLiveAuctionDetails";
 import { getDefaultSquareImageOptions } from "@/utils/imageOptions";
 import { detect } from "detect-browser";
+import { SUPERRARE_BASE_URL } from "../../constants";
 
 const app = new Frog({
   basePath: "/superrare/live-auction",
@@ -37,10 +35,12 @@ app.frame("/:utid", async (c) => {
               : "Auction ended"}
         </div>
         <div tw="flex flex-row justify-start w-full ">
-          <img src={auction.imageSrc} width={520} height={520} tw="rounded-[32px]" style={{ objectFit: "cover"}} />
+          <img src={auction.imageSrc} width={520} height={520} tw="rounded-[32px]" style={{ objectFit: "cover" }} />
           <div tw="flex flex-col justify-end items-start pl-[80px] ">
             <div tw="flex flex-col">
-              <div tw="text-[#6B6B6B] pb-[8px] flex">{auction.status == "finished" ? "Winning Bid" : "Current bid"}</div>
+              <div tw="text-[#6B6B6B] pb-[8px] flex">
+                {auction.status == "finished" ? "Winning Bid" : "Current bid"}
+              </div>
               <div tw="flex">{auction.highestBidFormatted}</div>
             </div>
             <div tw="flex flex-col pt-[80px] ">
@@ -49,15 +49,13 @@ app.frame("/:utid", async (c) => {
                 {auction.highestBidderAvatarSrc && (
                   <img src={auction.highestBidderAvatarSrc} width={80} height={80} tw="rounded-full mr-[24px]" />
                 )}
-                <div tw="flex overflow-hidden min-w-0">
-                  {auction.highestBidderName ?? "N/A"}
-                </div>
+                <div tw="flex overflow-hidden min-w-0">{auction.highestBidderName ?? "N/A"}</div>
               </div>
             </div>
           </div>
         </div>
-        <div tw="flex text-[#6B6B6B] w-full overflow-hidden justify-start" style={{textWrap: "wrap"}}>
-            {auction.title} by {auction.creatorName} 
+        <div tw="flex text-[#6B6B6B] w-full overflow-hidden justify-start" style={{ textWrap: "wrap" }}>
+          {auction.title} by {auction.creatorName}
         </div>
       </div>
     ) : (

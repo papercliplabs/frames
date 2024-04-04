@@ -4,8 +4,7 @@ import { Address, getAddress } from "viem";
 import { CurrencyType } from "../generated/graphql";
 import { shortenAddress } from "@/utils/wallet";
 import { formatNumber, formatTimeLeft } from "@/utils/format";
-
-export const SUPERRARE_BASE_URL = "https://superrare.com";
+import { SUPERRARE_BASE_URL } from "@/app/superrare/constants";
 
 export interface LiveAuction {
   contractAddress: Address;
@@ -113,7 +112,6 @@ export async function getSuperrareLiveAuctionDetails(utid: string): Promise<Live
   const highestBidderAvatarSrc =
     bidder?.primaryProfile.sr?.srAvatarUri ?? bidder?.primaryProfile.ens?.ensAvatarUri ?? undefined;
 
-    console.log(contractAddress, tokenId, title, imageSrc, startTime, endTime, creatorName, highestBid, highestBidderName, currencyType);
   if (
     contractAddress == undefined ||
     tokenId == undefined ||
