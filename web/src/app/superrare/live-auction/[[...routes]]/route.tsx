@@ -7,6 +7,7 @@ import { getSuperrareLiveAuctionDetails } from "@/data/superrare/queries/getSupe
 import { getDefaultSquareImageOptions } from "@/utils/imageOptions";
 import { detect } from "detect-browser";
 import { SUPERRARE_BASE_URL } from "../../constants";
+import ServerImage from "@/components/ServerImage";
 
 const app = new Frog({
   basePath: "/superrare/live-auction",
@@ -25,7 +26,7 @@ app.frame("/:utid", async (c) => {
 
   return c.res({
     image: auction ? (
-      <div tw="flex flex-col w-[1200px] h-[1200px] p-[80px] text-[48px] items-center justify-between text-[#FFFFFF] bg-[#0A0A0A]">
+      <div tw="flex flex-col w-[600px] h-[600px] p-[40px] text-[24px] items-center justify-between text-[#FFFFFF] bg-[#0A0A0A]">
         <div tw="flex">
           Live auction —{" "}
           {auction.status == "not-started"
@@ -35,35 +36,48 @@ app.frame("/:utid", async (c) => {
               : "Auction ended"}
         </div>
         <div tw="flex flex-row justify-start w-full ">
-          <img src={auction.imageSrc} width={520} height={520} tw="rounded-[32px]" style={{ objectFit: "cover" }} />
-          <div tw="flex flex-col justify-end items-start pl-[80px] ">
+          <ServerImage
+            src={auction.imageSrc}
+            width={260}
+            height={260}
+            tw="rounded-[16px]"
+            style={{ objectFit: "cover" }}
+            alt=""
+          />
+          <div tw="flex flex-col justify-end items-start pl-[40px] ">
             <div tw="flex flex-col">
-              <div tw="text-[#6B6B6B] pb-[8px] flex">
+              <div tw="text-[#6B6B6B] pb-[4px] flex">
                 {auction.status == "finished" ? "Winning Bid" : "Current bid"}
               </div>
               <div tw="flex">{auction.highestBidFormatted}</div>
             </div>
-            <div tw="flex flex-col pt-[80px] ">
-              <div tw="text-[#6B6B6B] pb-[8px] flex">{auction.status == "finished" ? "Winner" : "Highest Bidder"}</div>
+            <div tw="flex flex-col pt-[40px] ">
+              <div tw="text-[#6B6B6B] pb-[4px] flex">{auction.status == "finished" ? "Winner" : "Highest Bidder"}</div>
               <div tw="flex flex-row justify-start items-center ">
                 {auction.highestBidderAvatarSrc && (
-                  <img src={auction.highestBidderAvatarSrc} width={80} height={80} tw="rounded-full mr-[24px]" />
+                  <ServerImage
+                    src={auction.highestBidderAvatarSrc}
+                    width={40}
+                    height={40}
+                    tw="rounded-full mr-[6px]"
+                    alt=""
+                  />
                 )}
                 <div tw="flex overflow-hidden min-w-0">{auction.highestBidderName ?? "N/A"}</div>
               </div>
             </div>
           </div>
         </div>
-        <div tw="flex text-[#6B6B6B] w-full overflow-hidden justify-start" style={{ textWrap: "wrap" }}>
-          {auction.title} by {auction.creatorName}
+        <div tw="text-[#6B6B6B] w-full" style={{ overflowWrap: "break-word" }}>
+          {`${auction.title} by ${auction.creatorName}`}
         </div>
       </div>
     ) : (
-      <div tw="flex flex-col w-full h-full text-[#FFFFFF] bg-[#0A0A0A] justify-center items-center text-[48px] ">
+      <div tw="flex flex-col w-[600px] h-[600px] text-[#FFFFFF] bg-[#0A0A0A] justify-center items-center text-[24px] ">
         <div>No auction data found</div>
       </div>
     ),
-    imageOptions: await getDefaultSquareImageOptions(["inter"]),
+    imageOptions: await getDefaultSquareImageOptions(["inter"], 600),
     imageAspectRatio: "1:1",
     intents: [
       <Button key={1}>Refresh</Button>,

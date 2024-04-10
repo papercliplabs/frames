@@ -23,7 +23,7 @@ export interface LiveAuction {
 
 export async function getSuperrareLiveAuctionDetails(utid: string): Promise<LiveAuction | undefined> {
   const liveAuctionQuery = gql(/* GraphQL */ `
-    query LiveAuction($universalTokenId: String!) {
+    query LiveAuction($universalTokenId: [String!]!) {
       auctionByUtid(universalTokenId: $universalTokenId) {
         bid {
           amount
@@ -44,27 +44,27 @@ export async function getSuperrareLiveAuctionDetails(utid: string): Promise<Live
         }
         startTime
         endTime
-        nft {
-          tokenNumber
-          tokenContractAddress
-          metadata {
-            title
-            proxyImageMediumUri
-            originalMediaUri
-          }
-          creator {
-            primaryProfile {
-              sr {
-                srName
-                srAvatarUri
-              }
-              ens {
-                ensAvatarUri
-                ensName
-              }
+      }
+      nftByUtid(universalTokenId: $universalTokenId) {
+        tokenNumber
+        tokenContractAddress
+        metadata {
+          title
+          proxyImageMediumUri
+          originalMediaUri
+        }
+        creator {
+          primaryProfile {
+            sr {
+              srName
+              srAvatarUri
             }
-            primaryAddress
+            ens {
+              ensAvatarUri
+              ensName
+            }
           }
+          primaryAddress
         }
       }
     }
@@ -72,7 +72,7 @@ export async function getSuperrareLiveAuctionDetails(utid: string): Promise<Live
 
   const { data } = await getSuperrareApolloClient().query({
     query: liveAuctionQuery,
-    variables: { universalTokenId: utid },
+    variables: { universalTokenId: [utid.toLowerCase()] },
     context: {
       fetchOptions: {
         next: {
@@ -83,17 +83,16 @@ export async function getSuperrareLiveAuctionDetails(utid: string): Promise<Live
   });
 
   const auction = data.auctionByUtid[0];
+  const nft = data.nftByUtid[0];
 
-  const startTime = auction?.startTime;
-  const endTime = auction?.endTime;
-  const imageSrc = auction?.nft?.metadata?.originalMediaUri ?? auction?.nft?.metadata?.proxyImageMediumUri;
-  const title = auction?.nft?.metadata?.title;
-  const creator = auction?.nft?.creator;
+  const startTime = auction?.startTime ?? 0;
+  const endTime = auction?.endTime ?? 0;
+  const imageSrc = nft?.metadata?.originalMediaUri ?? nft?.metadata?.proxyImageMediumUri;
+  const title = nft?.metadata?.title;
+  const creator = nft?.creator;
   const bidder = auction?.bid?.bidder;
-  const contractAddress = auction?.nft?.tokenContractAddress
-    ? getAddress(auction?.nft?.tokenContractAddress)
-    : undefined;
-  const tokenId = auction?.nft?.tokenNumber ? BigInt(auction.nft.tokenNumber) : undefined;
+  const contractAddress = nft?.tokenContractAddress ? getAddress(nft?.tokenContractAddress) : undefined;
+  const tokenId = nft?.tokenNumber ? BigInt(nft.tokenNumber) : undefined;
 
   const creatorName = creator?.primaryProfile.sr?.srName
     ? "@" + creator.primaryProfile.sr.srName
@@ -117,8 +116,6 @@ export async function getSuperrareLiveAuctionDetails(utid: string): Promise<Live
     tokenId == undefined ||
     !title ||
     !imageSrc ||
-    !startTime ||
-    !endTime ||
     !creatorName ||
     (highestBid && !(highestBidderName || currencyType))
   ) {
@@ -142,7 +139,9 @@ export async function getSuperrareLiveAuctionDetails(utid: string): Promise<Live
   const timeLeftS = Math.max(endTimeS - nowS, 0);
   const timeToStartS = Math.max(startTimeS - nowS, 0);
 
-  const status = nowS < startTimeS ? "not-started" : timeLeftS == 0 ? "finished" : "underway";
+  // Hack for now, if we can't find auction just say finished...
+  const status =
+    auction == undefined ? "finished" : nowS < startTimeS ? "not-started" : timeLeftS == 0 ? "finished" : "underway";
   const timeFormatted = formatTimeLeft(status == "not-started" ? timeToStartS : timeLeftS);
   const highestBidFormatted = `${formatNumber(highestBid ?? 0, 4)} ${currencySymbol}`;
 
