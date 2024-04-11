@@ -87,12 +87,14 @@ export async function getSuperrareLiveAuctionDetails(utid: string): Promise<Live
 
   const startTime = auction?.startTime ?? 0;
   const endTime = auction?.endTime ?? 0;
-  const imageSrc = nft?.metadata?.originalMediaUri ?? nft?.metadata?.proxyImageMediumUri;
+  const imageSrc = nft?.metadata?.proxyImageMediumUri ?? nft?.metadata?.originalMediaUri;
   const title = nft?.metadata?.title;
   const creator = nft?.creator;
   const bidder = auction?.bid?.bidder;
   const contractAddress = nft?.tokenContractAddress ? getAddress(nft?.tokenContractAddress) : undefined;
   const tokenId = nft?.tokenNumber ? BigInt(nft.tokenNumber) : undefined;
+
+  console.log("VAL", nft?.metadata, nft?.metadata?.originalMediaUri, nft?.metadata?.proxyImageMediumUri);
 
   const creatorName = creator?.primaryProfile.sr?.srName
     ? "@" + creator.primaryProfile.sr.srName
