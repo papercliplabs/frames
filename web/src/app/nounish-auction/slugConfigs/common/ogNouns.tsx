@@ -138,9 +138,9 @@ export function NounAuctionStatus({
   colors,
 }: OgNounsAuctionData) {
   const rowEntries: { name: string; value: string }[] = [
-    { name: "Current bid", value: bid + " ETH"},
+    { name: "Current bid", value: bid + " ETH" },
     { name: "Time left", value: timeRemaining },
-    { name: "Highest bid", value: bidder },
+    { name: "Highest bidder", value: bidder },
   ];
 
   return (
@@ -193,7 +193,7 @@ export function NounReviewBid({
       >
         {newBidAmount} ETH
       </div>
-      <div tw="flex flex-row justify-between w-full text-[52px]" style={{fontFamily: "pt-root-ui"}}>
+      <div tw="flex flex-row justify-between w-full text-[52px]" style={{ fontFamily: "pt-root-ui" }}>
         <span tw="font-medium" style={{ color: colors.secondary }}>
           Current bid
         </span>
