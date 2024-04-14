@@ -2,6 +2,7 @@ import generateLayeredImage from "@/utils/generateLayeredImage";
 
 const SCALER = 2;
 
+// TODO(spennp): undo this, although we should add a landing page, or a redirect to paperclip.xyz
 export default async function Page() {
   return (
     <>
