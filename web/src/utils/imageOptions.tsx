@@ -4,8 +4,8 @@ export type FontType = "londrina" | "pt-root-ui" | "pally" | "druk" | "graphik" 
 
 interface FontConfig {
   path: string;
-  weight: number;
-  style: string;
+  weight: 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
+  style: "normal" | "italic";
 }
 
 const fontConfigs: Record<FontType, FontConfig[]> = {
@@ -80,10 +80,7 @@ const fontConfigs: Record<FontType, FontConfig[]> = {
 
 export const allFonts = Object.keys(fontConfigs);
 
-export async function getDefaultSquareImageOptions(
-  fontTypes: FontType[],
-  size: number = 1200
-): Promise<ImageResponseOptions> {
+export async function getFontOptionsFromFontTypes(fontTypes: FontType[]): Promise<ImageResponseOptions["fonts"]> {
   const fetches = [];
 
   for (let type of fontTypes) {
@@ -98,7 +95,7 @@ export async function getDefaultSquareImageOptions(
 
   const resp = await Promise.all(fetches);
 
-  const fonts = [];
+  const fonts: ImageResponseOptions["fonts"] = [];
   let i = 0;
   for (let type of fontTypes) {
     for (let config of fontConfigs[type]) {
@@ -112,12 +109,19 @@ export async function getDefaultSquareImageOptions(
     }
   }
 
+  return fonts;
+}
+
+export async function getDefaultSquareImageOptions(
+  fontTypes: FontType[],
+  size: number = 1200
+): Promise<ImageResponseOptions> {
   return {
     width: size,
     height: size,
     headers: {
       "Cache-Control": "max-age=0, must-revalidate",
     },
-    fonts: fonts as any,
+    fonts: await getFontOptionsFromFontTypes(fontTypes),
   };
 }
