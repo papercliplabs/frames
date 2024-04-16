@@ -14,8 +14,10 @@ const app = new Frog({
   verify: false,
 });
 
-app.frame("/:utid", async (c) => {
-  const utid = c.req.param("utid");
+app.frame("/:collection-address/:token-id", async (c) => {
+  const collectionAddress = c.req.param("collection-address");
+  const tokenId = c.req.param("token-id");
+  const utid = collectionAddress.toLowerCase() + "-" + tokenId;
   const auction = await getSuperrareLiveAuctionDetails(utid);
 
   // Handle redirect if clicked on frame
