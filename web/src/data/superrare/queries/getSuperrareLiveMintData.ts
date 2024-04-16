@@ -28,19 +28,26 @@ export async function getSuperrareLiveMintData(collectionAddress: Address): Prom
       functionName: "totalSupply",
     });
 
+    const supplyCap = await cachedReadContract(mainnetPublicClient, {
+      address: collectionAddress,
+      abi: lazySovereignNftAbi,
+      functionName: "maxTokens",
+    });
+
+    const soldOut = currentSupply >= supplyCap;
+
     // Cache all this data
-    const [supplyCap, ...tokenUris] = await Promise.all([
-      cachedReadContract(mainnetPublicClient, {
-        address: collectionAddress,
-        abi: lazySovereignNftAbi,
-        functionName: "maxTokens",
-      }),
-      cachedReadContract(mainnetPublicClient, {
-        address: collectionAddress,
-        abi: lazySovereignNftAbi,
-        functionName: "tokenURI",
-        args: [currentSupply + BigInt(1)],
-      }),
+    const tokenUris = await Promise.all([
+      ...(!soldOut
+        ? [
+            cachedReadContract(mainnetPublicClient, {
+              address: collectionAddress,
+              abi: lazySovereignNftAbi,
+              functionName: "tokenURI",
+              args: [currentSupply + BigInt(1)],
+            }),
+          ]
+        : []),
       ...(currentSupply >= BigInt(1)
         ? [
             cachedReadContract(mainnetPublicClient, {
@@ -68,6 +75,16 @@ export async function getSuperrareLiveMintData(collectionAddress: Address): Prom
               abi: lazySovereignNftAbi,
               functionName: "tokenURI",
               args: [currentSupply - BigInt(2)],
+            }),
+          ]
+        : []),
+      ...(soldOut && currentSupply >= BigInt(4)
+        ? [
+            cachedReadContract(mainnetPublicClient, {
+              address: collectionAddress,
+              abi: lazySovereignNftAbi,
+              functionName: "tokenURI",
+              args: [currentSupply - BigInt(3)],
             }),
           ]
         : []),

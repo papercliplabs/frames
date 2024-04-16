@@ -12,7 +12,7 @@ import Image, { getImageProps } from "next/image";
 import ServerImage from "@/components/ServerImage";
 
 const app = new Frog({
-  basePath: "/superrare/live-mint",
+  basePath: "/superrare/live-mint-old",
   verify: false,
 });
 
@@ -20,12 +20,6 @@ app.frame("/:collection-address", async (c) => {
   const collectionAddress = c.req.param("collection-address");
   const data = await getSuperrareLiveMintData(getAddress(collectionAddress));
   const link = `${SUPERRARE_BASE_URL}/releases/${collectionAddress}`;
-
-  // Handle redirect if clicked on frame
-  const browser = detect(c.req.header("user-agent") ?? "");
-  if (browser?.name) {
-    return Response.redirect(link);
-  }
 
   return c.res({
     image: data ? (
@@ -35,7 +29,7 @@ app.frame("/:collection-address", async (c) => {
       >
         <div tw="flex flex-col items-center p-[40px] h-2/3">
           <ServerImage
-            src={data.nextNft.image}
+            src={data.nextNft?.image ?? data.previousNfts[0].image}
             height={300}
             width={300}
             quality={50}
@@ -80,6 +74,7 @@ app.frame("/:collection-address", async (c) => {
       </div>
     ),
     imageOptions: await getDefaultSquareImageOptions(["inter"], 600),
+    browserLocation: link,
     imageAspectRatio: "1:1",
     intents: [
       <Button.Link key={1} href={link}>

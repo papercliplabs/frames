@@ -5,24 +5,19 @@ import { devtools } from "frog/dev";
 import { serveStatic } from "frog/serve-static";
 import { getSuperrareLiveAuctionDetails } from "@/data/superrare/queries/getSuperrareLiveAuctionDetails";
 import { getDefaultSquareImageOptions } from "@/utils/imageOptions";
-import { detect } from "detect-browser";
 import { SUPERRARE_BASE_URL } from "../../constants";
 import ServerImage from "@/components/ServerImage";
 
 const app = new Frog({
-  basePath: "/superrare/live-auction",
+  basePath: "/superrare/live-auction-old",
   verify: false,
 });
 
-app.frame("/:utid", async (c) => {
-  const utid = c.req.param("utid");
+app.frame("/:collection-address/:token-id", async (c) => {
+  const collectionAddress = c.req.param("collection-address");
+  const tokenId = c.req.param("token-id");
+  const utid = collectionAddress.toLowerCase() + "-" + tokenId;
   const auction = await getSuperrareLiveAuctionDetails(utid);
-
-  // Handle redirect if clicked on frame
-  const browser = detect(c.req.header("user-agent") ?? "");
-  if (browser?.name) {
-    return Response.redirect(auction?.link ?? SUPERRARE_BASE_URL);
-  }
 
   return c.res({
     image: auction ? (
@@ -77,6 +72,7 @@ app.frame("/:utid", async (c) => {
         <div>No auction data found</div>
       </div>
     ),
+    browserLocation: auction?.link ?? SUPERRARE_BASE_URL,
     imageOptions: await getDefaultSquareImageOptions(["inter"], 600),
     imageAspectRatio: "1:1",
     intents: [
