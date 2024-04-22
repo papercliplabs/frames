@@ -76,23 +76,27 @@ const spinConfig: { winAmount: number; rndThreshold: number; imageData: FrameIma
 ];
 
 async function isSoldOut(): Promise<boolean> {
-  const { data, error } = await supabase.from("degen-price-winners").select("id");
+  // const { data, error } = await supabase.from("degen-price-winners").select("id");
 
-  if (error) {
-    throw error;
-  }
+  // if (error) {
+  //   throw error;
+  // }
 
-  return data.length >= MAX_NUMBER_OF_SPINS;
+  // return data.length >= MAX_NUMBER_OF_SPINS;
+
+  return false;
 }
 
 async function didAlreadySpin(fid: number): Promise<boolean> {
-  const { data, error } = await supabase.from("degen-price-winners").select("*").eq("fid", fid);
+  // const { data, error } = await supabase.from("degen-price-winners").select("*").eq("fid", fid);
 
-  if (error) {
-    throw error;
-  }
+  // if (error) {
+  //   throw error;
+  // }
 
-  return data.length != 0;
+  // return data.length != 0;
+
+  return false;
 }
 
 function getRandomOutcome() {
@@ -113,15 +117,15 @@ function getRandomOutcome() {
 async function runSpin(frameData: FrameValidationData): Promise<FrameImageMetadata> {
   const outcome = getRandomOutcome();
 
-  // Store outcome
-  const userInfo = await getUserInfo(frameData.interactor.fid);
-  const { error } = await supabase
-    .from("degen-price-winners")
-    .insert([{ username: userInfo.username, fid: userInfo.fid, amount: outcome.winAmount }])
-    .select();
-  if (error) {
-    throw error;
-  }
+  // // Store outcome
+  // const userInfo = await getUserInfo(frameData.interactor.fid);
+  // const { error } = await supabase
+  //   .from("degen-price-winners")
+  //   .insert([{ username: userInfo.username, fid: userInfo.fid, amount: outcome.winAmount }])
+  //   .select();
+  // if (error) {
+  //   throw error;
+  // }
 
   return outcome.imageData;
 }
