@@ -116,7 +116,7 @@ export async function getDefaultSquareImageOptions(
     width: size,
     height: size,
     headers: {
-      "Cache-Control": "max-age=0, must-revalidate",
+      "cache-control": "max-age=0, must-revalidate", // MUST be lower case, otherwise doesn't work in ImageResponse
     },
     fonts: fonts as any,
   };
