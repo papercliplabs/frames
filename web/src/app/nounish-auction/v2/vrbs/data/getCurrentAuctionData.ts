@@ -5,10 +5,10 @@ import { vrbsPublicClient } from "../utils/client";
 import { vrbsAuctionHouseContract } from "../contracts/vrbsAuctionHouse";
 import { vrbsRevolutionTokenContract } from "../contracts/vrbsRevolutionToken";
 import { readContract } from "viem/actions";
-import { bigIntMax } from "@/utils/bigInt";
+import { bigIntMax } from "@/common/utils/bigInt";
 import { formatTimeLeft } from "@/utils/format";
-import "@/utils/bigIntPolyfill";
-import { User, getUser } from "@/data/getUser";
+import "@/common/utils/bigIntPolyfill";
+import { User, getUser } from "@/common/data/getUser";
 
 interface AuctionData {
   tokenId: bigint;

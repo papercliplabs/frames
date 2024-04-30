@@ -8,7 +8,7 @@ import { Address, encodeFunctionData, formatEther, getAddress } from "viem";
 import { getWalletName } from "@/utils/wallet";
 import { metadataAbi } from "@/abis/nounsBuilder/metadata";
 import { FrameTransactionResponse } from "@coinbase/onchainkit/frame";
-import { bigIntMax } from "@/utils/bigInt";
+import { bigIntMax } from "@/common/utils/bigInt";
 import { paperclipIcon } from "@/utils/paperclip";
 import { getImageProps } from "next/image";
 

@@ -9,7 +9,7 @@ import { tokenAbi } from "@/abis/ogNouns/token";
 import { paperclipIcon } from "@/utils/paperclip";
 import { FrameTransactionResponse } from "@coinbase/onchainkit/frame";
 import { parseBase64String } from "./utils";
-import { bigIntMax } from "@/utils/bigInt";
+import { bigIntMax } from "@/common/utils/bigInt";
 
 export type Colors = {
   background: string;

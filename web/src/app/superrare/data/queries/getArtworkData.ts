@@ -7,7 +7,7 @@ import { cachedReadContract } from "@/utils/caching";
 import { fetchIpfsData } from "@/utils/fetchIpfsDats";
 import { baseNft } from "@/abis/superrare/baseNft";
 import { User, getUserData } from "./getUserData";
-import "@/utils/bigIntPolyfill";
+import "@/common/utils/bigIntPolyfill";
 
 interface GetArtworkDataParams {
   collectionAddress: Address;

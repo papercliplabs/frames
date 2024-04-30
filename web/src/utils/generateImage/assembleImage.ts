@@ -6,9 +6,15 @@ interface AssembleImageParams {
   frameSize: Size;
   backgroundColor: Color;
   layerImageBufferStrings: string[];
+  gifOverrideDelay?: number;
 }
 
-async function assembleImageUncached({ frameSize, backgroundColor, layerImageBufferStrings }: AssembleImageParams) {
+async function assembleImageUncached({
+  frameSize,
+  backgroundColor,
+  layerImageBufferStrings,
+  gifOverrideDelay,
+}: AssembleImageParams) {
   const buffers = layerImageBufferStrings.map((bufferStr) => Buffer.from(bufferStr, "base64"));
   const layerImageMetadata = await Promise.all(buffers.map((buffer) => sharp(buffer).metadata()));
   const maxGifPages = layerImageMetadata.reduce((prevMax, metadata) => Math.max(metadata.pages ?? 1, prevMax), 1);
@@ -23,7 +29,7 @@ async function assembleImageUncached({ frameSize, backgroundColor, layerImageBuf
   });
 
   const combined = await base
-    .gif({ force: true })
+    .gif({ force: true, delay: gifOverrideDelay ? Array(maxGifPages).fill(gifOverrideDelay) : undefined })
     .composite(
       buffers.map((buffer, i) => ({
         input: buffer,
@@ -32,10 +38,11 @@ async function assembleImageUncached({ frameSize, backgroundColor, layerImageBuf
         top: 0,
         left: 0,
       }))
-    )
-    .toBuffer();
+    );
 
-  const imageBase64 = `data:image/gif;base64,${combined.toString("base64")}`;
+  const combinedBuffer = await combined.toBuffer();
+
+  const imageBase64 = `data:image/gif;base64,${combinedBuffer.toString("base64")}`;
   return imageBase64;
 }
 
