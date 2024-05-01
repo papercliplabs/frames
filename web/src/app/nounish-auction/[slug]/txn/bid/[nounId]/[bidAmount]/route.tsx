@@ -14,7 +14,6 @@ export async function POST(
   }
 
   const frameRequest: FrameRequest = await req.json();
-  await track("nounish-auction-bid", { slug: params.slug });
   console.log(
     `nounish-auction-bid - ${params.slug}, nounId=${params.nounId}, fid=${frameRequest.untrustedData.fid} bid=${params.bidAmount}`
   );

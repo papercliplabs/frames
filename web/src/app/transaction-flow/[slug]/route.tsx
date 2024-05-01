@@ -3,6 +3,7 @@ import { FrameButtonMetadata, FrameRequest, getFrameHtmlResponse } from "@coinba
 import { transactionFlowConfigs, SupportedTransactionFlowSlug } from "../config";
 import { getTransactionReceipt } from "viem/actions";
 import { Hex } from "viem";
+import { track } from "@vercel/analytics/server";
 
 export async function GET(req: NextRequest, { params }: { params: { slug: string; hash: string } }): Promise<Response> {
   const config = transactionFlowConfigs[params.slug as SupportedTransactionFlowSlug];
@@ -62,8 +63,10 @@ export async function POST(req: NextRequest, { params }: { params: { slug: strin
 
   let secondButton: FrameButtonMetadata = { label: "Refresh", action: "post" };
   if (status == "success") {
+    await track("txn-successful", { slug: params.slug, hash: transactionHash });
     secondButton = config.terminalButtons.success;
   } else if (status == "failed") {
+    await track("txn-failed", { slug: params.slug, hash: transactionHash });
     secondButton = config.terminalButtons.failed;
   }
 
