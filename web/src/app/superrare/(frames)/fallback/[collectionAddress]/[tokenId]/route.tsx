@@ -15,7 +15,14 @@ async function response(
       src: relativeEndpointUrl(req, `/image?t=${Date.now()}`),
       aspectRatio: "1:1",
     },
-    buttons: [{ label: "View", action: "link", target: href }],
+    buttons: [
+      {
+        label: "Refresh",
+        action: "post",
+        target: `${process.env.NEXT_PUBLIC_URL}/superrare/router/${params.collectionAddress}/${params.tokenId}`,
+      },
+      { label: "View", action: "link", target: href },
+    ],
   });
 }
 

@@ -11,6 +11,7 @@ import { getFrameMessageWithNeynarApiKey } from "@/utils/farcaster";
 import { mainnetPublicClient } from "@/utils/wallet";
 import { frameErrorResponse } from "@/utils/frameErrorResponse";
 
+// Seeing some weird BigInt serialization issues, so wrapping them all in BigInt again (from string)
 export async function POST(req: NextRequest, { params }: { params: { collectionAddress: string } }): Promise<Response> {
   const collectionAddress = getAddress(params.collectionAddress);
   const frameRequest: FrameRequest = await req.json();
@@ -50,11 +51,13 @@ export async function POST(req: NextRequest, { params }: { params: { collectionA
     }),
   ]);
 
-  const soldOut = limitedMintData.currentSupply >= limitedMintData.maxSupply;
+  const soldOut = BigInt(limitedMintData.currentSupply) >= BigInt(limitedMintData.maxSupply);
   const hitMintLimit =
-    limitedMintData.maxMintsPerAddress != BigInt(0) && userMintCount >= limitedMintData.maxMintsPerAddress;
+    BigInt(limitedMintData.maxMintsPerAddress) != BigInt(0) &&
+    BigInt(userMintCount) >= BigInt(limitedMintData.maxMintsPerAddress);
   const hitTxnLimit =
-    limitedMintData.txnLimitPerAddress != BigInt(0) && userTxnCount >= limitedMintData.txnLimitPerAddress;
+    BigInt(limitedMintData.txnLimitPerAddress) != BigInt(0) &&
+    BigInt(userTxnCount) >= BigInt(limitedMintData.txnLimitPerAddress);
 
   const errorMessage = soldOut
     ? "Error: Sold out"
@@ -67,7 +70,8 @@ export async function POST(req: NextRequest, { params }: { params: { collectionA
     return frameErrorResponse(errorMessage);
   }
 
-  const priceAndFee = limitedMintData.price + (limitedMintData.price * SUPERRARE_NETWORK_FEE_PERCENT) / BigInt(100);
+  const priceWithFee =
+    BigInt(limitedMintData.price) + (BigInt(limitedMintData.price) * SUPERRARE_NETWORK_FEE_PERCENT) / BigInt(100);
 
   const txResponse = {
     chainId: `eip155:${mainnet.id}`,
@@ -78,9 +82,9 @@ export async function POST(req: NextRequest, { params }: { params: { collectionA
       data: encodeFunctionData({
         abi: rareMinterAbi,
         functionName: "mintDirectSale",
-        args: [collectionAddress, limitedMintData.currency.address, limitedMintData.price, 1, []],
+        args: [collectionAddress, limitedMintData.currency.address, BigInt(limitedMintData.price), 1, []],
       }),
-      value: priceAndFee.toString(),
+      value: priceWithFee.toString(),
     },
   } as FrameTransactionResponse;
 

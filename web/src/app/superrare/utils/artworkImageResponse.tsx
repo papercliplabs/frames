@@ -1,6 +1,6 @@
 import ServerImage from "@/components/ServerImage";
 import { truncateString } from "@/utils/format";
-import { generateLayeredImageResponse } from "@/utils/generateLayeredImage";
+import { ImageLayer, generateLayeredImageResponse } from "@/utils/generateLayeredImage";
 import { localImageUrl } from "@/utils/urlHelpers";
 import clsx from "clsx";
 import { SatoriOptions } from "satori";
@@ -28,6 +28,7 @@ interface ArtworkImageResponseParams {
 }
 
 export function artworkImageResponse({ artwork, artist, tag, extra }: ArtworkImageResponseParams): Promise<Response> {
+  console.log("ART", artwork);
   return generateLayeredImageResponse({
     frameSize: {
       width: 600,
@@ -80,8 +81,7 @@ export function artworkImageResponse({ artwork, artist, tag, extra }: ArtworkIma
               </div>
               <div tw="flex flex-row h-[68px] items-center" style={{ gap: "64px" }}>
                 <div tw="flex flex-row items-center" style={{ gap: "16px" }}>
-                  {/* TODO(spennyp): for some reason, using server image sometimes causes the image to not render */}
-                  {artist.imgSrc && <img src={artist.imgSrc} width={56} height={56} alt="" tw="rounded-full" />}
+                  {artist.imgSrc && <div tw="w-[56px] h-[56px]" />} {/* Create a hole for the user image*/}
                   <div tw="flex flex-col">
                     <div tw="text-caption text-content-secondary">Artist</div>
                     <div>{truncateString(artist.name, 21)}</div>
@@ -99,6 +99,18 @@ export function artworkImageResponse({ artwork, artist, tag, extra }: ArtworkIma
         ),
         size: { width: 600, height: 600 },
       },
+      ...(artist.imgSrc
+        ? [
+            {
+              type: "static",
+              src: artist.imgSrc,
+              size: { width: 56, height: 56 },
+              position: { left: 32, top: 600 - 60 - 32 },
+              borderRadius: 999,
+              animated: false,
+            } as ImageLayer,
+          ]
+        : []),
     ],
   });
 }
@@ -115,18 +127,20 @@ export function errorImageResponse() {
     layers: [
       {
         type: "static",
-        src: "/images/superrare/overlay.png",
-        size: { width: 600, height: 600 },
-        animated: false,
+        src: "/images/superrare/no-image.gif",
+        size: { width: 140, height: 140 },
+        position: { left: 300 - 140 / 2, top: 176 },
+        animated: true,
       },
       {
         type: "dynamic",
         src: (
           <div tw="w-full h-full p-8 flex flex-col justify-center items-center text-content-primary text-body">
-            Error: unable to find artwork data
+            Unable to fetch the image
           </div>
         ),
-        size: { width: 600, height: 600 },
+        size: { width: 600, height: 50 },
+        position: { left: 0, top: 372 },
       },
     ],
   });

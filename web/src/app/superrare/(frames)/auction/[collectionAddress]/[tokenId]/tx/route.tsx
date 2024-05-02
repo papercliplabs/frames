@@ -37,7 +37,7 @@ export async function POST(
   }
 
   const nowTime = BigInt(Math.floor(Date.now() / 1000));
-  const auctionEnded = nowTime > auctionData.endTime;
+  const auctionEnded = nowTime > BigInt(auctionData.endTime);
 
   if (auctionEnded) {
     return frameErrorResponse("Error: auction ended");
@@ -63,7 +63,7 @@ export async function POST(
       data: encodeFunctionData({
         abi: brazzerAbi,
         functionName: "bid",
-        args: [collectionAddress, tokenId, zeroAddress, bid],
+        args: [collectionAddress, tokenId, auctionData.currency.address, bid],
       }),
       value: bidWithFee.toString(),
     },

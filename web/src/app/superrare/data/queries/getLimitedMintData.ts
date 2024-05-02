@@ -17,6 +17,8 @@ interface GetLimitedMintDataParams {
 interface LimitedMintData extends ArtworkData {
   currentSupply: bigint;
   maxSupply: bigint;
+  tokenId: bigint;
+
   currency: TokenData;
   price: bigint;
   maxMintsPerAddress: bigint; // total number of mints an address can make - 0 => no limit
@@ -87,12 +89,11 @@ export async function getLimitedMintDataUncached({
       return null;
     }
 
-    console.log("FROM DATA", directSaleConfig.price, typeof directSaleConfig.price);
-
     return {
       ...artworkData,
       currentSupply,
       maxSupply,
+      tokenId,
       currency,
       price: BigInt(directSaleConfig.price), // For some reason, need this explicit cast
       maxMintsPerAddress,

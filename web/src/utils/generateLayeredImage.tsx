@@ -18,7 +18,7 @@ interface BaseImageLayer {
   borderRadius?: number;
 }
 
-type ImageLayer =
+export type ImageLayer =
   | ({
       type: "static";
       src: string; // For local images, must use same path as <Image>.src (i.e relative to public folder, ex: "/images/nouns-auction-house.png")
@@ -57,9 +57,13 @@ async function getImageBufferForLayer(
     sharpImage = await sharp(Buffer.from(svg)).png();
   } else {
     if (new RegExp("^https://").test(layer.src)) {
-      const resp = await fetch(layer.src, { cache: "no-cache" }); // Disable cache here, since some images may be > 2MB (we cache the generated output)
+      const resp = await fetch(layer.src, { cache: "no-store" }); // Disable cache here, since some images may be > 2MB (we cache the generated output)
       const buffer = Buffer.from(await resp.arrayBuffer());
       sharpImage = await sharp(buffer, { animated: layer.animated });
+
+      if (!layer.animated) {
+        sharpImage = sharpImage.png({ force: true, quality: 70 });
+      }
     } else if (new RegExp(";base64").test(layer.src)) {
       // Base 64
       const base64Encoded = layer.src.split(";base64").pop();
@@ -70,10 +74,6 @@ async function getImageBufferForLayer(
       const resp = await fetch(`${process.env.NEXT_PUBLIC_URL}${imageProps.props.src}`); // Fully cache this (if over 2MB, throws error)
       const buffer = Buffer.from(await resp.arrayBuffer());
       sharpImage = await sharp(buffer, { animated: layer.animated });
-    }
-
-    if (!layer.animated) {
-      sharpImage = sharpImage.png();
     }
   }
 
@@ -163,6 +163,9 @@ export const generateLayeredImageCached = unstable_cache(generateLayeredImage, [
 export async function generateLayeredImageResponse(params: GenerateLayeredImageParams) {
   const resp = await generateLayeredImageCached(params);
   return new Response(Buffer.from(resp.replace("data:image/gif;base64,", ""), "base64"), {
-    headers: { "content-type": "image/gif" },
+    headers: {
+      "content-type": "image/gif",
+      "cache-control": "max-age=0, must-revalidate",
+    },
   });
 }

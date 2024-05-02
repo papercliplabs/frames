@@ -25,6 +25,7 @@ async function response(req: Request, { params }: { params: { collectionAddress:
     return Response.redirect(`${process.env.NEXT_PUBLIC_URL}/superrare/fallback/${collectionAddress}/${tokenId}`, 302);
   }
 
+  const transactionFlowSearchParams = new URLSearchParams({ successMessage: "You minted it!" });
   const href = `${SUPERRARE_BASE_URL}/releases/${params.collectionAddress.toLowerCase()}`;
   return frameResponseWrapper({
     req,
@@ -39,14 +40,18 @@ async function response(req: Request, { params }: { params: { collectionAddress:
       ...(limitedMintData.isValidForFrameTxn
         ? [
             {
-              label: "Bid",
+              label: "Mint",
               action: "tx",
               target: relativeEndpointUrl(req, `/tx`),
-              postUrl: `${process.env.NEXT_PUBLIC_URL}/transaction-flow/superrare`,
+              postUrl: `${process.env.NEXT_PUBLIC_URL}/transaction-flow/superrare?${transactionFlowSearchParams.toString()}`,
             } as FrameButtonMetadata,
           ]
         : []),
     ],
+    state: {
+      txSuccessTarget: `${process.env.NEXT_PUBLIC_URL}/superrare/fallback/${collectionAddress}/${limitedMintData.tokenId.toString()}`, // Go to the minted artworks frame
+      txFailedTarget: req.url,
+    },
   });
 }
 

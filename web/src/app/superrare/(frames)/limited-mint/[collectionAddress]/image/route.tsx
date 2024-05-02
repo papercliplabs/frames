@@ -19,12 +19,12 @@ export async function GET(req: Request, { params }: { params: { collectionAddres
           imgSrc: limitedMintData.creator.imageSrc,
         },
         tag: {
-          active: limitedMintData.currentSupply < limitedMintData.maxSupply,
+          active: BigInt(limitedMintData.currentSupply) < BigInt(limitedMintData.maxSupply),
           content: `${limitedMintData.currentSupply.toString()} / ${limitedMintData.maxSupply.toString()} Minted`,
         },
         extra: {
           title: "Price",
-          content: `${formatNumber(formatUnits(limitedMintData.price, limitedMintData.currency.decimals), 4)} ${limitedMintData.currency.symbol}`,
+          content: `${formatNumber(formatUnits(BigInt(limitedMintData.price), limitedMintData.currency.decimals), 4)} ${limitedMintData.currency.symbol}`,
         },
       })
     : errorImageResponse();

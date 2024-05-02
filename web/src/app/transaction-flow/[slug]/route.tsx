@@ -61,13 +61,24 @@ export async function POST(req: NextRequest, { params }: { params: { slug: strin
     // Don't have receipt yet, still pending
   }
 
+  let decodedState: { txSuccessTarget?: string; txFailedTarget?: string } | undefined = undefined;
+  if (config.deriveTerminalButtonTargetFromState) {
+    decodedState = JSON.parse(decodeURIComponent(frameRequest.untrustedData.state));
+  }
+
   let secondButton: FrameButtonMetadata = { label: "Refresh", action: "post" };
   if (status == "success") {
     await track("txn-successful", { slug: params.slug, hash: transactionHash });
     secondButton = config.terminalButtons.success;
+    if (config.deriveTerminalButtonTargetFromState && decodedState?.txSuccessTarget) {
+      secondButton.target = decodedState.txSuccessTarget;
+    }
   } else if (status == "failed") {
     await track("txn-failed", { slug: params.slug, hash: transactionHash });
     secondButton = config.terminalButtons.failed;
+    if (config.deriveTerminalButtonTargetFromState && decodedState?.txFailedTarget) {
+      secondButton.target = decodedState.txFailedTarget;
+    }
   }
 
   return new NextResponse(
@@ -75,7 +86,7 @@ export async function POST(req: NextRequest, { params }: { params: { slug: strin
       image: {
         src: `${process.env.NEXT_PUBLIC_URL}/transaction-flow/${
           params.slug
-        }/image/${status}?${searchParams.toString()}`,
+        }/image/${status}?${searchParams.toString()}&t=${Date.now()}`,
         aspectRatio: "1:1",
       },
       buttons: [
@@ -87,6 +98,7 @@ export async function POST(req: NextRequest, { params }: { params: { slug: strin
         secondButton,
       ],
       postUrl: `${process.env.NEXT_PUBLIC_URL}/transaction-flow/${params.slug}?${searchParams.toString()}`,
+      state: decodedState,
     })
   );
 }

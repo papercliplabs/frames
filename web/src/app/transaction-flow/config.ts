@@ -4,6 +4,7 @@ import { yellowCollectiveAuctionTransactionFlowConfig } from "./slugConfigs/yell
 import { Client } from "viem";
 import { beansAuctionTransactionFlowConfig } from "./slugConfigs/beansAuction";
 import { nounsAuctionTransactionFlowConfig } from "./slugConfigs/nounsAuction";
+import { superrareTransactionFlowConfig } from "./slugConfigs/superrare";
 
 // Put this into state to compose
 export interface TransactionFlowConfig {
@@ -30,12 +31,19 @@ export interface TransactionFlowConfig {
     success: FrameButtonMetadata;
     failed: FrameButtonMetadata;
   };
+  hidePaperclipLogo?: boolean;
+  deriveTerminalButtonTargetFromState?: boolean;
 }
 
-export type SupportedTransactionFlowSlug = "yellow-collective-auction" | "beans-auction" | "nouns-auction";
+export type SupportedTransactionFlowSlug =
+  | "yellow-collective-auction"
+  | "beans-auction"
+  | "nouns-auction"
+  | "superrare";
 
 export const transactionFlowConfigs: Record<SupportedTransactionFlowSlug, TransactionFlowConfig> = {
   "yellow-collective-auction": yellowCollectiveAuctionTransactionFlowConfig,
   "beans-auction": beansAuctionTransactionFlowConfig,
   "nouns-auction": nounsAuctionTransactionFlowConfig,
+  superrare: superrareTransactionFlowConfig,
 };

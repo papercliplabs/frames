@@ -24,6 +24,7 @@ async function response(
     );
   }
 
+  const transactionFlowSearchParams = new URLSearchParams({ successMessage: "Your bid was submitted." });
   const href = `${SUPERRARE_BASE_URL}/${params.collectionAddress.toLowerCase()}/${params.tokenId}`;
   return frameResponseWrapper({
     req,
@@ -42,11 +43,15 @@ async function response(
               label: "Bid",
               action: "tx",
               target: relativeEndpointUrl(req, "/tx"),
-              postUrl: `${process.env.NEXT_PUBLIC_URL}/transaction-flow/superrare`,
+              postUrl: `${process.env.NEXT_PUBLIC_URL}/transaction-flow/superrare?${transactionFlowSearchParams.toString()}`,
             } as FrameButtonMetadata,
           ]
         : []),
     ],
+    state: {
+      txSuccessTarget: req.url,
+      txFailedTarget: req.url,
+    },
   });
 }
 
