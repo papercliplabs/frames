@@ -4,7 +4,7 @@ import { formatNumber } from "@/utils/format";
 import { getAddress, formatUnits } from "viem";
 
 export async function GET(req: Request, { params }: { params: { collectionAddress: string } }): Promise<Response> {
-  let limitedMintData = await getLimitedMintData({
+  const limitedMintData = await getLimitedMintData({
     collectionAddress: getAddress(params.collectionAddress),
   });
 

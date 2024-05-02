@@ -6,8 +6,8 @@ import { mainnetPublicClient } from "@/utils/wallet";
 import { cachedReadContract } from "@/utils/caching";
 import { fetchIpfsData } from "@/utils/fetchIpfsDats";
 import { baseNft } from "@/abis/superrare/baseNft";
-import "@/utils/bigIntPolyfill";
 import { User, getUserData } from "./getUserData";
+import "@/utils/bigIntPolyfill";
 
 interface GetArtworkDataParams {
   collectionAddress: Address;

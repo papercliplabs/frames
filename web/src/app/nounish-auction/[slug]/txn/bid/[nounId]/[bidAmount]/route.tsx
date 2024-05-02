@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { SupportedNounishAuctionSlug, nounishAuctionConfigs } from "../../../../../configs";
 import { track } from "@vercel/analytics/server";
-import { FrameRequest } from "@coinbase/onchainkit";
+import { FrameRequest } from "@coinbase/onchainkit/frame";
 
 export async function POST(
   req: NextRequest,

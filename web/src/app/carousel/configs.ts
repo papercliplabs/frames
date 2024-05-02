@@ -1,4 +1,4 @@
-import { FrameButtonMetadata, FrameImageMetadata } from "@coinbase/onchainkit";
+import { FrameButtonMetadata, FrameImageMetadata } from "@coinbase/onchainkit/frame";
 import { beansDungeonConfig } from "./slugConfigs/beansDungeon";
 import { beansDungeonNoMintConfig } from "./slugConfigs/beansDungeonNoMint";
 import { paperclipAuctionFramesConfig } from "./slugConfigs/paperclipAuctionFrames";

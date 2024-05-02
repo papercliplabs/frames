@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { track } from "@vercel/analytics/server";
 import { SupportedAuctionDao, auctionConfigs } from "../daoConfig";
 import { extractComposableQueryParams, getComposeResponse } from "@/utils/composableParams";
-import { FrameButtonMetadata, FrameRequest, getFrameHtmlResponse } from "@coinbase/onchainkit";
+import { FrameButtonMetadata, FrameRequest, getFrameHtmlResponse } from "@coinbase/onchainkit/frame";
 
 async function response(dao: string, searchParams: URLSearchParams, request?: FrameRequest): Promise<Response> {
   const config = auctionConfigs[dao as SupportedAuctionDao];

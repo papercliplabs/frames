@@ -2,7 +2,7 @@ import { SUPERRARE_BASE_URL } from "@/app/superrare/utils/constants";
 import { getAuctionData } from "@/app/superrare/data/queries/getAuctionData";
 import frameResponseWrapper from "@/utils/frameResponseWrapper";
 import { relativeEndpointUrl } from "@/utils/urlHelpers";
-import { FrameButtonMetadata } from "@coinbase/onchainkit";
+import { FrameButtonMetadata } from "@coinbase/onchainkit/frame";
 import { getAddress } from "viem";
 
 async function response(
@@ -32,12 +32,19 @@ async function response(
       src: relativeEndpointUrl(req, `/image?t=${Date.now()}`),
       aspectRatio: "1:1",
     },
-    // TODO(spennyp): make txn endpoint
+    input: { text: "Enter ETH bid amount" },
     buttons: [
       { label: "Refresh", action: "post" },
       { label: "View", action: "link", target: href },
       ...(auctionData.isValidForFrameTxn
-        ? [{ label: "Bid", action: "post", target: href } as FrameButtonMetadata]
+        ? [
+            {
+              label: "Bid",
+              action: "tx",
+              target: relativeEndpointUrl(req, "/tx"),
+              postUrl: `${process.env.NEXT_PUBLIC_URL}/transaction-flow/superrare`,
+            } as FrameButtonMetadata,
+          ]
         : []),
     ],
   });

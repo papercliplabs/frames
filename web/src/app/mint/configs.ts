@@ -3,7 +3,7 @@ import { basedAndYellowFrameEditionOneConfig } from "./collectionConfigs/basedAn
 import { FontType } from "@/utils/baseImg";
 import { beansTheAdventureBeginsConfig } from "./collectionConfigs/beansTheAdventureBegins";
 import { beansEnteringTheUnknownConfig } from "./collectionConfigs/beansEnteringTheUnknown";
-import { FrameImageMetadata, FrameRequest, FrameValidationData } from "@coinbase/onchainkit";
+import { FrameImageMetadata, FrameRequest, FrameValidationData } from "@coinbase/onchainkit/frame";
 import { mainCharactersGenslerCoinConfig } from "./collectionConfigs/mainCharactersGenslerCoin";
 import { beansBeanBoogieConfig } from "./collectionConfigs/beansBeanBoogie";
 import { nounsDenverConfig } from "./collectionConfigs/nounsDenver";

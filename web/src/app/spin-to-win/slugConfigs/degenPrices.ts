@@ -1,7 +1,7 @@
 import { SpinToWinConfig } from "../configs";
 import { supabase } from "@/supabase/supabase";
 import { getUserInfo } from "@/utils/farcaster";
-import { FrameImageMetadata, FrameValidationData } from "@coinbase/onchainkit";
+import { FrameImageMetadata, FrameValidationData } from "@coinbase/onchainkit/frame";
 
 const MAX_NUMBER_OF_SPINS = 100;
 

@@ -3,7 +3,7 @@ import { SupportedCarouselSlugs, carouselConfigs } from "@/app/carousel/configs"
 import { getButtonsWithActionForCarouselItem } from "@/app/carousel/carouselUtils";
 import { isAllowedCaster, restrictedFrameResponse } from "@/utils/restrictedFrame";
 import { extractComposableQueryParams, getComposeResponse } from "@/utils/composableParams";
-import { FrameRequest, getFrameHtmlResponse } from "@coinbase/onchainkit";
+import { FrameRequest, getFrameHtmlResponse } from "@coinbase/onchainkit/frame";
 import { getFrameMessageWithNeynarApiKey } from "@/utils/farcaster";
 
 export async function GET(req: NextRequest, { params }: { params: { slug: string; page: string } }): Promise<Response> {

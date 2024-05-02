@@ -1,4 +1,4 @@
-import { FrameValidationData } from "@coinbase/onchainkit";
+import { FrameValidationData } from "@coinbase/onchainkit/frame";
 import { RsvpConfig } from "../configs";
 import { isNftBalanceAboveThreshold } from "@/app/mint/commonChecks/nftBalance";
 import { basePublicClient, mainnetPublicClient } from "@/utils/wallet";

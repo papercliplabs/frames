@@ -6,7 +6,7 @@ import { basePublicClient } from "@/utils/wallet";
 import { isNftBalanceAboveThreshold } from "../commonChecks/nftBalance";
 import { doesUserHaveActiveBadge, isChannelFollowedByUser } from "../commonChecks/farcaster";
 import { mintNftWithSyndicateV2 } from "@/utils/syndicate";
-import { FrameRequest, FrameValidationData } from "@coinbase/onchainkit";
+import { FrameRequest, FrameValidationData } from "@coinbase/onchainkit/frame";
 import { promiseTimeout } from "@/utils/promiseTimeout";
 
 const CLIENT = basePublicClient;
@@ -80,7 +80,7 @@ function MintConditionsNotMetComponent({ checkPayload }: ConditionsNotMetCompone
               {condition.passed ? (
                 <img
                   src={`${process.env.NEXT_PUBLIC_URL}/images/mint/beans/base-grant/condition-met-icon.png`}
-                  className="w-full h-full"
+                  className="h-full w-full"
                 />
               ) : null}
             </div>

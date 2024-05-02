@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "codegen": "graphql-codegen --config src/app/superrare/data/codegen.ts; graphql-codegen --config src/data/yellowCollective/codegen.ts; npx --silent supabase gen types typescript --project-id maigwjhtcdimlttkflad > src/supabase/codegen.types.ts",
+    "codegen": "graphql-codegen --config src/data/superrare/codegen.ts; graphql-codegen --config src/data/yellowCollective/codegen.ts; npx --silent supabase gen types typescript --project-id maigwjhtcdimlttkflad > src/supabase/codegen.types.ts",
     "dev": "next dev",
     "build": "yarn codegen; next build",
     "start": "next start",
@@ -13,7 +13,7 @@
   "dependencies": {
     "@apollo/client": "^3.9.0-rc.1",
     "@apollo/experimental-nextjs-app-support": "^0.9.0",
-    "@coinbase/onchainkit": "^0.10.1",
+    "@coinbase/onchainkit/frame": "^0.13.4",
     "@hookform/resolvers": "^3.3.4",
     "@neynar/nodejs-sdk": "^1.9.4",
     "@nouns/assets": "^0.5.0",

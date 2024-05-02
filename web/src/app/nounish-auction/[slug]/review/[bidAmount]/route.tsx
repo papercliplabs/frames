@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getFrameHtmlResponse } from "@coinbase/onchainkit";
+import { getFrameHtmlResponse } from "@coinbase/onchainkit/frame";
 import { SupportedNounishAuctionSlug, nounishAuctionConfigs } from "../../../configs";
 import { unstable_cache } from "next/cache";
 import { detect } from "detect-browser";

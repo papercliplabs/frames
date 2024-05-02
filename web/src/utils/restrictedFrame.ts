@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { FrameValidationData, getFrameHtmlResponse } from "@coinbase/onchainkit";
+import { FrameValidationData, getFrameHtmlResponse } from "@coinbase/onchainkit/frame";
 
 export function restrictedFrameResponse(): NextResponse {
   return new NextResponse(

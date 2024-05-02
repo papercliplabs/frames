@@ -14,6 +14,7 @@ import { User, getUserData } from "./getUserData";
 import { bigIntMax, bigIntMin } from "@/utils/bigInt";
 import { TokenData, getTokenData } from "./getTokenData";
 import { formatTimeLeft } from "@/utils/format";
+import "@/utils/bigIntPolyfill";
 
 interface GetAuctionDataParams {
   collectionAddress: Address;
@@ -35,7 +36,7 @@ interface LiveAuctionData extends ArtworkData {
   isValidForFrameTxn: boolean; // Valid when: currency is ETH, mint has started, mint has not ended
 }
 
-async function getAuctionDataUncached({
+export async function getAuctionDataUncached({
   collectionAddress,
   tokenId,
 }: GetAuctionDataParams): Promise<LiveAuctionData | null> {
@@ -47,13 +48,13 @@ async function getAuctionDataUncached({
       minBidIncrementPercentage,
     ] = await Promise.all([
       getArtworkData({ collectionAddress, tokenId }),
-      cachedReadContract(mainnetPublicClient, {
+      readContract(mainnetPublicClient, {
         address: SUPERRARE_BRAZZER_ADDRESS,
         abi: brazzerAbi,
         functionName: "getAuctionDetails",
         args: [collectionAddress, tokenId],
       }),
-      cachedReadContract(mainnetPublicClient, {
+      readContract(mainnetPublicClient, {
         address: SUPERRARE_BRAZZER_ADDRESS,
         abi: brazzerAbi,
         functionName: "auctionBids",

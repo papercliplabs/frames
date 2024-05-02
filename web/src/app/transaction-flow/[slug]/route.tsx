@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { FrameButtonMetadata, FrameRequest, getFrameHtmlResponse } from "@coinbase/onchainkit";
+import { FrameButtonMetadata, FrameRequest, getFrameHtmlResponse } from "@coinbase/onchainkit/frame";
 import { transactionFlowConfigs, SupportedTransactionFlowSlug } from "../config";
 import { getTransactionReceipt } from "viem/actions";
 import { Hex } from "viem";

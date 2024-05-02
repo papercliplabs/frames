@@ -548,10 +548,10 @@
   resolved "https://registry.yarnpkg.com/@bufbuild/protobuf/-/protobuf-1.9.0.tgz#fffac3183059a41ceef5311e07e3724d426a95c4"
   integrity sha512-W7gp8Q/v1NlCZLsv8pQ3Y0uCu/SHgXOVFK+eUluUKWXmsb6VHkpNx0apdOWWcDbB9sJoKeP8uPrjmehJz6xETQ==
 
-"@coinbase/onchainkit@^0.10.1":
-  version "0.10.2"
-  resolved "https://registry.yarnpkg.com/@coinbase/onchainkit/-/onchainkit-0.10.2.tgz#2f4d5a6084594d035067d0d73a30c5c2c5ccd8a1"
-  integrity sha512-7k0hngPb92eCI5hDFajeXp0hr/UVU5JTRPbqg5jAdQws3ew6TB1d59GJSSGJOc7vyDu+H9TEPq53T+Eu0cOk2A==
+"@coinbase/onchainkit@^0.13.4":
+  version "0.13.4"
+  resolved "https://registry.yarnpkg.com/@coinbase/onchainkit/-/onchainkit-0.13.4.tgz#35e5629ec073b1b3e24fa53ff662ea2d2eb6612a"
+  integrity sha512-+d2lZGpLRIpcNoSTOpqClQbd94d23EXBUna2b50MpQlvmYvTnK4eeVpExfgal04oV4ZAfqpQN5l3pTuJnCcVPA==
 
 "@esbuild/aix-ppc64@0.20.2":
   version "0.20.2"

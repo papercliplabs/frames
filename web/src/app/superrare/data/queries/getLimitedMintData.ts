@@ -8,6 +8,7 @@ import { SUPERRARE_MINTER_PROXY_ADDRESS } from "../../utils/constants";
 import { rareMinterAbi } from "@/abis/superrare/rareMinter";
 import { unstable_cache } from "next/cache";
 import { TokenData, getTokenData } from "./getTokenData";
+import "@/utils/bigIntPolyfill";
 
 interface GetLimitedMintDataParams {
   collectionAddress: Address;
@@ -24,7 +25,7 @@ interface LimitedMintData extends ArtworkData {
   isValidForFrameTxn: boolean; // Valid when: token is ETH, doesn't have an allowlist, mint has started, and not minted out
 }
 
-async function getLimitedMintDataUncached({
+export async function getLimitedMintDataUncached({
   collectionAddress,
 }: GetLimitedMintDataParams): Promise<LimitedMintData | null> {
   try {
@@ -86,12 +87,14 @@ async function getLimitedMintDataUncached({
       return null;
     }
 
+    console.log("FROM DATA", directSaleConfig.price, typeof directSaleConfig.price);
+
     return {
       ...artworkData,
       currentSupply,
       maxSupply,
       currency,
-      price: directSaleConfig.price,
+      price: BigInt(directSaleConfig.price), // For some reason, need this explicit cast
       maxMintsPerAddress,
       txnLimitPerAddress,
       isValidForFrameTxn,

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isAllowedCaster, restrictedFrameResponse } from "@/utils/restrictedFrame";
 import { extractComposableQueryParams, getComposeResponse } from "@/utils/composableParams";
-import { FrameRequest, getFrameHtmlResponse } from "@coinbase/onchainkit";
+import { FrameRequest, getFrameHtmlResponse } from "@coinbase/onchainkit/frame";
 import { getFrameMessageWithNeynarApiKey } from "@/utils/farcaster";
 import { SupportedRiddleSlug, riddleConfigs } from "../configs";
 

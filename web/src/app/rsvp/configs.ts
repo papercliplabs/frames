@@ -1,4 +1,4 @@
-import { FrameImageMetadata, FrameValidationData } from "@coinbase/onchainkit";
+import { FrameImageMetadata, FrameValidationData } from "@coinbase/onchainkit/frame";
 import { nounsDenverRsvpConfig } from "./slugConfigs/nounsDenver";
 
 export interface RsvpConfig {

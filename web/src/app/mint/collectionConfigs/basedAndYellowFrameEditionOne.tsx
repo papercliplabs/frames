@@ -7,7 +7,7 @@ import { basePublicClient, mainnetPublicClient, optimismClient } from "@/utils/w
 import { isNftBalanceAboveThreshold } from "../commonChecks/nftBalance";
 import { isCastLikedByUser, isChannelFollowedByUser } from "../commonChecks/farcaster";
 import { mintNftWithSyndicate } from "@/utils/syndicate";
-import { FrameRequest, FrameValidationData } from "@coinbase/onchainkit";
+import { FrameRequest, FrameValidationData } from "@coinbase/onchainkit/frame";
 
 const CLIENT = basePublicClient;
 const COLLECTION_ADDRESS = getAddress("0xc75A328b9544eDD315011024c31d988Fc14f5972");

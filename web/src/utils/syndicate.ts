@@ -1,4 +1,4 @@
-import { FrameRequest } from "@coinbase/onchainkit";
+import { FrameRequest } from "@coinbase/onchainkit/frame";
 import { Address } from "viem";
 
 export async function mintNftWithSyndicate(request: FrameRequest, apiKey: string) {

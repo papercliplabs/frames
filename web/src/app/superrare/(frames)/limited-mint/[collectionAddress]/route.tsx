@@ -6,7 +6,7 @@ import { getLimitedMintData } from "../../../data/queries/getLimitedMintData";
 import { readContract } from "viem/actions";
 import { baseNft } from "@/abis/superrare/baseNft";
 import { mainnetPublicClient } from "@/utils/wallet";
-import { FrameButtonMetadata } from "@coinbase/onchainkit";
+import { FrameButtonMetadata } from "@coinbase/onchainkit/frame";
 
 async function response(req: Request, { params }: { params: { collectionAddress: string } }): Promise<Response> {
   const collectionAddress = getAddress(params.collectionAddress);
@@ -33,12 +33,18 @@ async function response(req: Request, { params }: { params: { collectionAddress:
       src: relativeEndpointUrl(req, `/image?t=${Date.now()}`),
       aspectRatio: "1:1",
     },
-    // TODO(spennyp): make txn endpoint
     buttons: [
       { label: "Refresh", action: "post" },
       { label: "View", action: "link", target: href },
       ...(limitedMintData.isValidForFrameTxn
-        ? [{ label: "Bid", action: "post", target: href } as FrameButtonMetadata]
+        ? [
+            {
+              label: "Bid",
+              action: "tx",
+              target: relativeEndpointUrl(req, `/tx`),
+              postUrl: `${process.env.NEXT_PUBLIC_URL}/transaction-flow/superrare`,
+            } as FrameButtonMetadata,
+          ]
         : []),
     ],
   });

@@ -1,5 +1,5 @@
 import { FontType } from "@/utils/imageOptions";
-import { FrameButtonMetadata } from "@coinbase/onchainkit";
+import { FrameButtonMetadata } from "@coinbase/onchainkit/frame";
 import { yellowCollectiveAuctionTransactionFlowConfig } from "./slugConfigs/yellowCollectiveAuction";
 import { Client } from "viem";
 import { beansAuctionTransactionFlowConfig } from "./slugConfigs/beansAuction";
