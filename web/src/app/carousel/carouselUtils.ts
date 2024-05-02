@@ -1,5 +1,5 @@
 import { CarouselConfig } from "./configs";
-import { FrameButtonMetadata } from "@coinbase/onchainkit";
+import { FrameButtonMetadata } from "@coinbase/onchainkit/frame";
 
 type FrameButtonInfoWithAction = FrameButtonMetadata & { carouselAction?: "prev" | "next" | "compose" };
 

@@ -1,4 +1,4 @@
-import { FrameRequest, getFrameMessage } from "@coinbase/onchainkit";
+import { FrameRequest, getFrameMessage } from "@coinbase/onchainkit/frame";
 import { NeynarAPIClient } from "@neynar/nodejs-sdk";
 import { User as FarcasterUser } from "@neynar/nodejs-sdk/build/neynar-api/v2";
 

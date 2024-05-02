@@ -11,7 +11,7 @@ import {
   isUserFollowedByUser,
 } from "../commonChecks/farcaster";
 import { mintNftWithSyndicate } from "@/utils/syndicate";
-import { FrameRequest, FrameValidationData } from "@coinbase/onchainkit";
+import { FrameRequest, FrameValidationData } from "@coinbase/onchainkit/frame";
 
 const CLIENT = basePublicClient;
 const COLLECTION_ADDRESS = getAddress("0xB687d8D882ca5c765D09b19D090E019C227c89E3");

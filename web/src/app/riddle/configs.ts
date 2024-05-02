@@ -1,4 +1,4 @@
-import { FrameImageMetadata } from "@coinbase/onchainkit";
+import { FrameImageMetadata } from "@coinbase/onchainkit/frame";
 import { beansRiddleConfig } from "./slugConfigs/beans";
 import { FontType } from "@/utils/baseImg";
 

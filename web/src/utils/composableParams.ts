@@ -1,4 +1,4 @@
-import { FrameRequest } from "@coinbase/onchainkit";
+import { FrameRequest } from "@coinbase/onchainkit/frame";
 
 export function extractComposableQueryParams(searchParams: URLSearchParams): {
   composing: boolean;

@@ -1,4 +1,4 @@
-import { FrameMetadata, getFrameHtmlResponse } from "@coinbase/onchainkit";
+import { FrameMetadata, getFrameHtmlResponse } from "@coinbase/onchainkit/frame";
 import { detect } from "detect-browser";
 
 type FrameResponseWrapperParams = {

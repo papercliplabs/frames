@@ -5,7 +5,7 @@ import { SupportedMintCollection, mintConfigs } from "../configs";
 import { extractComposableQueryParams, getComposeResponse } from "@/utils/composableParams";
 import { track } from "@vercel/analytics/server";
 import { isAllowedCaster, restrictedFrameResponse } from "@/utils/restrictedFrame";
-import { FrameButtonMetadata, FrameRequest, getFrameHtmlResponse } from "@coinbase/onchainkit";
+import { FrameButtonMetadata, FrameRequest, getFrameHtmlResponse } from "@coinbase/onchainkit/frame";
 
 export async function GET(req: NextRequest, { params }: { params: { collection: string } }): Promise<Response> {
   const config = mintConfigs[params.collection as SupportedMintCollection];

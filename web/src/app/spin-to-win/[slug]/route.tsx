@@ -1,6 +1,6 @@
 import { SupportedSpinToWinSlug, spinToWinConfigs } from "../configs";
 import { NextRequest, NextResponse } from "next/server";
-import { FrameRequest, getFrameHtmlResponse } from "@coinbase/onchainkit";
+import { FrameRequest, getFrameHtmlResponse } from "@coinbase/onchainkit/frame";
 import { getFrameMessageWithNeynarApiKey } from "@/utils/farcaster";
 
 export async function GET(req: NextRequest, { params }: { params: { slug: string; page: string } }): Promise<Response> {

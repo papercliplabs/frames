@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { FrameRequest, getFrameHtmlResponse } from "@coinbase/onchainkit";
+import { FrameRequest, getFrameHtmlResponse } from "@coinbase/onchainkit/frame";
 import { SupportedNounishAuctionSlug, nounishAuctionConfigs } from "../configs";
 import { unstable_cache } from "next/cache";
 import { getFrameMessageWithNeynarApiKey } from "@/utils/farcaster";

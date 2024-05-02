@@ -4,7 +4,7 @@ import { ReactElement } from "react";
 import { isNftSoldOut } from "../commonChecks/nftSoldOut";
 import { basePublicClient } from "@/utils/wallet";
 import { mintNftWithSyndicate } from "@/utils/syndicate";
-import { FrameRequest, FrameValidationData } from "@coinbase/onchainkit";
+import { FrameRequest, FrameValidationData } from "@coinbase/onchainkit/frame";
 import { isCastLikedByUser } from "../commonChecks/farcaster";
 import { isNftBalanceAboveThreshold } from "../commonChecks/nftBalance";
 

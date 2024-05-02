@@ -5,7 +5,7 @@ import { isNftSoldOut } from "../commonChecks/nftSoldOut";
 import { basePublicClient } from "@/utils/wallet";
 import { isNftBalanceAboveThreshold } from "../commonChecks/nftBalance";
 import { mintNftWithSyndicate } from "@/utils/syndicate";
-import { FrameRequest, FrameValidationData } from "@coinbase/onchainkit";
+import { FrameRequest, FrameValidationData } from "@coinbase/onchainkit/frame";
 
 const CLIENT = basePublicClient;
 const COLLECTION_ADDRESS = getAddress("0x6703342631d23a0f2E6d3f35d34f3e765325341B");

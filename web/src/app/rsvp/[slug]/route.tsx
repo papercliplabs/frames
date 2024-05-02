@@ -1,6 +1,11 @@
 import { getFrameMessageWithNeynarApiKey } from "@/utils/farcaster";
 import { approveGuestForEvent, getGuestRegistrationStatus, isEventSoldOut, registerGuestForEvent } from "@/utils/luma";
-import { getFrameHtmlResponse, FrameRequest, FrameButtonMetadata, FrameInputMetadata } from "@coinbase/onchainkit";
+import {
+  getFrameHtmlResponse,
+  FrameRequest,
+  FrameButtonMetadata,
+  FrameInputMetadata,
+} from "@coinbase/onchainkit/frame";
 import { NextRequest, NextResponse } from "next/server";
 import { SupportedRsvpSlug, rsvpConfigs } from "../configs";
 import { isEmailValid } from "@/utils/validation";

@@ -1,6 +1,6 @@
 import { FrameContext } from "frog";
 import { degenPricesSlugConfig } from "./slugConfigs/degenPrices";
-import { FrameImageMetadata, FrameValidationData } from "@coinbase/onchainkit";
+import { FrameImageMetadata, FrameValidationData } from "@coinbase/onchainkit/frame";
 
 export interface SpinToWinConfig {
   isSoldOut: () => Promise<boolean>;

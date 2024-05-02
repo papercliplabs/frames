@@ -37,7 +37,7 @@ export async function GET(req: NextRequest, { params }: { params: { slug: string
         >
           {successMessage ?? "Your transaction was successfully submitted!"}
         </div>
-        {paperclipIcon}
+        {!config.hidePaperclipLogo && paperclipIcon}
       </div>
     ),
     await getDefaultSquareImageOptions([config.style.font.primary.type, config.style.font.secondary.type])
