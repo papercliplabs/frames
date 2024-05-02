@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "codegen": "graphql-codegen --config src/data/superrare/codegen.ts; graphql-codegen --config src/data/yellowCollective/codegen.ts; npx --silent supabase gen types typescript --project-id maigwjhtcdimlttkflad > src/supabase/codegen.types.ts",
+    "codegen": "graphql-codegen --config src/app/superrare/data/codegen.ts; graphql-codegen --config src/data/yellowCollective/codegen.ts; npx --silent supabase gen types typescript --project-id maigwjhtcdimlttkflad > src/supabase/codegen.types.ts",
     "dev": "next dev",
     "build": "yarn codegen; next build",
     "start": "next start",

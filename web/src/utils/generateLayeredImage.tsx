@@ -3,7 +3,8 @@ import satori from "satori";
 import { ReactNode } from "react";
 import { getFontOptionsFromFontTypes, FontType } from "./imageOptions";
 import { unstable_cache } from "next/cache";
-import { StaticImageData, getImageProps } from "next/image";
+import { getImageProps } from "next/image";
+import { SatoriOptions } from "satori";
 
 interface Size {
   width: number;
@@ -34,24 +35,29 @@ interface GenerateLayeredImageParams {
   frameSize: Size;
   backgroundColor: Color;
   layers: ImageLayer[];
+  fontTypes?: FontType[];
+  twConfig?: SatoriOptions["tailwindConfig"];
 }
 
-async function getImageBufferForLayer(layer: ImageLayer, frameSize: Size): Promise<Buffer> {
+async function getImageBufferForLayer(
+  layer: ImageLayer,
+  frameSize: Size,
+  fontTypes?: FontType[],
+  twConfig?: SatoriOptions["tailwindConfig"]
+): Promise<Buffer> {
   let sharpImage;
 
   if (layer.type == "dynamic") {
     const svg = await satori(layer.src, {
       width: layer.size.width,
       height: layer.size.height,
-      fonts:
-        (await getFontOptionsFromFontTypes(
-          layer.fontTypes && layer.fontTypes.length > 0 ? layer.fontTypes : ["inter"]
-        )) ?? [],
+      fonts: (await getFontOptionsFromFontTypes(fontTypes && fontTypes.length > 0 ? fontTypes : ["inter"])) ?? [],
+      tailwindConfig: twConfig,
     });
     sharpImage = await sharp(Buffer.from(svg)).png();
   } else {
     if (new RegExp("^https://").test(layer.src)) {
-      const resp = await fetch(layer.src); // Fully cache this (if over 2MB, throws error)
+      const resp = await fetch(layer.src, { cache: "no-cache" }); // Disable cache here, since some images may be > 2MB (we cache the generated output)
       const buffer = Buffer.from(await resp.arrayBuffer());
       sharpImage = await sharp(buffer, { animated: layer.animated });
     } else if (new RegExp(";base64").test(layer.src)) {
@@ -113,8 +119,16 @@ async function getImageBufferForLayer(layer: ImageLayer, frameSize: Size): Promi
 
 const getImageBufferForLayerCached = unstable_cache(getImageBufferForLayer, ["get-image-buffer-for-layer"]);
 
-export async function generateLayeredImage({ frameSize, backgroundColor, layers }: GenerateLayeredImageParams) {
-  const layerImageBuffers = await Promise.all(layers.map((layer) => getImageBufferForLayerCached(layer, frameSize)));
+export async function generateLayeredImage({
+  frameSize,
+  backgroundColor,
+  layers,
+  fontTypes,
+  twConfig,
+}: GenerateLayeredImageParams) {
+  const layerImageBuffers = await Promise.all(
+    layers.map((layer) => getImageBufferForLayerCached(layer, frameSize, fontTypes, twConfig))
+  );
   const layerImageMetadata = await Promise.all(layerImageBuffers.map((buffer) => sharp(buffer).metadata()));
   const maxGifPages = layerImageMetadata.reduce((prevMax, metadata) => Math.max(metadata.pages ?? 1, prevMax), 1);
 

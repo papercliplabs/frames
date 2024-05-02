@@ -45,6 +45,10 @@ export function formatNumber(num: number | string | undefined, decimals: number 
   return formattedNum + suffixes[suffixIndex];
 }
 
+export function truncateString(input: string, charLimit: number): string {
+  return input.length > charLimit - 3 ? input.slice(0, charLimit - 3) + "..." : input;
+}
+
 export function formatTimeLeft(seconds: number): string {
   const hours = Math.floor(seconds / 3600);
   const mins = Math.floor((seconds % 3600) / 60);

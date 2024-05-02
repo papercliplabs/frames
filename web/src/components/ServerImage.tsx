@@ -1,4 +1,3 @@
-/** @jsxImportSource frog/jsx */
 import { ImageProps, getImageProps } from "next/image";
 
 export default function ServerImage(props: ImageProps) {

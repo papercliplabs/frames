@@ -1,0 +1,23 @@
+import { SUPERRARE_BASE_URL } from "@/app/superrare/utils/constants";
+import frameResponseWrapper from "@/utils/frameResponseWrapper";
+import { relativeEndpointUrl } from "@/utils/urlHelpers";
+import { NextRequest } from "next/server";
+
+async function response(
+  req: NextRequest,
+  { params }: { params: { collectionAddress: string; tokenId: string } }
+): Promise<Response> {
+  const href = `${SUPERRARE_BASE_URL}/${params.collectionAddress.toLowerCase()}/${params.tokenId}`;
+  return frameResponseWrapper({
+    req,
+    browserRedirectUrl: href,
+    image: {
+      src: relativeEndpointUrl(req, `/image?t=${Date.now()}`),
+      aspectRatio: "1:1",
+    },
+    buttons: [{ label: "View", action: "link", target: href }],
+  });
+}
+
+export const GET = response;
+export const POST = response;

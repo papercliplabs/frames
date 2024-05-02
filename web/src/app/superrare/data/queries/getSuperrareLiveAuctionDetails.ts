@@ -1,10 +1,10 @@
-import { getSuperrareApolloClient } from "@/data/superrare/client";
+import { getSuperrareApolloClient } from "@/app/superrare/data/client";
 import { gql } from "../generated";
 import { Address, getAddress } from "viem";
 import { CurrencyType } from "../generated/graphql";
 import { shortenAddress } from "@/utils/wallet";
 import { formatNumber, formatTimeLeft } from "@/utils/format";
-import { SUPERRARE_BASE_URL } from "@/app/superrare/constants";
+import { SUPERRARE_BASE_URL } from "@/app/superrare/utils/constants";
 
 export interface LiveAuction {
   contractAddress: Address;
