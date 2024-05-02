@@ -2,25 +2,32 @@ import { artworkImageResponse, errorImageResponse } from "@/app/superrare/utils/
 import { getAuctionData } from "@/app/superrare/data/queries/getAuctionData";
 import { formatNumber } from "@/utils/format";
 import { formatUnits, getAddress } from "viem";
+import { getArtworkData } from "@/app/superrare/data/queries/getArtworkData";
 
 export async function GET(
   req: Request,
   { params }: { params: { collectionAddress: string; tokenId: string } }
 ): Promise<Response> {
-  let auctionData = await getAuctionData({
-    collectionAddress: getAddress(params.collectionAddress),
-    tokenId: BigInt(params.tokenId),
-  });
+  const collectionAddress = getAddress(params.collectionAddress);
+  const tokenId = BigInt(params.tokenId);
 
-  return auctionData
+  const [artworkData, auctionData] = await Promise.all([
+    getArtworkData({ collectionAddress, tokenId }),
+    getAuctionData({
+      collectionAddress,
+      tokenId,
+    }),
+  ]);
+
+  return artworkData && auctionData
     ? artworkImageResponse({
         artwork: {
-          title: auctionData.title,
-          imgSrc: auctionData.imageSrc,
+          title: artworkData.title,
+          imgSrc: artworkData.imageSrc,
         },
         artist: {
-          name: auctionData.creator.name,
-          imgSrc: auctionData.creator.imageSrc,
+          name: artworkData.creator.name,
+          imgSrc: artworkData.creator.imageSrc,
         },
         tag: {
           active: true,
@@ -33,3 +40,5 @@ export async function GET(
       })
     : errorImageResponse();
 }
+
+export const maxDuration = 300; // Allow up to 5min for first fetch

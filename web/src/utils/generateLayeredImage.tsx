@@ -53,24 +53,33 @@ async function getImageBufferForLayer(
       height: layer.size.height,
       fonts: (await getFontOptionsFromFontTypes(fontTypes && fontTypes.length > 0 ? fontTypes : ["inter"])) ?? [],
       tailwindConfig: twConfig,
+      // embedFont: true,
+      // debug: true,
     });
-    sharpImage = await sharp(Buffer.from(svg)).png();
+
+    sharpImage = await sharp(Buffer.from(svg)).png({ force: true, quality: 100 });
   } else {
-    if (new RegExp("^https://").test(layer.src)) {
-      const resp = await fetch(layer.src, { cache: "no-store" }); // Disable cache here, since some images may be > 2MB (we cache the generated output)
+    const layerSrcNormalized = layer.src.replace("ipfs://", "https://ipfs.io/ipfs/");
+    if (new RegExp("^https://").test(layerSrcNormalized)) {
+      const resp = await fetch(layerSrcNormalized, { cache: "no-store" }); // Disable cache here, since some images may be > 2MB (we cache the generated output)
       const buffer = Buffer.from(await resp.arrayBuffer());
       sharpImage = await sharp(buffer, { animated: layer.animated });
 
       if (!layer.animated) {
-        sharpImage = sharpImage.png({ force: true, quality: 70 });
+        sharpImage = sharpImage.png({ force: true, quality: 65 });
       }
-    } else if (new RegExp(";base64").test(layer.src)) {
+    } else if (new RegExp(";base64").test(layerSrcNormalized)) {
       // Base 64
-      const base64Encoded = layer.src.split(";base64").pop();
+      const base64Encoded = layerSrcNormalized.split(";base64").pop();
       sharpImage = await sharp(Buffer.from(base64Encoded!, "base64")).png();
     } else {
       // Local image
-      const imageProps = getImageProps({ src: layer.src, width: layer.size.width, height: layer.size.height, alt: "" });
+      const imageProps = getImageProps({
+        src: layerSrcNormalized,
+        width: layer.size.width,
+        height: layer.size.height,
+        alt: "",
+      });
       const resp = await fetch(`${process.env.NEXT_PUBLIC_URL}${imageProps.props.src}`); // Fully cache this (if over 2MB, throws error)
       const buffer = Buffer.from(await resp.arrayBuffer());
       sharpImage = await sharp(buffer, { animated: layer.animated });
@@ -169,3 +178,6 @@ export async function generateLayeredImageResponse(params: GenerateLayeredImageP
     },
   });
 }
+
+// Disable all fetch caching, using unstable_cache instead at better locations
+export const dynamic = "force-dynamic";

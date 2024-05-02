@@ -14,7 +14,7 @@ interface GetLimitedMintDataParams {
   collectionAddress: Address;
 }
 
-interface LimitedMintData extends ArtworkData {
+interface LimitedMintData {
   currentSupply: bigint;
   maxSupply: bigint;
   tokenId: bigint;
@@ -83,14 +83,8 @@ export async function getLimitedMintDataUncached({
     const isValidForFrameTxn = isEthMint && noAllowList && mintStarted && notMintedOut;
 
     const tokenId = notMintedOut ? currentSupply + BigInt(1) : currentSupply;
-    const artworkData = await getArtworkData({ collectionAddress, tokenId });
-    if (!artworkData) {
-      console.log("getLimitedMintData - no artwork data", collectionAddress, tokenId);
-      return null;
-    }
 
     return {
-      ...artworkData,
       currentSupply,
       maxSupply,
       tokenId,
@@ -101,7 +95,7 @@ export async function getLimitedMintDataUncached({
       isValidForFrameTxn,
     };
   } catch (e) {
-    console.log("getArtworkData - error:", collectionAddress, e);
+    console.log("getLimitedMintData - error:", collectionAddress, e);
     return null;
   }
 }

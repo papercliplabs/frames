@@ -1,17 +1,12 @@
-import { Address, erc20Abi, isAddressEqual, zeroAddress } from "viem";
-import { ArtworkData, getArtworkData } from "./getArtworkData";
+import { Address, isAddressEqual, zeroAddress } from "viem";
 import { cachedReadContract } from "@/utils/caching";
-import { baseNft } from "@/abis/superrare/baseNft";
 import { readContract } from "viem/actions";
 import { mainnetPublicClient } from "@/utils/wallet";
 import { SUPERRARE_BRAZZER_ADDRESS } from "../../utils/constants";
-import { rareMinterAbi } from "@/abis/superrare/rareMinter";
 import { unstable_cache } from "next/cache";
-import { gql } from "../generated";
-import { getSuperrareApolloClient } from "../client";
 import { brazzerAbi } from "@/abis/superrare/brazzer";
 import { User, getUserData } from "./getUserData";
-import { bigIntMax, bigIntMin } from "@/utils/bigInt";
+import { bigIntMax } from "@/utils/bigInt";
 import { TokenData, getTokenData } from "./getTokenData";
 import { formatTimeLeft } from "@/utils/format";
 import "@/utils/bigIntPolyfill";
@@ -21,7 +16,7 @@ interface GetAuctionDataParams {
   tokenId: bigint;
 }
 
-interface LiveAuctionData extends ArtworkData {
+interface LiveAuctionData {
   currency: TokenData;
 
   highestBidder?: User;
@@ -42,12 +37,10 @@ export async function getAuctionDataUncached({
 }: GetAuctionDataParams): Promise<LiveAuctionData | null> {
   try {
     const [
-      artworkData,
       [creatorAddress, , startTime, auctionLength, currencyAddress, minimumBid, auctionType],
       [bidderAddress, , highestBid],
       minBidIncrementPercentage,
     ] = await Promise.all([
-      getArtworkData({ collectionAddress, tokenId }),
       readContract(mainnetPublicClient, {
         address: SUPERRARE_BRAZZER_ADDRESS,
         abi: brazzerAbi,
@@ -83,11 +76,6 @@ export async function getAuctionDataUncached({
     const auctionStarted = currentTimestamp > startTime;
     const auctionEnded = currentTimestamp > endTime;
 
-    if (!artworkData) {
-      console.log("getAuctionData - no artwork data", collectionAddress, tokenId);
-      return null;
-    }
-
     if (!auctionStarted || auctionEnded) {
       console.log("getAuctionData - auction not running");
       return null;
@@ -99,7 +87,6 @@ export async function getAuctionDataUncached({
     const isValidForFrameTxn = isAddressEqual(currency.address, zeroAddress);
 
     return {
-      ...artworkData,
       currency,
       highestBidder: highestBidder ?? undefined,
       highestBid,

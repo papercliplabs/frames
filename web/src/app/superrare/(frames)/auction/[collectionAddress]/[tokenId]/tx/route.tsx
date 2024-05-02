@@ -46,6 +46,9 @@ export async function POST(
   let bid: bigint;
   try {
     bid = parseEther(frameValidationResponse.message.input.trim());
+    if (bid < BigInt(auctionData.nextMinBid)) {
+      throw Error("Bid too low");
+    }
   } catch (e) {
     return frameErrorResponse(
       `Invalid bid, must be at least ${formatNumber(formatEther(auctionData.nextMinBid), 4)} Ξ`

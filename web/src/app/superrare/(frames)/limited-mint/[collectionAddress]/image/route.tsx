@@ -2,21 +2,30 @@ import { artworkImageResponse, errorImageResponse } from "@/app/superrare/utils/
 import { getLimitedMintData } from "@/app/superrare/data/queries/getLimitedMintData";
 import { formatNumber } from "@/utils/format";
 import { getAddress, formatUnits } from "viem";
+import { getArtworkData } from "@/app/superrare/data/queries/getArtworkData";
 
 export async function GET(req: Request, { params }: { params: { collectionAddress: string } }): Promise<Response> {
+  const collectionAddress = getAddress(params.collectionAddress);
+
   const limitedMintData = await getLimitedMintData({
-    collectionAddress: getAddress(params.collectionAddress),
+    collectionAddress: collectionAddress,
   });
 
-  return limitedMintData
+  if (!limitedMintData) {
+    return errorImageResponse();
+  }
+
+  const artworkData = await getArtworkData({ collectionAddress, tokenId: limitedMintData.tokenId });
+
+  return artworkData
     ? artworkImageResponse({
         artwork: {
-          title: limitedMintData.title,
-          imgSrc: limitedMintData.imageSrc,
+          title: artworkData.title,
+          imgSrc: artworkData.imageSrc,
         },
         artist: {
-          name: limitedMintData.creator.name,
-          imgSrc: limitedMintData.creator.imageSrc,
+          name: artworkData.creator.name,
+          imgSrc: artworkData.creator.imageSrc,
         },
         tag: {
           active: BigInt(limitedMintData.currentSupply) < BigInt(limitedMintData.maxSupply),
@@ -29,3 +38,5 @@ export async function GET(req: Request, { params }: { params: { collectionAddres
       })
     : errorImageResponse();
 }
+
+export const maxDuration = 300; // Allow up to 5min for first fetch
