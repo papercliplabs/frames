@@ -29,3 +29,5 @@ export async function GET(req: Request, { params }: { params: { collectionAddres
       })
     : errorImageResponse();
 }
+
+export const maxDuration = 300; // Allow up to 5min for first fetch

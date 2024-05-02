@@ -57,3 +57,5 @@ async function response(req: Request, { params }: { params: { collectionAddress:
 
 export const GET = response;
 export const POST = response;
+
+export const maxDuration = 300; // Allow up to 5min for first fetch

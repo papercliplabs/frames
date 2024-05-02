@@ -24,3 +24,5 @@ export async function GET(
       })
     : errorImageResponse();
 }
+
+export const maxDuration = 300; // Allow up to 5min for first fetch
