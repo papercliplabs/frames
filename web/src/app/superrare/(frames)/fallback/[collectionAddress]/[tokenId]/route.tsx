@@ -11,6 +11,8 @@ async function response(
   return frameResponseWrapper({
     req,
     // browserRedirectUrl: href,
+    // Push fallback requests back through the router
+    postUrl: `${process.env.NEXT_PUBLIC_URL}/superrare/router/${params.collectionAddress}/${params.tokenId}`,
     image: {
       src: relativeEndpointUrl(req, `/image?t=${Date.now()}`),
       aspectRatio: "1:1",
@@ -19,7 +21,6 @@ async function response(
       {
         label: "Refresh",
         action: "post",
-        target: `${process.env.NEXT_PUBLIC_URL}/superrare/router/${params.collectionAddress}/${params.tokenId}`,
       },
       { label: "View", action: "link", target: href },
     ],

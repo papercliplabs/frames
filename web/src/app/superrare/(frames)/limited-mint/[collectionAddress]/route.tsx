@@ -30,12 +30,16 @@ async function response(req: Request, { params }: { params: { collectionAddress:
   return frameResponseWrapper({
     req,
     // browserRedirectUrl: href,
+    postUrl: `${process.env.NEXT_PUBLIC_URL}/superrare/limited-mint/${collectionAddress}`,
     image: {
       src: relativeEndpointUrl(req, `/image?t=${Date.now()}`),
       aspectRatio: "1:1",
     },
     buttons: [
-      { label: "Refresh", action: "post" },
+      {
+        label: "Refresh",
+        action: "post",
+      },
       { label: "View", action: "link", target: href },
       ...(limitedMintData.isValidForFrameTxn
         ? [
