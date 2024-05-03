@@ -46,7 +46,7 @@ export function formatNumber(num: number | string | undefined, decimals: number 
 }
 
 export function truncateString(input: string, charLimit: number): string {
-  return input.length > charLimit - 3 ? input.slice(0, charLimit - 3) + "..." : input;
+  return input.length > charLimit ? input.slice(0, charLimit) + "..." : input;
 }
 
 export function formatTimeLeft(seconds: number): string {

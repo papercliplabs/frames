@@ -45,9 +45,7 @@ async function getUserDataUncached({ userAddress }: GetUserDataParams): Promise<
 
   const user = data.usersByAddresses[0];
 
-  const name = user?.primaryProfile.sr?.srName
-    ? "@" + user.primaryProfile.sr.srName
-    : user?.primaryProfile.ens?.ensName ?? shortenAddress(userAddress);
+  const name = user?.primaryProfile.sr?.srName ?? user?.primaryProfile.ens?.ensName ?? shortenAddress(userAddress);
 
   const imageSrc = user?.primaryProfile.sr?.srAvatarUri ?? user?.primaryProfile.ens?.ensAvatarUri ?? undefined;
 

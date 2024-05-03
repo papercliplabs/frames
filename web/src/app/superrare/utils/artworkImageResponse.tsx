@@ -71,7 +71,7 @@ export function artworkImageResponse({ artwork, artist, tag, extra }: ArtworkIma
             )}
             <div tw="flex flex-col w-full" style={{ gap: "64px" }}>
               <div
-                tw="flex text-title overflow-hidden"
+                tw="flex text-title"
                 style={{
                   wordBreak: "break-word",
                   textWrap: "wrap",
@@ -82,11 +82,12 @@ export function artworkImageResponse({ artwork, artist, tag, extra }: ArtworkIma
                 {truncateString(artwork.title, 70).replace(" #", " #\u200B")}
               </div>
               <div tw="flex flex-row h-[136px] items-center" style={{ gap: "128px" }}>
-                <div tw="flex flex-row items-center" style={{ gap: "32px" }}>
+                {/* This gap should be 32px, but for some reason satori is rendering as double */}
+                <div tw="flex flex-row items-center" style={{ gap: "16px" }}>
                   {artist.imgSrc && <div tw="w-[112px] h-[112px]" />} {/* Create a hole for the user image*/}
                   <div tw="flex flex-col">
                     <div tw="text-caption text-content-secondary">Artist</div>
-                    <div>{truncateString(artist.name, 21)}</div>
+                    <div>{truncateString(artist.name, 15)}</div>
                   </div>
                 </div>
                 {extra && (
