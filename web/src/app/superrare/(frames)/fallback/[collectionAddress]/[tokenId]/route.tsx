@@ -10,7 +10,7 @@ async function response(
   const href = `${SUPERRARE_BASE_URL}/${params.collectionAddress.toLowerCase()}/${params.tokenId}`;
   return frameResponseWrapper({
     req,
-    browserRedirectUrl: href,
+    // browserRedirectUrl: href,
     image: {
       src: relativeEndpointUrl(req, `/image?t=${Date.now()}`),
       aspectRatio: "1:1",

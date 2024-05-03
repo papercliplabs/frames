@@ -29,7 +29,7 @@ async function response(req: Request, { params }: { params: { collectionAddress:
   const href = `${SUPERRARE_BASE_URL}/releases/${params.collectionAddress.toLowerCase()}`;
   return frameResponseWrapper({
     req,
-    browserRedirectUrl: href,
+    // browserRedirectUrl: href,
     image: {
       src: relativeEndpointUrl(req, `/image?t=${Date.now()}`),
       aspectRatio: "1:1",
