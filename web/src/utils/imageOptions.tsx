@@ -1,6 +1,15 @@
 import { ImageResponseOptions } from "next/server";
 
-export type FontType = "londrina" | "pt-root-ui" | "pally" | "druk" | "graphik" | "inter" | "noto";
+export type FontType =
+  | "londrina"
+  | "pt-root-ui"
+  | "pally"
+  | "druk"
+  | "graphik"
+  | "inter"
+  | "noto"
+  | "roboto"
+  | "roboto-mono";
 
 interface FontConfig {
   path: string;
@@ -86,6 +95,40 @@ const fontConfigs: Record<FontType, FontConfig[]> = {
       path: "fonts/noto/Sans_SemiCondensed-Italic.ttf",
       weight: 400,
       style: "italic",
+    },
+  ],
+  roboto: [
+    {
+      path: "fonts/roboto/regular.ttf",
+      weight: 400,
+      style: "normal",
+    },
+    {
+      path: "fonts/roboto/medium.ttf",
+      weight: 500,
+      style: "normal",
+    },
+    {
+      path: "fonts/roboto/bold.ttf",
+      weight: 700,
+      style: "normal",
+    },
+  ],
+  "roboto-mono": [
+    {
+      path: "fonts/roboto-mono/regular.ttf",
+      weight: 400,
+      style: "normal",
+    },
+    {
+      path: "fonts/roboto-mono/medium.ttf",
+      weight: 500,
+      style: "normal",
+    },
+    {
+      path: "fonts/roboto-mono/bold.ttf",
+      weight: 700,
+      style: "normal",
     },
   ],
 };

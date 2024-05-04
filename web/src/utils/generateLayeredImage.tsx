@@ -1,4 +1,4 @@
-import sharp, { Color, ResizeOptions } from "sharp";
+import sharp, { Color, ResizeOptions, Sharp } from "sharp";
 import satori from "satori";
 import { ReactNode } from "react";
 import { getFontOptionsFromFontTypes, FontType } from "./imageOptions";
@@ -29,7 +29,8 @@ export type ImageLayer =
       type: "dynamic";
       src: ReactNode;
       fontTypes?: FontType[];
-    } & BaseImageLayer);
+    } & BaseImageLayer)
+  | { type: "sharp"; src: Sharp };
 
 interface GenerateLayeredImageParams {
   frameSize: Size;
@@ -45,6 +46,11 @@ async function getImageBufferForLayer(
   fontTypes?: FontType[],
   twConfig?: SatoriOptions["tailwindConfig"]
 ): Promise<Buffer> {
+  if (layer.type == "sharp") {
+    // If its already a sharp image, just return it
+    return layer.src.toBuffer();
+  }
+
   let sharpImage;
 
   if (layer.type == "dynamic") {
