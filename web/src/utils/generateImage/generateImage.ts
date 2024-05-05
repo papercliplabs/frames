@@ -1,6 +1,5 @@
 import { Color } from "sharp";
-import { Size } from "./types";
-import { ImageLayer } from "../generateLayeredImage";
+import { ImageLayer, Size } from "./types";
 
 import { SatoriOptions } from "satori";
 import { generateLayerImageBuffer } from "./generateLayerImageBuffer";

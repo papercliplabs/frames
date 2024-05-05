@@ -1,6 +1,7 @@
 import ServerImage from "@/components/ServerImage";
 import { truncateString } from "@/utils/format";
-import { ImageLayer, generateLayeredImageResponse } from "@/utils/generateLayeredImage";
+import { generateImageResponse } from "@/utils/generateImage/generateImage";
+import { ImageLayer } from "@/utils/generateImage/types";
 import { localImageUrl } from "@/utils/urlHelpers";
 import clsx from "clsx";
 import { SatoriOptions } from "satori";
@@ -28,7 +29,7 @@ interface ArtworkImageResponseParams {
 }
 
 export function artworkImageResponse({ artwork, artist, tag, extra }: ArtworkImageResponseParams): Promise<Response> {
-  return generateLayeredImageResponse({
+  return generateImageResponse({
     frameSize: {
       width: 1200,
       height: 1200,
@@ -119,7 +120,7 @@ export function artworkImageResponse({ artwork, artist, tag, extra }: ArtworkIma
 }
 
 export function errorImageResponse() {
-  return generateLayeredImageResponse({
+  return generateImageResponse({
     frameSize: {
       width: 1200,
       height: 1200,
