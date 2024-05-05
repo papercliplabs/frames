@@ -5,6 +5,7 @@ import { Client } from "viem";
 import { beansAuctionTransactionFlowConfig } from "./slugConfigs/beansAuction";
 import { nounsAuctionTransactionFlowConfig } from "./slugConfigs/nounsAuction";
 import { superrareTransactionFlowConfig } from "./slugConfigs/superrare";
+import { vrbsAuctionFlowConfig } from "./slugConfigs/vrbsAuction";
 
 // Put this into state to compose
 export interface TransactionFlowConfig {
@@ -39,11 +40,13 @@ export type SupportedTransactionFlowSlug =
   | "yellow-collective-auction"
   | "beans-auction"
   | "nouns-auction"
-  | "superrare";
+  | "superrare"
+  | "vrbs-auction";
 
 export const transactionFlowConfigs: Record<SupportedTransactionFlowSlug, TransactionFlowConfig> = {
   "yellow-collective-auction": yellowCollectiveAuctionTransactionFlowConfig,
   "beans-auction": beansAuctionTransactionFlowConfig,
   "nouns-auction": nounsAuctionTransactionFlowConfig,
   superrare: superrareTransactionFlowConfig,
+  "vrbs-auction": vrbsAuctionFlowConfig,
 };

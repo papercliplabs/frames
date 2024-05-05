@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { nounishAuctionConfigs, SupportedNounishAuctionSlug } from "@/app/nounish-auction/configs";
+import { nounishAuctionConfigs, SupportedNounishAuctionSlug } from "@/app/nounish-auction/(v1)/configs";
 
 export async function POST(req: NextRequest, { params }: { params: { slug: string } }): Promise<Response> {
   // Config
