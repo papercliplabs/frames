@@ -1,54 +1,28 @@
 import sharp, { Color, ResizeOptions, Sharp } from "sharp";
 import satori from "satori";
-import { ReactNode } from "react";
-import { getFontOptionsFromFontTypes, FontType } from "./imageOptions";
+import { getFontOptionsFromFontTypes, FontType } from "../imageOptions";
 import { unstable_cache } from "next/cache";
 import { getImageProps } from "next/image";
 import { SatoriOptions } from "satori";
+import { ImageLayer, Size } from "./types";
 
-interface Size {
-  width: number;
-  height: number;
-}
-
-interface BaseImageLayer {
-  size: Size;
-  position?: { left: number; top: number };
-  extrude?: { left: number; right: number };
-  borderRadius?: number;
-}
-
-export type ImageLayer =
-  | ({
-      type: "static";
-      src: string; // For local images, must use same path as <Image>.src (i.e relative to public folder, ex: "/images/nouns-auction-house.png")
-      fit?: ResizeOptions["fit"];
-      animated?: boolean;
-    } & BaseImageLayer)
-  | ({
-      type: "dynamic";
-      src: ReactNode;
-      fontTypes?: FontType[];
-    } & BaseImageLayer)
-  | { type: "sharp"; src: Sharp };
-
-interface GenerateLayeredImageParams {
+interface GenerateLayerImageBufferParams {
+  layer: ImageLayer;
   frameSize: Size;
-  backgroundColor: Color;
-  layers: ImageLayer[];
   fontTypes?: FontType[];
-  twConfig?: SatoriOptions["tailwindConfig"];
+  twConfig: SatoriOptions["tailwindConfig"];
 }
 
-async function getImageBufferForLayer(
-  layer: ImageLayer,
-  frameSize: Size,
-  fontTypes?: FontType[],
-  twConfig?: SatoriOptions["tailwindConfig"]
-): Promise<Buffer> {
+async function generateLayerImageBufferUncached({
+  layer,
+  frameSize,
+  fontTypes,
+  twConfig,
+}: GenerateLayerImageBufferParams): Promise<string> {
   if (layer.type == "sharp") {
     // If its already a sharp image, just return it
-    return layer.src.toBuffer();
+    const buffer = await layer.src.toBuffer();
+    return buffer.toString("base64");
   }
 
   let sharpImage;
@@ -129,58 +103,11 @@ async function getImageBufferForLayer(
     sharpImage.composite([{ input: await roundedCorners.toBuffer(), tile: true, blend: "dest-in" }]);
   }
 
-  return await sharpImage.toBuffer();
+  // Need to return base64 string instead of buffers due to unstable_cache not serializing buffers correctly
+  const buffer = await sharpImage.toBuffer();
+  return buffer.toString("base64");
 }
 
-const getImageBufferForLayerCached = unstable_cache(getImageBufferForLayer, ["get-image-buffer-for-layer"]);
-
-export async function generateLayeredImage({
-  frameSize,
-  backgroundColor,
-  layers,
-  fontTypes,
-  twConfig,
-}: GenerateLayeredImageParams) {
-  const layerImageBuffers = await Promise.all(
-    layers.map((layer) => getImageBufferForLayerCached(layer, frameSize, fontTypes, twConfig))
-  );
-  const layerImageMetadata = await Promise.all(layerImageBuffers.map((buffer) => sharp(buffer).metadata()));
-  const maxGifPages = layerImageMetadata.reduce((prevMax, metadata) => Math.max(metadata.pages ?? 1, prevMax), 1);
-
-  const base = sharp({
-    create: {
-      width: frameSize.width,
-      height: frameSize.width * maxGifPages, // Gifs are represented as vertical "toilet roll", the base needs to extend to accommodate this
-      channels: 4,
-      background: backgroundColor,
-    },
-  });
-
-  const combined = await base
-    .gif({ force: true })
-    .composite(
-      layers.map((layer, i) => ({
-        input: layerImageBuffers[i],
-        animated: layer.type == "static" ? layer.animated : false,
-        tile: true,
-        top: 0,
-        left: 0,
-      }))
-    )
-    .toBuffer();
-
-  const imageBase64 = `data:image/gif;base64,${combined.toString("base64")}`;
-  return imageBase64;
-}
-
-export const generateLayeredImageCached = unstable_cache(generateLayeredImage, ["generate-layered-image"]);
-
-export async function generateLayeredImageResponse(params: GenerateLayeredImageParams) {
-  const resp = await generateLayeredImageCached(params);
-  return new Response(Buffer.from(resp.replace("data:image/gif;base64,", ""), "base64"), {
-    headers: {
-      "content-type": "image/gif",
-      "cache-control": "max-age=0, must-revalidate",
-    },
-  });
-}
+export const generateLayerImageBuffer = unstable_cache(generateLayerImageBufferUncached, [
+  "generate-layer-image-buffer",
+]);
