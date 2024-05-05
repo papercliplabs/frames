@@ -1,18 +1,18 @@
 import { formatNumber, truncateString } from "@/utils/format";
-import { formatEther, getAddress } from "viem";
+import { formatEther } from "viem";
 import { getCurrentAuctionDataCached } from "../../data/getCurrentAuctionData";
-import { generateLayeredImageResponse } from "@/utils/generateLayeredImage";
 import ServerImage from "@/components/ServerImage";
 import { localImageUrl } from "@/utils/urlHelpers";
 import { SatoriOptions } from "satori";
 import sharp, { Sharp } from "sharp";
 import "@/utils/bigIntPolyfill";
+import { generateImageResponse } from "@/utils/generateImage/generateImage";
 
 export async function GET(req: Request): Promise<Response> {
   const auctionData = await getCurrentAuctionDataCached();
   const backgroundImage = formBackgroundImage(auctionData.artworkImageSrc);
 
-  return generateLayeredImageResponse({
+  return generateImageResponse({
     frameSize: { width: 1200, height: 1200 },
     backgroundColor: { r: 0xff, g: 0xff, b: 0xff },
     fontTypes: ["roboto", "roboto-mono"],

@@ -1,3 +1,4 @@
+"use server";
 import { mainnetPublicClient, shortenAddress } from "@/utils/wallet";
 import { unstable_cache } from "next/cache";
 import { Address } from "viem";

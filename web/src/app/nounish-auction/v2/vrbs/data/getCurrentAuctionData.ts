@@ -1,3 +1,4 @@
+"use server";
 import { cachedReadContract } from "@/utils/caching";
 import { unstable_cache } from "next/cache";
 import { vrbsPublicClient } from "../utils/client";
