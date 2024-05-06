@@ -72,7 +72,7 @@ export async function GET(req: Request): Promise<Response> {
         src: (
           <div tw="w-full h-full flex">
             <div tw="absolute text-caption-sm flex top-[570px] right-[340px] py-1 px-[14px] bg-white/90 h-[40px] justify-end items-center rounded-full">
-              {truncateString(auctionData.artist.name, 15)}
+              {truncateString(auctionData.artist.name, 18)}
             </div>
           </div>
         ),
@@ -130,9 +130,9 @@ const twConfig: SatoriOptions["tailwindConfig"] = {
           },
         ],
         "caption-sm": [
-          "22px",
+          "28px",
           {
-            lineHeight: "22px",
+            lineHeight: "28px",
             letterSpacing: "0px",
           },
         ],

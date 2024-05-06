@@ -14,7 +14,7 @@ export async function GET(
 
   return artworkData
     ? artworkImageResponse({
-        imageCacheMaxAgeS: SECONDS_PER_YEAR, // This image is not dynamic, don't need to cache
+        imageCacheMaxAgeS: SECONDS_PER_YEAR, // This image is not dynamic, don't need to revalidate
         artwork: {
           title: artworkData.title,
           imgSrc: artworkData.imageSrc,

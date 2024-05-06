@@ -3,7 +3,6 @@ import { getAuctionData } from "@/app/superrare/data/queries/getAuctionData";
 import { formatNumber } from "@/utils/format";
 import { formatUnits, getAddress } from "viem";
 import { getArtworkData } from "@/app/superrare/data/queries/getArtworkData";
-import { SECONDS_PER_YEAR } from "@/utils/constants";
 
 export async function GET(
   req: Request,
