@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import { baseImage } from "@/utils/baseImg";
-import { auctionConfigs, SupportedAuctionDao } from "@/app/auction/daoConfig";
+import { auctionConfigs, SupportedAuctionDao } from "@/app/nounish-auction/v0/daoConfig";
 import { unstable_cache } from "next/cache";
 
 export async function GET(req: NextRequest, { params }: { params: { dao: string } }): Promise<Response> {

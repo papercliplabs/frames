@@ -36,7 +36,7 @@ export type SupportedAuctionDao =
   | "yellow-collective"
   | "purple-dao"
   | "based-dao"
-  | "builder-dao"
+  // | "builder-dao"
   | "based-management"
   | "lil-nouns"
   | "energy-dao"
@@ -79,9 +79,9 @@ export const auctionConfigs: Record<SupportedAuctionDao, AuctionConfig> = {
     },
   },
   "purple-dao": {
-    client: mainnetPublicClient,
-    auctionAddress: "0x43790fe6bd46b210eb27f01306c1d3546aeb8c1b",
-    tokenAddress: "0xa45662638e9f3bbb7a6fecb4b17853b7ba0f3a60",
+    client: basePublicClient,
+    auctionAddress: "0x73ab6d816fb9fe1714e477c5a70d94e803b56576",
+    tokenAddress: "0x8de71d80ee2c4700bc9d4f8031a2504ca93f7088",
     firstPageImage: `${process.env.NEXT_PUBLIC_URL}/images/purple-auction-house.png`,
     getAuctionDetails: getNounBuilderAuctionDetails,
     auctionStatusComponent: NounAuctionStatus,
@@ -113,24 +113,24 @@ export const auctionConfigs: Record<SupportedAuctionDao, AuctionConfig> = {
       fontType: "inter",
     },
   },
-  "builder-dao": {
-    client: mainnetPublicClient,
-    auctionAddress: "0x658d3a1b6dabcfbaa8b75cc182bf33efefdc200d",
-    tokenAddress: "0xdf9b7d26c8fc806b1ae6273684556761ff02d422",
-    firstPageImage: `${process.env.NEXT_PUBLIC_URL}/images/builder-dao-auction-house.png`,
-    getAuctionDetails: getNounBuilderAuctionDetails,
-    auctionStatusComponent: NounAuctionStatus,
-    title: "BASED DAO",
-    description:
-      "Builder DAO is dedicated to the creation and development of free and accessible DAO infrastructure as a public good.",
-    auctionUrl: "https://nouns.build/dao/ethereum/0xdf9b7d26c8fc806b1ae6273684556761ff02d422/408",
-    tokenNamePrefix: "Builder #",
-    style: {
-      backgroundColor: "#0088ff",
-      textColor: "black",
-      fontType: "inter",
-    },
-  },
+  // "builder-dao": {
+  //   client: basePublicClient,
+  //   auctionAddress: "0x6a8289ad5cf685c8753a47ff7eaf7a22a04d6ece",
+  //   tokenAddress: "0xe8af882f2f5c79580230710ac0e2344070099432",
+  //   firstPageImage: `${process.env.NEXT_PUBLIC_URL}/images/builder-dao-auction-house.png`,
+  //   getAuctionDetails: getNounBuilderAuctionDetails,
+  //   auctionStatusComponent: NounAuctionStatus,
+  //   title: "BASED DAO",
+  //   description:
+  //     "Builder DAO is dedicated to the creation and development of free and accessible DAO infrastructure as a public good.",
+  //   auctionUrl: "https://nouns.build/dao/ethereum/0xdf9b7d26c8fc806b1ae6273684556761ff02d422/408",
+  //   tokenNamePrefix: "Builder #",
+  //   style: {
+  //     backgroundColor: "#0088ff",
+  //     textColor: "black",
+  //     fontType: "inter",
+  //   },
+  // },
   "based-management": {
     client: basePublicClient,
     auctionAddress: "0x629c4e852beb467af0b15587b07d71b957b61c8a",
@@ -184,9 +184,9 @@ export const auctionConfigs: Record<SupportedAuctionDao, AuctionConfig> = {
     },
   },
   "beans-dao": {
-    client: mainnetPublicClient,
-    auctionAddress: "0xA2Ccbcb596FBA2CCB4552D599119C328078Bb07c",
-    tokenAddress: "0x4A458eEA1954EfC6d8acCdaB82af031c33Ef72FE",
+    client: basePublicClient,
+    auctionAddress: "0xE56a5C5761467888ad95E43a5B172A631C15E376",
+    tokenAddress: "0x65EB64E86b71f8Be76b2aedacE781209Db25879D",
     firstPageImage: `${process.env.NEXT_PUBLIC_URL}/images/beans-dao-auction-house.png`,
     getAuctionDetails: getBeansDaoAuctionDetails,
     auctionStatusComponent: BeansAuctionStatus,

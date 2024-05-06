@@ -1,5 +1,6 @@
 import { ReactElement } from "react";
 import { AuctionStatusProps } from "./AuctionStatusProps";
+import ServerImage from "@/components/ServerImage";
 
 export default function NounAuctionStatus({
   id,
@@ -23,13 +24,23 @@ export default function NounAuctionStatus({
       >
         Made with ❤️ by Paperclip Labs
       </div>
-      <img
-        src={imgSrc ?? ""}
-        width={420}
-        height={420}
-        alt={`#${id}`}
-        tw="shrink-0 rounded-[50px] border-[3px] border-white/30"
-      />
+      {imgSrc?.endsWith(".png") ? (
+        <ServerImage
+          src={imgSrc ?? ""}
+          width={420}
+          height={420}
+          alt={`#${id}`}
+          tw="shrink-0 rounded-[50px] border-[3px] border-white/30"
+        />
+      ) : (
+        <img
+          src={imgSrc ?? ""}
+          width={420}
+          height={420}
+          alt={`#${id}`}
+          tw="shrink-0 rounded-[50px] border-[3px] border-white/30"
+        />
+      )}
       <div tw="flex flex-col max-w-[700px] pl-[64px] ">
         <span tw="pb-[56px]">
           {collectionName}
