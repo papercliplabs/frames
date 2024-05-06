@@ -29,13 +29,16 @@ export async function generateImage({
   return generateImage;
 }
 
-export async function generateImageResponse(params: GenerateLayeredImageParams) {
+export async function generateImageResponse({
+  imageCacheMaxAgeS,
+  ...params
+}: GenerateLayeredImageParams & { imageCacheMaxAgeS?: number }) {
   const image = await generateImage(params);
 
   return new Response(Buffer.from(image.replace("data:image/gif;base64,", ""), "base64"), {
     headers: {
       "content-type": "image/gif",
-      "cache-control": "max-age=0, must-revalidate",
+      "cache-control": `max-age=${imageCacheMaxAgeS ? Math.ceil(imageCacheMaxAgeS) : 0}, must-revalidate`,
     },
   });
 }

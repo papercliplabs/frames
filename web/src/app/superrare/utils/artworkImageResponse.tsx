@@ -26,10 +26,19 @@ interface ArtworkImageResponseParams {
     title: string;
     content: string;
   };
+
+  imageCacheMaxAgeS?: number;
 }
 
-export function artworkImageResponse({ artwork, artist, tag, extra }: ArtworkImageResponseParams): Promise<Response> {
+export function artworkImageResponse({
+  artwork,
+  artist,
+  tag,
+  extra,
+  imageCacheMaxAgeS,
+}: ArtworkImageResponseParams): Promise<Response> {
   return generateImageResponse({
+    imageCacheMaxAgeS: imageCacheMaxAgeS ?? 30, // Every 30s at most
     frameSize: {
       width: 1200,
       height: 1200,

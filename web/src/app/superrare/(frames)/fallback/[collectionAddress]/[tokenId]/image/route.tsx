@@ -1,6 +1,7 @@
 import { artworkImageResponse, errorImageResponse } from "@/app/superrare/utils/artworkImageResponse";
 import { getArtworkData } from "@/app/superrare/data/queries/getArtworkData";
 import { getAddress } from "viem";
+import { SECONDS_PER_YEAR } from "@/utils/constants";
 
 export async function GET(
   req: Request,
@@ -13,6 +14,7 @@ export async function GET(
 
   return artworkData
     ? artworkImageResponse({
+        imageCacheMaxAgeS: SECONDS_PER_YEAR, // This image is not dynamic, don't need to revalidate
         artwork: {
           title: artworkData.title,
           imgSrc: artworkData.imageSrc,

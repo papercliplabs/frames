@@ -5,10 +5,10 @@ import { vrbsPublicClient } from "../utils/client";
 import { vrbsAuctionHouseContract } from "../contracts/vrbsAuctionHouse";
 import { vrbsRevolutionTokenContract } from "../contracts/vrbsRevolutionToken";
 import { readContract } from "viem/actions";
-import { bigIntMax, bigIntMin } from "@/utils/bigInt";
+import { bigIntMax } from "@/utils/bigInt";
 import { formatTimeLeft } from "@/utils/format";
-import { User, getUser } from "./getUser";
 import "@/utils/bigIntPolyfill";
+import { User, getUser } from "@/data/getUser";
 
 interface AuctionData {
   tokenId: bigint;
@@ -52,13 +52,13 @@ export async function getCurrentAuctionData(): Promise<AuctionData> {
       functionName: "getArtPieceById",
       args: [tokenId],
     }),
-    getUser({ address: highestBidderAddress }),
+    getUser({ address: highestBidderAddress, resolverTypes: ["farcaster", "ens"] }),
   ]);
 
   // Artist
   const creators = [...artData.creators].sort((a, b) => Number(a.bps - b.bps));
   const mainCreatorAddress = creators[0].creator;
-  const artist = await getUser({ address: mainCreatorAddress });
+  const artist = await getUser({ address: mainCreatorAddress, resolverTypes: ["farcaster", "ens"] });
 
   // Next bid
   const nextMinBid = bigIntMax(
