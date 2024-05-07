@@ -17,17 +17,9 @@ async function response(
       src: relativeEndpointUrl(req, `/image?t=${Date.now()}`),
       aspectRatio: "1:1",
     },
-    buttons: [
-      {
-        label: "Refresh",
-        action: "post",
-      },
-      { label: "View", action: "link", target: href },
-    ],
+    buttons: [{ label: "View", action: "link", target: href }],
   });
 }
 
 export const GET = response;
 export const POST = response;
-
-export const maxDuration = 300; // Allow up to 5min for first fetch
