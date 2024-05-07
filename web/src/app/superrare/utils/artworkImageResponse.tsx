@@ -79,7 +79,7 @@ export function artworkImageResponse({
             ) : (
               <div />
             )}
-            <div tw="flex flex-col w-full" style={{ gap: "64px" }}>
+            <div tw="flex flex-col w-full" style={{ gap: "64px", textShadow: "0px 0px 2px rgba(0, 0, 0, 0.90)" }}>
               <div
                 tw="flex text-title"
                 style={{
