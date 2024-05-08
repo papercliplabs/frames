@@ -108,20 +108,40 @@ async function getArtworkDataFromContractAndIpfs({
   collectionAddress,
   tokenId,
 }: GetArtworkDataParams): Promise<ArtworkData | null> {
-  const [tokenUri, tokenCreator] = await Promise.all([
-    cachedReadContract(mainnetPublicClient, {
-      address: collectionAddress,
-      abi: baseNft,
-      functionName: "tokenURI",
-      args: [tokenId],
-    }),
-    cachedReadContract(mainnetPublicClient, {
-      address: collectionAddress,
-      abi: baseNft,
-      functionName: "tokenCreator",
-      args: [tokenId],
-    }),
-  ]);
+  let tokenUri: string;
+  let tokenCreator: Address;
+  try {
+    [tokenUri, tokenCreator] = await Promise.all([
+      cachedReadContract(mainnetPublicClient, {
+        address: collectionAddress,
+        abi: baseNft,
+        functionName: "tokenURI",
+        args: [tokenId],
+      }),
+      cachedReadContract(mainnetPublicClient, {
+        address: collectionAddress,
+        abi: baseNft,
+        functionName: "tokenCreator",
+        args: [tokenId],
+      }),
+    ]);
+  } catch (e) {
+    // Fallback to owner if tokenCreator doesn't exist
+    [tokenUri, tokenCreator] = await Promise.all([
+      cachedReadContract(mainnetPublicClient, {
+        address: collectionAddress,
+        abi: baseNft,
+        functionName: "tokenURI",
+        args: [tokenId],
+      }),
+      cachedReadContract(mainnetPublicClient, {
+        address: collectionAddress,
+        abi: baseNft,
+        functionName: "owner",
+        args: [],
+      }),
+    ]);
+  }
 
   const [nftData, creator] = await Promise.all([
     fetchIpfsData<IpfsNftData>(tokenUri),
