@@ -4,7 +4,7 @@ import { tokenAbi } from "@/abis/nounsBuilder/token";
 import { parseBase64String } from "./utils";
 import { multicall, readContract } from "viem/actions";
 import { formatNumber, formatTimeLeft } from "@/utils/format";
-import { Address, encodeFunctionData, formatEther } from "viem";
+import { Address, encodeFunctionData, formatEther, getAddress } from "viem";
 import { getWalletName } from "@/utils/wallet";
 import { metadataAbi } from "@/abis/nounsBuilder/metadata";
 import { FrameTransactionResponse } from "@coinbase/onchainkit/frame";
@@ -103,8 +103,8 @@ export function getNounsBuilderBidTransactionData({
       to: auctionAddress,
       data: encodeFunctionData({
         abi: auctionAbi,
-        functionName: "createBid",
-        args: [nounId],
+        functionName: "createBidWithReferral",
+        args: [nounId, getAddress("0x1C937764e433878c6eB1820bC5a1A42c6f25dA81")], // Base only for now
       }),
       value: bidAmount.toString(),
     },
