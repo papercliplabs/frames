@@ -12,3 +12,5 @@ export async function GET(req: Request): Promise<Response> {
 
 export const revalidate = SECONDS_PER_DAY / 2;
 export const dynamic = "force-dynamic";
+
+export const maxDuration = 150; // Allow up to 2.5min for first fetch

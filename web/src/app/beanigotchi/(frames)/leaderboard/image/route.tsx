@@ -22,3 +22,5 @@ export async function GET(req: NextRequest): Promise<Response> {
 }
 
 export const dynamic = "force-dynamic";
+
+export const maxDuration = 150; // Allow up to 2.5 min for first fetch

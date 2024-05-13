@@ -23,3 +23,5 @@ export async function GET(
     xpGained,
   });
 }
+
+export const maxDuration = 150; // Allow up to 2.5min for first fetch

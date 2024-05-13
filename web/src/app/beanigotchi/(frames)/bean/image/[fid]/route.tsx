@@ -18,3 +18,5 @@ export async function GET(req: Request, { params }: { params: { fid: string } })
 }
 
 export const dynamic = "force-dynamic";
+
+export const maxDuration = 150; // Allow up to 2.5 min for first fetch

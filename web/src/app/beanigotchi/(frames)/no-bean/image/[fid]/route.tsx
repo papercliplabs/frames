@@ -11,3 +11,5 @@ export async function GET(req: NextRequest, { params }: { params: { fid: string 
     secondaryColor: trainer.bean.colors.classTwo,
   });
 }
+
+export const maxDuration = 150; // Allow up to 2.5 min for first fetch
