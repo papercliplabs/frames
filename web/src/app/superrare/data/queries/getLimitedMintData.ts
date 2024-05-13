@@ -8,7 +8,7 @@ import { SUPERRARE_MINTER_PROXY_ADDRESS } from "../../utils/constants";
 import { rareMinterAbi } from "@/abis/superrare/rareMinter";
 import { unstable_cache } from "next/cache";
 import { TokenData, getTokenData } from "./getTokenData";
-import "@/utils/bigIntPolyfill";
+import "@/common/utils/bigIntPolyfill";
 
 interface GetLimitedMintDataParams {
   collectionAddress: Address;

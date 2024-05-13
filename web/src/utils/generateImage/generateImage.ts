@@ -3,7 +3,7 @@ import { ImageLayer, Size } from "./types";
 
 import { SatoriOptions } from "satori";
 import { generateLayerImageBuffer } from "./generateLayerImageBuffer";
-import { FontType, getFontOptionsFromFontTypes } from "../imageOptions";
+import { FontType } from "../imageOptions";
 import { assembleImage } from "./assembleImage";
 
 interface GenerateLayeredImageParams {
@@ -12,6 +12,7 @@ interface GenerateLayeredImageParams {
   layers: ImageLayer[];
   fontTypes?: FontType[];
   twConfig?: SatoriOptions["tailwindConfig"];
+  gifOverrideDelay?: number;
 }
 
 export async function generateImage({
@@ -20,11 +21,12 @@ export async function generateImage({
   layers,
   fontTypes,
   twConfig,
+  gifOverrideDelay,
 }: GenerateLayeredImageParams) {
   const layerImageBufferStrings = await Promise.all(
     layers.map((layer) => generateLayerImageBuffer({ layer, frameSize, fontTypes: fontTypes ?? ["inter"], twConfig }))
   );
-  const generateImage = await assembleImage({ frameSize, backgroundColor, layerImageBufferStrings });
+  const generateImage = await assembleImage({ frameSize, backgroundColor, layerImageBufferStrings, gifOverrideDelay });
 
   return generateImage;
 }

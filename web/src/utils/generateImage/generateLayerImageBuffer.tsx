@@ -1,10 +1,11 @@
-import sharp, { Color, ResizeOptions, Sharp } from "sharp";
+import sharp from "sharp";
 import satori from "satori";
 import { getFontOptionsFromFontTypes, FontType } from "../imageOptions";
 import { unstable_cache } from "next/cache";
 import { getImageProps } from "next/image";
 import { SatoriOptions } from "satori";
 import { ImageLayer, Size } from "./types";
+import { Resvg } from "@resvg/resvg-js";
 
 interface GenerateLayerImageBufferParams {
   layer: ImageLayer;
@@ -33,11 +34,16 @@ async function generateLayerImageBufferUncached({
       height: layer.size.height,
       fonts: (await getFontOptionsFromFontTypes(fontTypes && fontTypes.length > 0 ? fontTypes : ["inter"])) ?? [],
       tailwindConfig: twConfig,
-      // embedFont: true,
+      embedFont: true,
       // debug: true,
     });
 
-    sharpImage = await sharp(Buffer.from(svg)).png({ force: true, quality: 100 });
+    // Use Resvg instead of direct sharp constructor since latter doesn't supported nested svg's
+    const resvg = new Resvg(svg);
+    const pngData = resvg.render();
+    const pngBuffer = pngData.asPng();
+
+    sharpImage = sharp(pngBuffer);
   } else {
     const layerSrcNormalized = layer.src.replace("ipfs://", "https://ipfs.io/ipfs/");
     if (new RegExp("^https://").test(layerSrcNormalized)) {
@@ -108,6 +114,9 @@ async function generateLayerImageBufferUncached({
   return buffer.toString("base64");
 }
 
-export const generateLayerImageBuffer = unstable_cache(generateLayerImageBufferUncached, [
-  "generate-layer-image-buffer",
-]);
+export const generateLayerImageBuffer = unstable_cache(
+  (params: GenerateLayerImageBufferParams) => {
+    return generateLayerImageBufferUncached(params);
+  },
+  ["generate-layer-image-buffer"]
+);

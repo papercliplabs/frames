@@ -10,7 +10,7 @@ import {
 import { basePublicClient } from "@/utils/wallet";
 import { FrameTransactionResponse } from "@coinbase/onchainkit/frame";
 import { ColorConfig } from "./common/types";
-import { getAuctionImage } from "@/data/yellowCollective/queries/getAuctionData";
+import { getAuctionImage } from "@/common/data/yellowCollective/queries/getAuctionData";
 
 type PermittedBackgroundAttribute = "based" | "yellow";
 

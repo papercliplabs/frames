@@ -5,7 +5,7 @@ import ServerImage from "@/components/ServerImage";
 import { localImageUrl } from "@/utils/urlHelpers";
 import { SatoriOptions } from "satori";
 import sharp, { Sharp } from "sharp";
-import "@/utils/bigIntPolyfill";
+import "@/common/utils/bigIntPolyfill";
 import { generateImageResponse } from "@/utils/generateImage/generateImage";
 
 export async function GET(req: Request): Promise<Response> {

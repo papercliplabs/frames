@@ -22,31 +22,35 @@ const nextConfig = {
       ];
     },
     redirects: async () => {
-        return [
-            {
-              source: "/auction/:slug",
-              destination: "/nounish-auction/v0/:slug",
-              permanent: false,
-            },
-            {
-                source: "/carousel/:slug",
-                destination: "/carousel/:slug/0",
-                permanent: false,
-            }
-        ];
-      },
-      images: {
-        remotePatterns: [
-          {
-            protocol: "https",
-            hostname: "**",
-          },
-        ],
-      },      logging: {
-        fetches: {
-            fullUrl: true
+      return [
+        {
+          source: "/auction/:slug",
+          destination: "/nounish-auction/v0/:slug",
+          permanent: false,
         },
+        {
+            source: "/carousel/:slug",
+            destination: "/carousel/:slug/0",
+            permanent: false,
+        }
+      ];
+    },
+    images: {
+      remotePatterns: [
+        {
+          protocol: "https",
+          hostname: "**",
+        },
+      ],
+    },      
+    logging: {
+      fetches: {
+          fullUrl: true
       },
+    },
+    experimental: {
+      serverComponentsExternalPackages: ["@resvg/resvg-js"],
+    },
 };
 
 export default nextConfig;

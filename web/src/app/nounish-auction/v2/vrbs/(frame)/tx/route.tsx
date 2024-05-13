@@ -9,7 +9,7 @@ import { formatNumber } from "@/utils/format";
 import { getCurrentAuctionData } from "../../data/getCurrentAuctionData";
 import { vrbsAuctionHouseContract } from "../../contracts/vrbsAuctionHouse";
 import { PAPERCLIP_LABS_REFERRAL_ADDRESS } from "../../utils/client";
-import "@/utils/bigIntPolyfill";
+import "@/common/utils/bigIntPolyfill";
 
 export async function POST(req: NextRequest): Promise<Response> {
   const frameRequest: FrameRequest = await req.json();

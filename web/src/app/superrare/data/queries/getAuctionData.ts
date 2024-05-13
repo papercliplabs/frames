@@ -6,10 +6,10 @@ import { SUPERRARE_BRAZZER_ADDRESS } from "../../utils/constants";
 import { unstable_cache } from "next/cache";
 import { brazzerAbi } from "@/abis/superrare/brazzer";
 import { User, getUserData } from "./getUserData";
-import { bigIntMax } from "@/utils/bigInt";
+import { bigIntMax } from "@/common/utils/bigInt";
 import { TokenData, getTokenData } from "./getTokenData";
 import { formatTimeLeft } from "@/utils/format";
-import "@/utils/bigIntPolyfill";
+import "@/common/utils/bigIntPolyfill";
 
 interface GetAuctionDataParams {
   collectionAddress: Address;
