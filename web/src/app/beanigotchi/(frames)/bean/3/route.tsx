@@ -18,9 +18,8 @@ async function response(req: Request): Promise<Response> {
     },
     buttons: [
       { label: "<-", action: "post", target: `${BEANIGOTCHI_FRAME_BASE_URL}/bean/1` },
-      { label: "How it works?", action: "post", target: `${BEANIGOTCHI_FRAME_BASE_URL}/how-to` },
-      { label: "Leaderboard", action: "post", target: `${BEANIGOTCHI_FRAME_BASE_URL}/leaderboard` },
-      { label: "->", action: "post", target: `${BEANIGOTCHI_FRAME_BASE_URL}/bean/3` },
+      { label: "Bid", action: "post", target: `${process.env.NEXT_PUBLIC_URL}/nounish-auction/beans` },
+      { label: "Change Bean", action: "post", target: `${BEANIGOTCHI_FRAME_BASE_URL}/bean/change` },
     ],
   });
 }

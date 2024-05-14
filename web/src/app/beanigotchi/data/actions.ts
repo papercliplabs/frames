@@ -56,7 +56,7 @@ async function train(fid: number): Promise<ActionResult> {
 
     const feedBoostPct = trainer.feedBoost ? 25 : 0;
     const waterBoostPct = trainer.waterBoost ? 25 : 0;
-    const beanOwnerPct = trainer.ownsBean ? 200 : 0;
+    const beanOwnerPct = trainer.ownedBeanIds.length > 0 ? 100 : 0;
     const xpMultiplier = (100 + feedBoostPct + waterBoostPct + beanOwnerPct) / 100;
 
     const baseXpGain = 50 + Math.random() * 50; // Number in [50, 100)

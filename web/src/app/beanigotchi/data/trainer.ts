@@ -1,4 +1,4 @@
-import { getPersistentData } from "./internal/persistentData";
+import { getPersistentData, setPersistentData } from "./internal/persistentData";
 import { LevelStatus, totalXpToLevelStatus } from "../utils/level";
 import { FEED_BOOST_TIME_S, TRAIN_COOLDOWN_TIME_S, WATER_BOOST_TIME_S } from "../utils/constants";
 import { getUserInfo } from "@/utils/farcaster";
@@ -20,7 +20,9 @@ export interface Trainer {
   feedBoost: boolean;
   waterBoost: boolean;
   permittedToTrain: boolean;
+
   ownsBean: boolean;
+  ownedBeanIds: bigint[];
 
   firstTime: boolean;
 
@@ -47,20 +49,26 @@ export async function getTrainer({ fid }: GetTrainerProps): Promise<Trainer> {
     userVerifiedAddresses.map((address) => getBeanIdForAddress({ ownerAddress: address }))
   );
 
-  let beanId: bigint | undefined;
-  let ownsBean = true;
-  for (let id of beanIds) {
-    if (id != undefined) {
-      beanId = id;
-      break;
-    }
+  const ownedBeanIds = beanIds.filter((id) => id != undefined) as bigint[];
+  const ownsBean = ownedBeanIds.length > 0;
+
+  const preferredBeanId = persistentData.preferredBeanId ? BigInt(persistentData.preferredBeanId) : undefined;
+
+  let beanId: bigint;
+  if (preferredBeanId != undefined && beanIds.includes(preferredBeanId)) {
+    beanId = preferredBeanId;
   }
 
-  // If not, use the current auction bean
-  if (!beanId) {
-    ownsBean = false;
+  if (preferredBeanId == BigInt(-1) || ownedBeanIds.length == 0) {
+    // If they don't own a bean, or configured preferred to -1 which means use the auction bean
     const currentAuction = await getCurrentAuction();
     beanId = currentAuction.beanId;
+  } else if (preferredBeanId != undefined && beanIds.includes(preferredBeanId)) {
+    // If they own their configured preferred bean
+    beanId = preferredBeanId;
+  } else {
+    // Otherwise, just take the first one
+    beanId = ownedBeanIds[0];
   }
 
   const bean = await getBean({ beanId });
@@ -75,8 +83,30 @@ export async function getTrainer({ fid }: GetTrainerProps): Promise<Trainer> {
     permittedToTrain,
     ownsBean,
 
+    ownedBeanIds,
+
     firstTime,
 
     bean,
   };
+}
+
+interface SetPreferredBeanId {
+  fid: number;
+  preferredBeanId: bigint;
+}
+
+export async function setPreferredBeanId({ fid, preferredBeanId }: SetPreferredBeanId): Promise<boolean> {
+  const [trainer, { data }] = await Promise.all([getTrainer({ fid }), getPersistentData({ fid })]);
+
+  // -1 used for the auction bean
+  if (trainer.ownedBeanIds.includes(preferredBeanId) || preferredBeanId == BigInt(-1)) {
+    data.preferredBeanId = Number(preferredBeanId);
+    await setPersistentData({ data });
+
+    return true;
+  } else {
+    // unowned
+    return false;
+  }
 }

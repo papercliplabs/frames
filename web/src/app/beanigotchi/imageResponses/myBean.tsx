@@ -1,6 +1,7 @@
 import { generateImageResponse } from "@/utils/generateImage/generateImage";
 import { beanedexFrameLayers } from "./partial/beanidexFrameLayers";
 import { twConfig } from "./partial/twConfig";
+import { ENABLE_ANIMATIONS } from "../utils/constants";
 
 interface MyBeanImageResponseParams {
   primaryColor: string;
@@ -26,8 +27,6 @@ export async function myBeanImageResponse({
   beanId,
   beanImgSrc,
 }: MyBeanImageResponseParams): Promise<Response> {
-  console.log(secondaryColor.toUpperCase());
-
   return generateImageResponse({
     frameSize: {
       width: 1200,
@@ -51,14 +50,14 @@ export async function myBeanImageResponse({
         src: `/images/beanigotchi/eyes/${secondaryColor.toUpperCase().slice(1)}/left.gif`,
         size: { width: 176, height: 108 },
         position: { left: 408, top: 480 },
-        animated: true,
+        animated: ENABLE_ANIMATIONS,
       },
       {
         type: "static",
         src: `/images/beanigotchi/eyes/${secondaryColor.toUpperCase().slice(1)}/right.gif`,
         size: { width: 176, height: 108 },
         position: { left: 636, top: 480 },
-        animated: true,
+        animated: ENABLE_ANIMATIONS,
       },
       ...(await beanedexFrameLayers({
         primaryColor,

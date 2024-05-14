@@ -12,7 +12,7 @@ async function response(req: Request): Promise<Response> {
   if (trainer.firstTime) {
     revalidateTag(`beanigotchi-get-persistent-data-${fid}`); // Force revalidation so won't show next time
     return Response.redirect(`${BEANIGOTCHI_FRAME_BASE_URL}/how-to`, 302);
-  } else if (!trainer.ownsBean) {
+  } else if (trainer.ownedBeanIds.length == 0) {
     return Response.redirect(`${BEANIGOTCHI_FRAME_BASE_URL}/no-bean`, 302);
   } else {
     return Response.redirect(`${BEANIGOTCHI_FRAME_BASE_URL}/bean/1`, 302);
