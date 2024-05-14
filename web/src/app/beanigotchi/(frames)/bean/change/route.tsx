@@ -36,7 +36,7 @@ async function response(req: Request): Promise<Response> {
       src: `${BEANIGOTCHI_FRAME_BASE_URL}/bean/image/${fid}?t=${Date.now()}`,
       aspectRatio: "1:1",
     },
-    input: { text: "Bean id (empty for auction bean)" },
+    input: { text: "BeanId (or blank for daily bean)" },
     buttons: [
       { label: "Back", action: "post", target: `${BEANIGOTCHI_FRAME_BASE_URL}/bean/3` },
       { label: "Change", action: "post", target: `${BEANIGOTCHI_FRAME_BASE_URL}/bean/change` },

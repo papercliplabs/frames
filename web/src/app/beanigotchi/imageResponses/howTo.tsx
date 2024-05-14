@@ -31,7 +31,7 @@ export async function howToImageResponse({
       ...(await beanedexFrameLayers({
         primaryColor,
         secondaryColor,
-        title: "UH OH!",
+        title: "HOW TO",
         waterBoostActive: false,
         foodBoostActive: false,
       })),

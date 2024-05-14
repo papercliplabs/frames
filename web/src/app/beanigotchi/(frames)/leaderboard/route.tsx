@@ -4,6 +4,7 @@ import { BEANS_WEBSITE_URL } from "@/common/beans/config/constants";
 import { FrameButtonMetadata, FrameRequest } from "@coinbase/onchainkit/frame";
 import { BEANIGOTCHI_FRAME_BASE_URL } from "@/app/beanigotchi/utils/constants";
 import { getUserLeaderboardRank } from "../../data/leaderboard";
+import { getTrainer } from "../../data/trainer";
 
 async function response(req: Request): Promise<Response> {
   // Support a GET request here for sharing leaderboard, where we won't show any user rank
@@ -12,8 +13,11 @@ async function response(req: Request): Promise<Response> {
   if (req.method == "POST") {
     const frameRequest: FrameRequest = await req.json();
     fid = frameRequest.untrustedData.fid;
-    const userRank = await getUserLeaderboardRank({ fid });
-    shareLinkParams.append("text", `I am rank ${userRank} on the Beanigotchi leaderboard!`);
+    const [userRank, trainer] = await Promise.all([getUserLeaderboardRank({ fid }), getTrainer({ fid })]);
+    shareLinkParams.append(
+      "text",
+      `I made it to trainer level ${trainer.levelStatus.level} and rank ${userRank} on the Beanigotchi leaderboard!`
+    );
     shareLinkParams.append("embeds[]", `${BEANIGOTCHI_FRAME_BASE_URL}/leaderboard`);
   }
 
