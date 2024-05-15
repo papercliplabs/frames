@@ -17,7 +17,7 @@ async function response(req: Request): Promise<Response> {
       aspectRatio: "1:1",
     },
     buttons: [
-      { label: "<-", action: "post", target: `${BEANIGOTCHI_FRAME_BASE_URL}/bean/1` },
+      { label: "<-", action: "post", target: `${BEANIGOTCHI_FRAME_BASE_URL}/bean/2` },
       { label: "Bid", action: "post", target: `${process.env.NEXT_PUBLIC_URL}/nounish-auction/beans` },
       { label: "Change Bean", action: "post", target: `${BEANIGOTCHI_FRAME_BASE_URL}/bean/change` },
     ],

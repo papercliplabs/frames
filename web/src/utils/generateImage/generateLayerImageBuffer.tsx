@@ -49,7 +49,7 @@ async function generateLayerImageBufferUncached({
     if (new RegExp("^https://").test(layerSrcNormalized)) {
       const resp = await fetch(layerSrcNormalized, { cache: "no-store" }); // Disable cache here, since some images may be > 2MB (we cache the generated output)
       const buffer = Buffer.from(await resp.arrayBuffer());
-      sharpImage = await sharp(buffer, { animated: layer.animated });
+      sharpImage = sharp(buffer, { animated: layer.animated });
 
       if (!layer.animated) {
         sharpImage = sharpImage.png({ force: true, quality: 65 });
@@ -110,8 +110,9 @@ async function generateLayerImageBufferUncached({
   }
 
   // Need to return base64 string instead of buffers due to unstable_cache not serializing buffers correctly
-  const buffer = await sharpImage.toBuffer();
-  return buffer.toString("base64");
+  const buffer = await sharpImage.gif({ effort: 1 }).toBuffer();
+  const stringBuf = await buffer.toString("base64");
+  return stringBuf;
 }
 
 export const generateLayerImageBuffer = unstable_cache(

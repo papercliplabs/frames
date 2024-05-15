@@ -28,8 +28,8 @@ async function assembleImageUncached({
     },
   });
 
-  const combined = await base
-    .gif({ force: true, delay: gifOverrideDelay ? Array(maxGifPages).fill(gifOverrideDelay) : undefined })
+  const combined = base
+    .gif({ force: true, delay: gifOverrideDelay ? Array(maxGifPages).fill(gifOverrideDelay) : undefined, effort: 1 })
     .composite(
       buffers.map((buffer, i) => ({
         input: buffer,
