@@ -70,6 +70,10 @@ async function generateLayerImageBufferUncached({
       const buffer = Buffer.from(await resp.arrayBuffer());
       sharpImage = await sharp(buffer, { animated: layer.animated });
     }
+
+    if (layer.animated) {
+      sharpImage = sharpImage.gif({ effort: 1 });
+    }
   }
 
   if (layer.extrude) {
@@ -110,7 +114,7 @@ async function generateLayerImageBufferUncached({
   }
 
   // Need to return base64 string instead of buffers due to unstable_cache not serializing buffers correctly
-  const buffer = await sharpImage.gif({ effort: 1 }).toBuffer();
+  const buffer = await sharpImage.toBuffer();
   const stringBuf = await buffer.toString("base64");
   return stringBuf;
 }
