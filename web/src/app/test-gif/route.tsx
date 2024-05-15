@@ -4,14 +4,14 @@ import "@/common/utils/bigIntPolyfill";
 
 export async function GET(req: Request): Promise<Response> {
   return generateImageResponse({
-    frameSize: { width: 600, height: 600 },
+    frameSize: { width: 800, height: 800 },
     backgroundColor: { r: 0x00, g: 0x00, b: 0x00 },
     fontTypes: ["roboto", "roboto-mono"],
     layers: [
       {
         type: "static",
         src: "/images/beanigotchi/animated/spinny.gif",
-        size: { width: 600, height: 600 },
+        size: { width: 800, height: 800 },
         animated: true,
       },
       {
@@ -23,7 +23,7 @@ export async function GET(req: Request): Promise<Response> {
             </div>
           </div>
         ),
-        size: { width: 600, height: 600 },
+        size: { width: 800, height: 800 },
       },
     ],
   });

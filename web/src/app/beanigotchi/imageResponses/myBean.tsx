@@ -1,7 +1,7 @@
 import { generateImageResponse } from "@/utils/generateImage/generateImage";
 import { beanedexFrameLayers } from "./partial/beanidexFrameLayers";
 import { twConfig } from "./partial/twConfig";
-import { ENABLE_ANIMATIONS } from "../utils/constants";
+import { ENABLE_ANIMATIONS, SCALER } from "../utils/constants";
 
 interface MyBeanImageResponseParams {
   primaryColor: string;
@@ -29,8 +29,8 @@ export async function myBeanImageResponse({
 }: MyBeanImageResponseParams): Promise<Response> {
   return generateImageResponse({
     frameSize: {
-      width: 1200,
-      height: 1200,
+      width: Math.floor(1200 * SCALER),
+      height: Math.floor(1200 * SCALER),
     },
     backgroundColor: primaryColor,
     fontTypes: ["graphik"],
@@ -40,23 +40,23 @@ export async function myBeanImageResponse({
       {
         type: "static",
         src: beanImgSrc,
-        size: { width: 820, height: 740 },
-        position: { left: 200, top: 188 },
-        extrude: { left: 240, right: 240 },
+        size: { width: Math.floor(820 * SCALER), height: Math.floor(740 * SCALER) },
+        position: { left: Math.floor(200 * SCALER), top: Math.floor(188 * SCALER) },
+        extrude: { left: Math.floor(240 * SCALER), right: Math.floor(240 * SCALER) },
         animated: false,
       },
       {
         type: "static",
         src: `/images/beanigotchi/eyes/${secondaryColor.toUpperCase().slice(1)}/left.gif`,
-        size: { width: 176, height: 108 },
-        position: { left: 408, top: 480 },
+        size: { width: Math.floor(176 * SCALER), height: Math.floor(108 * SCALER) },
+        position: { left: Math.floor(408 * SCALER), top: Math.floor(480 * SCALER) },
         animated: ENABLE_ANIMATIONS,
       },
       {
         type: "static",
         src: `/images/beanigotchi/eyes/${secondaryColor.toUpperCase().slice(1)}/right.gif`,
-        size: { width: 176, height: 108 },
-        position: { left: 636, top: 480 },
+        size: { width: Math.floor(176 * SCALER), height: Math.floor(108 * SCALER) },
+        position: { left: Math.floor(636 * SCALER), top: Math.floor(480 * SCALER) },
         animated: ENABLE_ANIMATIONS,
       },
       ...(await beanedexFrameLayers({

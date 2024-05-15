@@ -7,3 +7,4 @@ export const TRAIN_COOLDOWN_TIME_S = 600;
 export const BEANIGOTCHI_FRAME_BASE_URL = `${process.env.NEXT_PUBLIC_URL}/beanigotchi`;
 
 export const ENABLE_ANIMATIONS = true;
+export const SCALER = 0.6;

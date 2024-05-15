@@ -1,4 +1,5 @@
 import { SatoriOptions } from "satori";
+import { SCALER } from "../../utils/constants";
 
 export const twConfig: SatoriOptions["tailwindConfig"] = {
   theme: {
@@ -15,21 +16,21 @@ export const twConfig: SatoriOptions["tailwindConfig"] = {
       },
       fontSize: {
         title: [
-          "62px",
+          `${62 * SCALER}px`,
           {
-            letterSpacing: "4.96px",
+            letterSpacing: `${4.96 * SCALER}px`,
           },
         ],
         body: [
-          "36px",
+          `${36 * SCALER}px`,
           {
-            letterSpacing: "2.88px",
+            letterSpacing: `${2.88 * SCALER}px`,
           },
         ],
         caption: [
-          "28px",
+          `${28 * SCALER}px`,
           {
-            letterSpacing: "0.28px",
+            letterSpacing: `${0.28 * SCALER}px`,
           },
         ],
       },

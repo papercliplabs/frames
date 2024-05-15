@@ -2,7 +2,7 @@ import { SECONDS_PER_DAY } from "@/utils/constants";
 import { generateImageResponse } from "@/utils/generateImage/generateImage";
 import { beanedexFrameLayers } from "./partial/beanidexFrameLayers";
 import { twConfig } from "./partial/twConfig";
-import { ENABLE_ANIMATIONS } from "../utils/constants";
+import { ENABLE_ANIMATIONS, SCALER } from "../utils/constants";
 
 interface HomeImageResponseParams {
   primaryColor: string;
@@ -13,8 +13,8 @@ export async function homeImageResponse({ primaryColor, secondaryColor }: HomeIm
   return generateImageResponse({
     imageCacheMaxAgeS: SECONDS_PER_DAY / 2,
     frameSize: {
-      width: 1200,
-      height: 1200,
+      width: Math.floor(1200 * SCALER),
+      height: Math.floor(1200 * SCALER),
     },
     backgroundColor: primaryColor,
     fontTypes: ["graphik"],
@@ -23,8 +23,8 @@ export async function homeImageResponse({ primaryColor, secondaryColor }: HomeIm
       {
         type: "dynamic",
         src: <div tw="w-full h-full bg-black" />,
-        size: { width: 820, height: 740 },
-        position: { left: 200, top: 188 },
+        size: { width: Math.floor(820 * SCALER), height: Math.floor(740 * SCALER) },
+        position: { left: Math.floor(200 * SCALER), top: Math.floor(188 * SCALER) },
       },
       ...(await beanedexFrameLayers({
         primaryColor,
@@ -36,8 +36,8 @@ export async function homeImageResponse({ primaryColor, secondaryColor }: HomeIm
       {
         type: "static",
         src: "/images/beanigotchi/animated/title.gif",
-        size: { width: 700, height: 400 },
-        position: { left: 255, top: 380 },
+        size: { width: Math.floor(700 * SCALER), height: Math.floor(400 * SCALER) },
+        position: { left: Math.floor(255 * SCALER), top: Math.floor(380 * SCALER) },
         animated: ENABLE_ANIMATIONS,
       },
     ],

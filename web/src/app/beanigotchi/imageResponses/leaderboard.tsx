@@ -2,6 +2,7 @@ import { SECONDS_PER_DAY } from "@/utils/constants";
 import { generateImageResponse } from "@/utils/generateImage/generateImage";
 import { beanedexFrameLayers } from "./partial/beanidexFrameLayers";
 import { twConfig } from "./partial/twConfig";
+import { SCALER } from "../utils/constants";
 
 interface LeaderboardImageResponseParams {
   primaryColor: string;
@@ -20,8 +21,8 @@ export async function leaderboardImageResponse({
   return generateImageResponse({
     imageCacheMaxAgeS: SECONDS_PER_DAY,
     frameSize: {
-      width: 1200,
-      height: 1200,
+      width: Math.floor(1200 * SCALER),
+      height: Math.floor(1200 * SCALER),
     },
     backgroundColor: primaryColor,
     fontTypes: ["graphik"],
@@ -30,8 +31,8 @@ export async function leaderboardImageResponse({
       {
         type: "dynamic",
         src: <div tw="w-full h-full bg-black" />,
-        size: { width: 820, height: 740 },
-        position: { left: 200, top: 188 },
+        size: { width: Math.floor(820 * SCALER), height: Math.floor(740 * SCALER) },
+        position: { left: Math.floor(200 * SCALER), top: Math.floor(188 * SCALER) },
       },
       ...(await beanedexFrameLayers({
         primaryColor,
@@ -42,35 +43,35 @@ export async function leaderboardImageResponse({
       })),
       {
         type: "dynamic",
-        size: { width: 735, height: 635 },
-        position: { left: 240, top: 260 },
+        size: { width: Math.floor(735 * SCALER), height: Math.floor(635 * SCALER) },
+        position: { left: Math.floor(240 * SCALER), top: Math.floor(260 * SCALER) },
         src: (
           <div
-            tw="flex flex-col w-full h-full text-content-primary justify-top items-center p-[40px]"
-            style={{ gap: "70px" }}
+            tw="flex flex-col w-full h-full text-content-primary justify-top items-center "
+            style={{ gap: 70 * SCALER, padding: 40 * SCALER }}
           >
             <div tw="text-title font-bold w-full justify-center">LEADERBOARD</div>
             <div tw="flex w-full justify-between text-body">
-              <div tw="flex flex-col w-1/4 items-center" style={{ gap: "40px" }}>
+              <div tw="flex flex-col w-1/4 items-center" style={{ gap: 40 * SCALER }}>
                 <span tw="font-bold">RANK</span>
                 {topTrainers.map((entry, i) => (
-                  <span key={i} tw="h-[36px] items-center">
+                  <span key={i} tw="items-center" style={{ height: 36 * SCALER }}>
                     {i + 1}
                   </span>
                 ))}
               </div>
-              <div tw="flex flex-col w-1/2 items-center" style={{ gap: "40px" }}>
+              <div tw="flex flex-col w-1/2 items-center" style={{ gap: 40 * SCALER }}>
                 <span tw="font-bold">USER</span>
                 {topTrainers.map((entry, i) => (
-                  <span key={i} tw="text-caption items-center h-[36px]">
+                  <span key={i} tw="text-caption items-center" style={{ height: 36 * SCALER }}>
                     {entry.username}
                   </span>
                 ))}
               </div>
-              <div tw="flex flex-col w-1/4 items-center" style={{ gap: "40px" }}>
+              <div tw="flex flex-col w-1/4 items-center" style={{ gap: 40 * SCALER }}>
                 <span tw="font-bold">LEVEL</span>
                 {topTrainers.map((entry, i) => (
-                  <span key={i} tw="h-[36px] items-center">
+                  <span key={i} tw="items-center" style={{ height: 36 * SCALER }}>
                     {entry.level}
                   </span>
                 ))}
