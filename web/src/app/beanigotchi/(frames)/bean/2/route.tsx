@@ -18,7 +18,7 @@ async function response(req: Request): Promise<Response> {
     },
     buttons: [
       { label: "<-", action: "post", target: `${BEANIGOTCHI_FRAME_BASE_URL}/bean/1` },
-      { label: "How it works?", action: "post", target: `${BEANIGOTCHI_FRAME_BASE_URL}/how-to` },
+      { label: "How to Play", action: "post", target: `${BEANIGOTCHI_FRAME_BASE_URL}/how-to/1` },
       { label: "Leaderboard", action: "post", target: `${BEANIGOTCHI_FRAME_BASE_URL}/leaderboard` },
       { label: "->", action: "post", target: `${BEANIGOTCHI_FRAME_BASE_URL}/bean/3` },
     ],

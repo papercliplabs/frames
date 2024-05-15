@@ -9,7 +9,7 @@ interface GetBeanIdForAddressParams {
   ownerAddress: Address;
 }
 
-export async function getBeanIdForAddress({ ownerAddress }: GetBeanIdForAddressParams): Promise<bigint | undefined> {
+export async function getBeanIdsForAddress({ ownerAddress }: GetBeanIdForAddressParams): Promise<bigint[]> {
   const beanBalance = await readContractCached(
     beansClient,
     { ...beansTokenContract, functionName: "balanceOf", args: [ownerAddress] },
@@ -17,14 +17,20 @@ export async function getBeanIdForAddress({ ownerAddress }: GetBeanIdForAddressP
   );
 
   if (beanBalance > BigInt(0)) {
-    const beanId = await readContractCached(
-      beansClient,
-      { ...beansTokenContract, functionName: "tokenOfOwnerByIndex", args: [ownerAddress, BigInt(0)] },
-      { revalidate: SECONDS_PER_DAY }
+    const beanIds = await Promise.all(
+      Array(Number(beanBalance))
+        .fill(0)
+        .map((v, i) =>
+          readContractCached(
+            beansClient,
+            { ...beansTokenContract, functionName: "tokenOfOwnerByIndex", args: [ownerAddress, BigInt(0)] },
+            { revalidate: SECONDS_PER_DAY }
+          )
+        )
     );
 
-    return BigInt(beanId);
+    return beanIds.map((id) => BigInt(id)); // To avoid issues with bigint cache serialization
   } else {
-    return undefined;
+    return [];
   }
 }

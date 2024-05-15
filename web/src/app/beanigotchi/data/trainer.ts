@@ -2,7 +2,7 @@ import { getPersistentData, setPersistentData } from "./internal/persistentData"
 import { LevelStatus, totalXpToLevelStatus } from "../utils/level";
 import { FEED_BOOST_TIME_S, TRAIN_COOLDOWN_TIME_S, WATER_BOOST_TIME_S } from "../utils/constants";
 import { getUserInfo } from "@/utils/farcaster";
-import { getBeanIdForAddress } from "./internal/getBeanIdForAddress";
+import { getBeanIdsForAddress } from "./internal/getBeanIdForAddress";
 import { Address } from "viem";
 import { getCurrentAuction } from "@/common/beans/data/getCurrentAuction";
 import { Bean, getBean } from "@/common/beans/data/getBean";
@@ -45,17 +45,16 @@ export async function getTrainer({ fid }: GetTrainerProps): Promise<Trainer> {
 
   // Check if the user owns a bean, we just take the first one found
   const userVerifiedAddresses = userInfo.verified_addresses.eth_addresses as Address[];
-  const beanIds = await Promise.all(
-    userVerifiedAddresses.map((address) => getBeanIdForAddress({ ownerAddress: address }))
-  );
+  const ownedBeanIds = (
+    await Promise.all(userVerifiedAddresses.map((address) => getBeanIdsForAddress({ ownerAddress: address })))
+  ).flat();
 
-  const ownedBeanIds = beanIds.filter((id) => id != undefined) as bigint[];
   const ownsBean = ownedBeanIds.length > 0;
 
   const preferredBeanId = persistentData.preferredBeanId ? BigInt(persistentData.preferredBeanId) : undefined;
 
   let beanId: bigint;
-  if (preferredBeanId != undefined && beanIds.includes(preferredBeanId)) {
+  if (preferredBeanId != undefined && ownedBeanIds.includes(preferredBeanId)) {
     beanId = preferredBeanId;
   }
 
@@ -63,7 +62,7 @@ export async function getTrainer({ fid }: GetTrainerProps): Promise<Trainer> {
     // If they don't own a bean, or configured preferred to -1 which means use the auction bean
     const currentAuction = await getCurrentAuction();
     beanId = currentAuction.beanId;
-  } else if (preferredBeanId != undefined && beanIds.includes(preferredBeanId)) {
+  } else if (preferredBeanId != undefined && ownedBeanIds.includes(preferredBeanId)) {
     // If they own their configured preferred bean
     beanId = preferredBeanId;
   } else {
