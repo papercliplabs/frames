@@ -1,10 +1,12 @@
-import { Color } from "sharp";
+import sharp, { Color } from "sharp";
 import { ImageLayer, Size } from "./types";
 
 import { SatoriOptions } from "satori";
 import { generateLayerImageBuffer } from "./generateLayerImageBuffer";
 import { FontType } from "../imageOptions";
 import { assembleImage } from "./assembleImage";
+
+sharp.concurrency(12);
 
 interface GenerateLayeredImageParams {
   frameSize: Size;
@@ -24,8 +26,11 @@ export async function generateImage({
   gifOverrideDelay,
 }: GenerateLayeredImageParams) {
   const layerImageBufferStrings = await Promise.all(
-    layers.map((layer) => generateLayerImageBuffer({ layer, frameSize, fontTypes: fontTypes ?? ["inter"], twConfig }))
+    layers.map((layer, i) =>
+      generateLayerImageBuffer({ layer, frameSize, fontTypes: fontTypes ?? ["inter"], twConfig })
+    )
   );
+
   const generateImage = await assembleImage({ frameSize, backgroundColor, layerImageBufferStrings, gifOverrideDelay });
 
   return generateImage;
