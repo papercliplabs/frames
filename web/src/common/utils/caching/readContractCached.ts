@@ -1,6 +1,6 @@
-import { unstable_cache } from "next/cache";
 import { Abi, Chain, Client, ContractFunctionArgs, ContractFunctionName, Transport } from "viem";
 import { ReadContractParameters, ReadContractReturnType, readContract } from "viem/actions";
+import { customUnstableCache } from "./customUnstableCache";
 
 export async function readContractCached<
   chain extends Chain | undefined,
@@ -15,7 +15,7 @@ export async function readContractCached<
     tags?: string[];
   }
 ): Promise<ReadContractReturnType<abi, functionName, args>> {
-  return unstable_cache(
+  return customUnstableCache(
     (client: Client<Transport, chain>, parameters: ReadContractParameters<abi, functionName, args>) => {
       return readContract(client, parameters);
     },

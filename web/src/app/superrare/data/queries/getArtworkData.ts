@@ -1,13 +1,13 @@
-import { unstable_cache } from "next/cache";
 import { Address, getAddress } from "viem";
 import { gql } from "../generated";
 import { getSuperrareApolloClient } from "../client";
 import { mainnetPublicClient } from "@/utils/wallet";
-import { cachedReadContract } from "@/utils/caching";
 import { fetchIpfsData } from "@/utils/fetchIpfsDats";
 import { baseNft } from "@/abis/superrare/baseNft";
 import { User, getUserData } from "./getUserData";
-import "@/common/utils/bigIntPolyfill";
+import { readContractCached } from "@/common/utils/caching/readContractCached";
+import { SECONDS_PER_DAY } from "@/utils/constants";
+import { customUnstableCache } from "@/common/utils/caching/customUnstableCache";
 
 interface GetArtworkDataParams {
   collectionAddress: Address;
@@ -112,34 +112,50 @@ async function getArtworkDataFromContractAndIpfs({
   let tokenCreator: Address;
   try {
     [tokenUri, tokenCreator] = await Promise.all([
-      cachedReadContract(mainnetPublicClient, {
-        address: collectionAddress,
-        abi: baseNft,
-        functionName: "tokenURI",
-        args: [tokenId],
-      }),
-      cachedReadContract(mainnetPublicClient, {
-        address: collectionAddress,
-        abi: baseNft,
-        functionName: "tokenCreator",
-        args: [tokenId],
-      }),
+      readContractCached(
+        mainnetPublicClient,
+        {
+          address: collectionAddress,
+          abi: baseNft,
+          functionName: "tokenURI",
+          args: [tokenId],
+        },
+        { revalidate: SECONDS_PER_DAY }
+      ),
+      readContractCached(
+        mainnetPublicClient,
+        {
+          address: collectionAddress,
+          abi: baseNft,
+          functionName: "tokenCreator",
+          args: [tokenId],
+        },
+        { revalidate: SECONDS_PER_DAY }
+      ),
     ]);
   } catch (e) {
     // Fallback to owner if tokenCreator doesn't exist
     [tokenUri, tokenCreator] = await Promise.all([
-      cachedReadContract(mainnetPublicClient, {
-        address: collectionAddress,
-        abi: baseNft,
-        functionName: "tokenURI",
-        args: [tokenId],
-      }),
-      cachedReadContract(mainnetPublicClient, {
-        address: collectionAddress,
-        abi: baseNft,
-        functionName: "owner",
-        args: [],
-      }),
+      readContractCached(
+        mainnetPublicClient,
+        {
+          address: collectionAddress,
+          abi: baseNft,
+          functionName: "tokenURI",
+          args: [tokenId],
+        },
+        { revalidate: SECONDS_PER_DAY }
+      ),
+      readContractCached(
+        mainnetPublicClient,
+        {
+          address: collectionAddress,
+          abi: baseNft,
+          functionName: "owner",
+          args: [],
+        },
+        { revalidate: SECONDS_PER_DAY }
+      ),
     ]);
   }
 
@@ -159,4 +175,4 @@ async function getArtworkDataFromContractAndIpfs({
   };
 }
 
-export const getArtworkData = unstable_cache(getArtworkDataUncached, ["get-artwork-data"], { revalidate: 600 }); // Revalidate every 10min
+export const getArtworkData = customUnstableCache(getArtworkDataUncached, ["get-artwork-data"], { revalidate: 600 }); // Revalidate every 10min

@@ -2,9 +2,9 @@ import { NextRequest } from "next/server";
 import { SupportedNounishAuctionSlug, nounishAuctionConfigs } from "../../../../configs";
 import { ImageResponse } from "next/og";
 import { getDefaultSquareImageOptions } from "@/utils/imageOptions";
-import { unstable_cache } from "next/cache";
 import { formatEther } from "viem";
 import { formatNumber } from "@/utils/format";
+import { customUnstableCache } from "@/common/utils/caching/customUnstableCache";
 
 export async function GET(
   req: NextRequest,
@@ -16,7 +16,7 @@ export async function GET(
     return Response.error();
   }
 
-  const data = await unstable_cache(config.getAuctionData, ["nounish-auction", params.slug], {
+  const data = await customUnstableCache(config.getAuctionData, ["nounish-auction", params.slug], {
     revalidate: 2,
   })();
 

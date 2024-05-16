@@ -1,14 +1,13 @@
-import { Address, erc20Abi, isAddressEqual, zeroAddress } from "viem";
-import { ArtworkData, getArtworkData } from "./getArtworkData";
-import { cachedReadContract } from "@/utils/caching";
+import { Address, isAddressEqual, zeroAddress } from "viem";
 import { baseNft } from "@/abis/superrare/baseNft";
 import { readContract } from "viem/actions";
 import { mainnetPublicClient } from "@/utils/wallet";
 import { SUPERRARE_MINTER_PROXY_ADDRESS } from "../../utils/constants";
 import { rareMinterAbi } from "@/abis/superrare/rareMinter";
-import { unstable_cache } from "next/cache";
 import { TokenData, getTokenData } from "./getTokenData";
-import "@/common/utils/bigIntPolyfill";
+import { readContractCached } from "@/common/utils/caching/readContractCached";
+import { SECONDS_PER_DAY, SECONDS_PER_HOUR } from "@/utils/constants";
+import { customUnstableCache } from "@/common/utils/caching/customUnstableCache";
 
 interface GetLimitedMintDataParams {
   collectionAddress: Address;
@@ -38,35 +37,55 @@ export async function getLimitedMintDataUncached({
           abi: baseNft,
           functionName: "totalSupply",
         }),
-        cachedReadContract(mainnetPublicClient, {
-          address: collectionAddress,
-          abi: baseNft,
-          functionName: "maxTokens",
-        }),
-        cachedReadContract(mainnetPublicClient, {
-          address: SUPERRARE_MINTER_PROXY_ADDRESS,
-          abi: rareMinterAbi,
-          functionName: "getDirectSaleConfig",
-          args: [collectionAddress],
-        }),
-        cachedReadContract(mainnetPublicClient, {
-          address: SUPERRARE_MINTER_PROXY_ADDRESS,
-          abi: rareMinterAbi,
-          functionName: "getContractMintLimit",
-          args: [collectionAddress],
-        }),
-        cachedReadContract(mainnetPublicClient, {
-          address: SUPERRARE_MINTER_PROXY_ADDRESS,
-          abi: rareMinterAbi,
-          functionName: "getContractTxLimit",
-          args: [collectionAddress],
-        }),
-        cachedReadContract(mainnetPublicClient, {
-          address: SUPERRARE_MINTER_PROXY_ADDRESS,
-          abi: rareMinterAbi,
-          functionName: "getContractAllowListConfig",
-          args: [collectionAddress],
-        }),
+        readContractCached(
+          mainnetPublicClient,
+          {
+            address: collectionAddress,
+            abi: baseNft,
+            functionName: "maxTokens",
+          },
+          { revalidate: SECONDS_PER_HOUR }
+        ),
+        readContractCached(
+          mainnetPublicClient,
+          {
+            address: SUPERRARE_MINTER_PROXY_ADDRESS,
+            abi: rareMinterAbi,
+            functionName: "getDirectSaleConfig",
+            args: [collectionAddress],
+          },
+          { revalidate: SECONDS_PER_HOUR }
+        ),
+        readContractCached(
+          mainnetPublicClient,
+          {
+            address: SUPERRARE_MINTER_PROXY_ADDRESS,
+            abi: rareMinterAbi,
+            functionName: "getContractMintLimit",
+            args: [collectionAddress],
+          },
+          { revalidate: SECONDS_PER_HOUR }
+        ),
+        readContractCached(
+          mainnetPublicClient,
+          {
+            address: SUPERRARE_MINTER_PROXY_ADDRESS,
+            abi: rareMinterAbi,
+            functionName: "getContractTxLimit",
+            args: [collectionAddress],
+          },
+          { revalidate: SECONDS_PER_HOUR }
+        ),
+        readContractCached(
+          mainnetPublicClient,
+          {
+            address: SUPERRARE_MINTER_PROXY_ADDRESS,
+            abi: rareMinterAbi,
+            functionName: "getContractAllowListConfig",
+            args: [collectionAddress],
+          },
+          { revalidate: SECONDS_PER_HOUR }
+        ),
       ]);
 
     const currencyAddress = directSaleConfig.currencyAddress;
@@ -89,7 +108,7 @@ export async function getLimitedMintDataUncached({
       maxSupply,
       tokenId,
       currency,
-      price: BigInt(directSaleConfig.price), // For some reason, need this explicit cast
+      price: directSaleConfig.price,
       maxMintsPerAddress,
       txnLimitPerAddress,
       isValidForFrameTxn,
@@ -100,6 +119,6 @@ export async function getLimitedMintDataUncached({
   }
 }
 
-export const getLimitedMintData = unstable_cache(getLimitedMintDataUncached, ["get-limited-mint-data"], {
+export const getLimitedMintData = customUnstableCache(getLimitedMintDataUncached, ["get-limited-mint-data"], {
   revalidate: 10,
 });

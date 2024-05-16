@@ -1,8 +1,8 @@
 import { SECONDS_PER_MONTH } from "@/utils/constants";
-import { unstable_cache } from "next/cache";
 import { Address } from "viem";
 import { User } from ".";
 import { NEYNAR_KEY } from "@/utils/farcaster";
+import { customUnstableCache } from "@/common/utils/caching/customUnstableCache";
 
 async function getFarcasterUserUncached({ address }: { address: Address }): Promise<User | null> {
   try {
@@ -33,6 +33,6 @@ async function getFarcasterUserUncached({ address }: { address: Address }): Prom
   }
 }
 
-export const getFarcasterUser = unstable_cache(getFarcasterUserUncached, ["get-farcaster-user"], {
+export const getFarcasterUser = customUnstableCache(getFarcasterUserUncached, ["get-farcaster-user"], {
   revalidate: SECONDS_PER_MONTH,
 });

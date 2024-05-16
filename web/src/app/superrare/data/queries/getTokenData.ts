@@ -1,4 +1,5 @@
-import { cachedReadContract } from "@/utils/caching";
+import { readContractCached } from "@/common/utils/caching/readContractCached";
+import { SECONDS_PER_MONTH, SECONDS_PER_WEEK } from "@/utils/constants";
 import { mainnetPublicClient } from "@/utils/wallet";
 import { Address, erc20Abi, isAddressEqual, zeroAddress } from "viem";
 
@@ -22,16 +23,24 @@ export async function getTokenData({ tokenAddress }: GetTokenDataParams): Promis
   }
 
   const [symbol, decimals] = await Promise.all([
-    cachedReadContract(mainnetPublicClient, {
-      address: tokenAddress,
-      abi: erc20Abi,
-      functionName: "symbol",
-    }),
-    cachedReadContract(mainnetPublicClient, {
-      address: tokenAddress,
-      abi: erc20Abi,
-      functionName: "decimals",
-    }),
+    readContractCached(
+      mainnetPublicClient,
+      {
+        address: tokenAddress,
+        abi: erc20Abi,
+        functionName: "symbol",
+      },
+      { revalidate: SECONDS_PER_MONTH }
+    ),
+    readContractCached(
+      mainnetPublicClient,
+      {
+        address: tokenAddress,
+        abi: erc20Abi,
+        functionName: "decimals",
+      },
+      { revalidate: SECONDS_PER_MONTH }
+    ),
   ]);
 
   return {

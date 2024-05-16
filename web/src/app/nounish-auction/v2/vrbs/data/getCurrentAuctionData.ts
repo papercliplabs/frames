@@ -1,14 +1,14 @@
 "use server";
-import { cachedReadContract } from "@/utils/caching";
-import { unstable_cache } from "next/cache";
 import { vrbsPublicClient } from "../utils/client";
 import { vrbsAuctionHouseContract } from "../contracts/vrbsAuctionHouse";
 import { vrbsRevolutionTokenContract } from "../contracts/vrbsRevolutionToken";
 import { readContract } from "viem/actions";
 import { bigIntMax } from "@/common/utils/bigInt";
 import { formatTimeLeft } from "@/utils/format";
-import "@/common/utils/bigIntPolyfill";
 import { User, getUser } from "@/common/data/getUser";
+import { readContractCached } from "@/common/utils/caching/readContractCached";
+import { SECONDS_PER_HOUR } from "@/utils/constants";
+import { customUnstableCache } from "@/common/utils/caching/customUnstableCache";
 
 interface AuctionData {
   tokenId: bigint;
@@ -34,24 +34,36 @@ export async function getCurrentAuctionData(): Promise<AuctionData> {
         functionName: "auction",
         args: [],
       }),
-      cachedReadContract(vrbsPublicClient, {
-        ...vrbsAuctionHouseContract,
-        functionName: "minBidIncrementPercentage",
-        args: [],
-      }),
-      cachedReadContract(vrbsPublicClient, {
-        ...vrbsAuctionHouseContract,
-        functionName: "reservePrice",
-        args: [],
-      }),
+      readContractCached(
+        vrbsPublicClient,
+        {
+          ...vrbsAuctionHouseContract,
+          functionName: "minBidIncrementPercentage",
+          args: [],
+        },
+        { revalidate: SECONDS_PER_HOUR }
+      ),
+      readContractCached(
+        vrbsPublicClient,
+        {
+          ...vrbsAuctionHouseContract,
+          functionName: "reservePrice",
+          args: [],
+        },
+        { revalidate: SECONDS_PER_HOUR }
+      ),
     ]);
 
   const [artData, highestBidder] = await Promise.all([
-    cachedReadContract(vrbsPublicClient, {
-      ...vrbsRevolutionTokenContract,
-      functionName: "getArtPieceById",
-      args: [tokenId],
-    }),
+    readContractCached(
+      vrbsPublicClient,
+      {
+        ...vrbsRevolutionTokenContract,
+        functionName: "getArtPieceById",
+        args: [tokenId],
+      },
+      { revalidate: SECONDS_PER_HOUR }
+    ),
     getUser({ address: highestBidderAddress, resolverTypes: ["farcaster", "ens"] }),
   ]);
 
@@ -89,6 +101,10 @@ export async function getCurrentAuctionData(): Promise<AuctionData> {
 }
 
 // Light cached to help deduplicate requests
-export const getCurrentAuctionDataCached = unstable_cache(getCurrentAuctionData, ["vrbs-get-current-auction-data"], {
-  revalidate: 5,
-});
+export const getCurrentAuctionDataCached = customUnstableCache(
+  getCurrentAuctionData,
+  ["vrbs-get-current-auction-data"],
+  {
+    revalidate: 5,
+  }
+);

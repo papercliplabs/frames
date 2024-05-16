@@ -22,7 +22,10 @@ async function response(req: Request, { params }: { params: { collectionAddress:
       functionName: "totalSupply",
     });
 
-    return Response.redirect(`${process.env.NEXT_PUBLIC_URL}/superrare/fallback/${collectionAddress}/${tokenId}`, 302);
+    return Response.redirect(
+      `${process.env.NEXT_PUBLIC_URL}/superrare/fallback/${collectionAddress}/${tokenId.toString()}`,
+      302
+    );
   }
 
   const transactionFlowSearchParams = new URLSearchParams({ successMessage: "You minted it!" });

@@ -1,10 +1,9 @@
-import { readContractCached } from "@/common/viem/readContractCached";
 import { Address } from "viem";
 import { beansClient } from "../config/client";
 import { beansAuctionContract } from "../config/contracts/auction";
 import { SECONDS_PER_DAY } from "@/utils/constants";
 import { bigIntMax } from "@/common/utils/bigInt";
-import "@/common/utils/bigIntPolyfill";
+import { readContractCached } from "@/common/utils/caching/readContractCached";
 
 interface Auction {
   beanId: bigint;
@@ -40,19 +39,18 @@ export async function getCurrentAuction(): Promise<Auction> {
   ]);
 
   const nextMinBid = bigIntMax(
-    BigInt(reservePrice),
-    BigInt(highestBidAmount) + (BigInt(highestBidAmount) * BigInt(minBidIncrementPercentage)) / BigInt(100)
+    reservePrice,
+    highestBidAmount + (highestBidAmount * BigInt(minBidIncrementPercentage)) / BigInt(100)
   );
 
-  // Explicit bigint cast since unstable cache relies on bigint polyfill which returns a string on deserialization
   return {
-    beanId: BigInt(beanId),
+    beanId,
 
     highestBiderAddress,
-    highestBidAmount: BigInt(highestBidAmount),
+    highestBidAmount,
 
-    startTime: BigInt(startTime),
-    endTime: BigInt(endTime),
+    startTime,
+    endTime,
 
     settled,
     nextMinBid,

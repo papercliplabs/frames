@@ -1,11 +1,11 @@
 import sharp from "sharp";
 import satori from "satori";
 import { getFontOptionsFromFontTypes, FontType } from "../imageOptions";
-import { unstable_cache } from "next/cache";
 import { getImageProps } from "next/image";
 import { SatoriOptions } from "satori";
 import { ImageLayer, Size } from "./types";
 import { Resvg } from "@resvg/resvg-js";
+import { customUnstableCache } from "@/common/utils/caching/customUnstableCache";
 
 interface GenerateLayerImageBufferParams {
   layer: ImageLayer;
@@ -119,7 +119,7 @@ async function generateLayerImageBufferUncached({
   return stringBuf;
 }
 
-export const generateLayerImageBuffer = unstable_cache(
+export const generateLayerImageBuffer = customUnstableCache(
   (params: GenerateLayerImageBufferParams) => {
     return generateLayerImageBufferUncached(params);
   },
