@@ -47,8 +47,9 @@ export async function POST(req: NextRequest, { params }: { params: { slug: strin
       return Response.error();
     }
   } else {
-    // Store for next time
+    // First time, so store for next time
     searchParams.append("hash", transactionHash);
+    await track("txn-pending", { slug: params.slug, hash: transactionHash });
   }
 
   let status: "pending" | "success" | "failed" = "pending";
