@@ -17,12 +17,12 @@ const pageContent: Record<1 | 2 | 3, { body1: string; body2: string }> = {
     body2: "The higher your trainer level, the higher you get on the Beanigotchi leaderboard!",
   },
   2: {
-    body1: "If you own a Bean you get 100% XP boost to your training XP",
+    body1: "If you own a Bean you get 100% XP boost to your training XP.",
     body2: "If you own multiple Beans, you can choose which Bean to train and take care of by inputting the Bean ID!",
   },
   3: {
     body1: "If you do not own a Bean, fear not! You can still train and take care of the Bean of the day.",
-    body2: "If you'd like, you can make the Bean your own by placing abid through the Beanidex!",
+    body2: "If you'd like, you can make the Bean your own by placing a bid through the Beanidex!",
   },
 };
 

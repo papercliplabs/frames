@@ -104,12 +104,12 @@ function getScreenContent(
     case "feed":
       svg = (
         <svg
-          width={225 * SCALER}
-          height={327 * SCALER}
+          width={230 * SCALER}
+          height={268 * SCALER}
           viewBox={`0 0 54 63`}
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          style={{ position: "absolute", left: 630 * SCALER, top: 20 * SCALER }}
+          style={{ position: "absolute", left: 630 * SCALER, top: 40 * SCALER }}
         >
           <path
             d="M27.07 56.01C38.0052 56.01 46.87 47.1453 46.87 36.21C46.87 25.2748 38.0052 16.41 27.07 16.41C16.1348 16.41 7.27 25.2748 7.27 36.21C7.27 47.1453 16.1348 56.01 27.07 56.01Z"
@@ -146,7 +146,7 @@ function getScreenContent(
           viewBox={`0 0 48 70`}
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          style={{ position: "absolute", left: 630 * SCALER, top: 20 * SCALER }}
+          style={{ position: "absolute", left: 630 * SCALER, top: 40 * SCALER }}
         >
           <path
             d="M41.5 45.4C41.5 55.03 33.7 62.83 24.07 62.83C14.44 62.83 6.64 55.03 6.64 45.4C6.64 38.25 16.26 18.11 21.21 8.22995C22.39 5.85995 25.75 5.85995 26.94 8.22995C31.89 18.11 41.51 38.25 41.51 45.4H41.5Z"

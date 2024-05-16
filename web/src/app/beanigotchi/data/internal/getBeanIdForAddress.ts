@@ -23,7 +23,7 @@ export async function getBeanIdsForAddress({ ownerAddress }: GetBeanIdForAddress
         .map((v, i) =>
           readContractCached(
             beansClient,
-            { ...beansTokenContract, functionName: "tokenOfOwnerByIndex", args: [ownerAddress, BigInt(0)] },
+            { ...beansTokenContract, functionName: "tokenOfOwnerByIndex", args: [ownerAddress, BigInt(i)] },
             { revalidate: SECONDS_PER_DAY }
           )
         )
