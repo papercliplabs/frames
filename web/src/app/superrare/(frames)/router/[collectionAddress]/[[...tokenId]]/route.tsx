@@ -20,7 +20,7 @@ async function response(
       switch (artworkState) {
         case "auction":
           return Response.redirect(
-            `${process.env.NEXT_PUBLIC_URL}/superrare/auction/${collectionAddress}/${tokenId}`,
+            `${process.env.NEXT_PUBLIC_URL}/superrare/auction/${collectionAddress}/${tokenId?.toString()}`,
             302
           );
         case "limited-mint":
@@ -28,7 +28,7 @@ async function response(
         case "fallback":
           if (tokenId != undefined) {
             return Response.redirect(
-              `${process.env.NEXT_PUBLIC_URL}/superrare/fallback/${collectionAddress}/${tokenId}`,
+              `${process.env.NEXT_PUBLIC_URL}/superrare/fallback/${collectionAddress}/${tokenId.toString()}`,
               302
             );
           } else {
@@ -41,9 +41,9 @@ async function response(
 
   return frameResponseWrapper({
     req,
-    postUrl: `${process.env.NEXT_PUBLIC_URL}/superrare/router/${collectionAddress}/${tokenId ? tokenId : ""}`,
+    postUrl: `${process.env.NEXT_PUBLIC_URL}/superrare/router/${collectionAddress}/${tokenId ? tokenId.toString() : ""}`,
     image: {
-      src: `${process.env.NEXT_PUBLIC_URL}/superrare/router/${collectionAddress}/image?t=${Date.now()}${tokenId ? `&tokenId=${tokenId}` : ""}`,
+      src: `${process.env.NEXT_PUBLIC_URL}/superrare/router/${collectionAddress}/image?t=${Date.now()}${tokenId != undefined ? `&tokenId=${tokenId.toString()}` : ""}`,
       aspectRatio: "1:1",
     },
     buttons: [

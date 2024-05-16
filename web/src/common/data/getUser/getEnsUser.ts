@@ -1,10 +1,10 @@
 import { SECONDS_PER_MONTH } from "@/utils/constants";
 import { mainnetPublicClient } from "@/utils/wallet";
-import { unstable_cache } from "next/cache";
 import { Address } from "viem";
 import { getEnsAvatar, getEnsName } from "viem/actions";
 import { normalize } from "viem/ens";
 import { User } from ".";
+import { customUnstableCache } from "@/common/utils/caching/customUnstableCache";
 
 async function getEnsUserUncached({ address }: { address: Address }): Promise<User | null> {
   const ensName = await getEnsName(mainnetPublicClient, { address });
@@ -20,4 +20,4 @@ async function getEnsUserUncached({ address }: { address: Address }): Promise<Us
   }
 }
 
-export const getEnsUser = unstable_cache(getEnsUserUncached, ["get-ens-user"], { revalidate: SECONDS_PER_MONTH });
+export const getEnsUser = customUnstableCache(getEnsUserUncached, ["get-ens-user"], { revalidate: SECONDS_PER_MONTH });

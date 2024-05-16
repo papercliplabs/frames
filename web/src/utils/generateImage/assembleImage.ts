@@ -1,6 +1,7 @@
 import sharp, { Color } from "sharp";
 import { Size } from "./types";
 import { unstable_cache } from "next/cache";
+import { customUnstableCache } from "@/common/utils/caching/customUnstableCache";
 
 interface AssembleImageParams {
   frameSize: Size;
@@ -46,4 +47,4 @@ async function assembleImageUncached({
   return imageBase64;
 }
 
-export const assembleImage = unstable_cache(assembleImageUncached, ["assemble-image"]);
+export const assembleImage = customUnstableCache(assembleImageUncached, ["assemble-image"]);

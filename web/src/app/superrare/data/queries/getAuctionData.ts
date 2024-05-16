@@ -1,15 +1,14 @@
 import { Address, isAddressEqual, zeroAddress } from "viem";
-import { cachedReadContract } from "@/utils/caching";
 import { readContract } from "viem/actions";
 import { mainnetPublicClient } from "@/utils/wallet";
 import { SUPERRARE_BRAZZER_ADDRESS } from "../../utils/constants";
-import { unstable_cache } from "next/cache";
 import { brazzerAbi } from "@/abis/superrare/brazzer";
 import { User, getUserData } from "./getUserData";
 import { bigIntMax } from "@/common/utils/bigInt";
 import { TokenData, getTokenData } from "./getTokenData";
 import { formatTimeLeft } from "@/utils/format";
-import "@/common/utils/bigIntPolyfill";
+import { customUnstableCache } from "@/common/utils/caching/customUnstableCache";
+import { readContractCached } from "@/common/utils/caching/readContractCached";
 
 interface GetAuctionDataParams {
   collectionAddress: Address;
@@ -53,7 +52,7 @@ export async function getAuctionDataUncached({
         functionName: "auctionBids",
         args: [collectionAddress, tokenId],
       }),
-      cachedReadContract(mainnetPublicClient, {
+      readContractCached(mainnetPublicClient, {
         address: SUPERRARE_BRAZZER_ADDRESS,
         abi: brazzerAbi,
         functionName: "minimumBidIncreasePercentage",
@@ -104,6 +103,6 @@ export async function getAuctionDataUncached({
   }
 }
 
-export const getAuctionData = unstable_cache(getAuctionDataUncached, ["get-auction-data"], {
+export const getAuctionData = customUnstableCache(getAuctionDataUncached, ["get-auction-data"], {
   revalidate: 10,
 });

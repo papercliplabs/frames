@@ -1,7 +1,7 @@
 import { supabase } from "@/supabase/supabase";
-import { unstable_cache } from "next/cache";
 import { Trainer, getTrainer } from "./trainer";
 import { getPersistentData } from "./internal/persistentData";
+import { customUnstableCache } from "@/common/utils/caching/customUnstableCache";
 
 async function getLeaderboardFidsUncached(n: number): Promise<number[]> {
   const { data, error } = await supabase.from("beanigotchi").select("fid").order("xp", { ascending: false }).limit(n);
@@ -13,7 +13,7 @@ async function getLeaderboardFidsUncached(n: number): Promise<number[]> {
   return data.map((entry) => entry.fid);
 }
 
-const getLeaderboardFids = unstable_cache(getLeaderboardFidsUncached, ["beanigotchi-get-leaderboard-fids"], {
+const getLeaderboardFids = customUnstableCache(getLeaderboardFidsUncached, ["beanigotchi-get-leaderboard-fids"], {
   revalidate: 30,
 });
 
@@ -38,7 +38,7 @@ async function getUserLeaderboardRankUncached({ fid }: { fid: number }): Promise
   return count;
 }
 
-export const getUserLeaderboardRank = unstable_cache(
+export const getUserLeaderboardRank = customUnstableCache(
   getUserLeaderboardRankUncached,
   ["beanigotchi-get-user-leaderboard-rank"],
   {

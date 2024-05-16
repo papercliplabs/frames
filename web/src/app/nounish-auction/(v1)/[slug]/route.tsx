@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { FrameRequest, getFrameHtmlResponse } from "@coinbase/onchainkit/frame";
 import { SupportedNounishAuctionSlug, nounishAuctionConfigs } from "../configs";
-import { unstable_cache } from "next/cache";
 import { getFrameMessageWithNeynarApiKey } from "@/utils/farcaster";
 import { parseEther } from "viem";
 import { detect } from "detect-browser";
+import { customUnstableCache } from "@/common/utils/caching/customUnstableCache";
 
 async function response(req: NextRequest, slug: string, frameRequest?: FrameRequest): Promise<Response> {
   const config = nounishAuctionConfigs[slug as SupportedNounishAuctionSlug];
@@ -20,7 +20,7 @@ async function response(req: NextRequest, slug: string, frameRequest?: FrameRequ
     return Response.redirect(config.auctionUrl);
   }
 
-  const data = await unstable_cache(config.getAuctionData, ["nounish-auction", slug], {
+  const data = await customUnstableCache(config.getAuctionData, ["nounish-auction", slug], {
     revalidate: 2,
   })();
 

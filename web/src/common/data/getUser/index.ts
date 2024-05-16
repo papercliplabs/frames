@@ -1,5 +1,4 @@
 import { shortenAddress } from "@/utils/wallet";
-import { unstable_cache } from "next/cache";
 import { Address } from "viem";
 import { getEnsUser } from "./getEnsUser";
 import { getFarcasterUser } from "./getFarcasterUser";

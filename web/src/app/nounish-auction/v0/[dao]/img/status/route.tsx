@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { baseImage } from "@/utils/baseImg";
 import { auctionConfigs, SupportedAuctionDao } from "@/app/nounish-auction/v0/daoConfig";
-import { unstable_cache } from "next/cache";
+import { customUnstableCache } from "@/common/utils/caching/customUnstableCache";
 
 export async function GET(req: NextRequest, { params }: { params: { dao: string } }): Promise<Response> {
   const config = auctionConfigs[params.dao as SupportedAuctionDao];
@@ -10,7 +10,7 @@ export async function GET(req: NextRequest, { params }: { params: { dao: string 
     console.error("No auction config found - ", params.dao);
   }
 
-  const { nounId, nounImgSrc, timeRemaining, bidFormatted, bidder, dynamicTextColor } = await unstable_cache(
+  const { nounId, nounImgSrc, timeRemaining, bidFormatted, bidder, dynamicTextColor } = await customUnstableCache(
     () =>
       config.getAuctionDetails({
         client: config.client,

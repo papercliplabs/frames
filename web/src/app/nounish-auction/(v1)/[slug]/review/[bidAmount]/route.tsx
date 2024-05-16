@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getFrameHtmlResponse } from "@coinbase/onchainkit/frame";
 import { SupportedNounishAuctionSlug, nounishAuctionConfigs } from "../../../configs";
-import { unstable_cache } from "next/cache";
 import { detect } from "detect-browser";
+import { customUnstableCache } from "@/common/utils/caching/customUnstableCache";
 
 // Only get request, since we just redirect to here, and this is terminal
 async function response(slug: string, bidAmount: string): Promise<Response> {
@@ -13,7 +13,7 @@ async function response(slug: string, bidAmount: string): Promise<Response> {
   }
 
   // Frame validation
-  const data = await unstable_cache(config.getAuctionData, ["nounish-auction", slug], {
+  const data = await customUnstableCache(config.getAuctionData, ["nounish-auction", slug], {
     revalidate: 2,
   })();
 

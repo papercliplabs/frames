@@ -2,11 +2,10 @@
 import { beansClient } from "@/common/beans/config/client";
 import { beansTokenContract } from "@/common/beans/config/contracts/token";
 import { Address } from "viem";
-import { readContractCached } from "@/common/viem/readContractCached";
 import { SECONDS_PER_MONTH } from "@/utils/constants";
 import { beansDescriptorContract } from "../config/contracts/descriptor";
 import { parseBase64Json } from "@/common/utils/base64";
-import "@/common/utils/bigIntPolyfill";
+import { readContractCached } from "@/common/utils/caching/readContractCached";
 
 interface GetBeanParams {
   beanId: bigint;

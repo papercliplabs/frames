@@ -1,6 +1,7 @@
+import { customUnstableCache } from "@/common/utils/caching/customUnstableCache";
 import { Database } from "@/supabase/codegen.types";
 import { supabase } from "@/supabase/supabase";
-import { revalidateTag, unstable_cache } from "next/cache";
+import { revalidateTag } from "next/cache";
 
 type BeanigotchiPersistentData = Database["public"]["Tables"]["beanigotchi"]["Row"];
 
@@ -27,7 +28,7 @@ async function getPersistentDataUncached({
 export async function getPersistentData({
   fid,
 }: GetPersistentDataParams): Promise<{ data: BeanigotchiPersistentData; newEntry: boolean }> {
-  return unstable_cache((fid: number) => getPersistentDataUncached({ fid }), ["beanigotchi-get-persistent-data"], {
+  return customUnstableCache((fid: number) => getPersistentDataUncached({ fid }), ["beanigotchi-get-persistent-data"], {
     tags: [`beanigotchi-get-persistent-data-${fid}`],
   })(fid);
 }

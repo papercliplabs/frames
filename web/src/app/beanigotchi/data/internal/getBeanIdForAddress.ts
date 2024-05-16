@@ -1,9 +1,8 @@
 import { Address } from "viem";
-import "@/common/utils/bigIntPolyfill";
-import { readContractCached } from "@/common/viem/readContractCached";
 import { beansClient } from "@/common/beans/config/client";
 import { beansTokenContract } from "@/common/beans/config/contracts/token";
 import { SECONDS_PER_DAY } from "@/utils/constants";
+import { readContractCached } from "@/common/utils/caching/readContractCached";
 
 interface GetBeanIdForAddressParams {
   ownerAddress: Address;

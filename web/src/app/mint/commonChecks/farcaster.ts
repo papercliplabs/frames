@@ -1,5 +1,4 @@
 import { getFollowerUserIdsForChannel, getLikedUserIdsForCast, getUserInfo } from "@/utils/farcaster";
-import { revalidateTag, unstable_cache } from "next/cache";
 import { Address } from "viem";
 
 export async function isCastLikedByUser(userAddress: Address, userId: number, castHash: string): Promise<boolean> {

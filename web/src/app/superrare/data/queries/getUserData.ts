@@ -2,7 +2,7 @@ import { Address } from "viem";
 import { gql } from "../generated";
 import { getSuperrareApolloClient } from "../client";
 import { shortenAddress } from "@/utils/wallet";
-import { unstable_cache } from "next/cache";
+import { customUnstableCache } from "@/common/utils/caching/customUnstableCache";
 
 interface GetUserDataParams {
   userAddress: Address;
@@ -55,4 +55,4 @@ async function getUserDataUncached({ userAddress }: GetUserDataParams): Promise<
   };
 }
 
-export const getUserData = unstable_cache(getUserDataUncached, ["get-user-data"]);
+export const getUserData = customUnstableCache(getUserDataUncached, ["get-user-data"]);
