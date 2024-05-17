@@ -9,6 +9,7 @@ import { yellowCollectiveAuctionConfig } from "./slugConfigs/yellow";
 import { africaAuctionConfig } from "./slugConfigs/africa";
 import { parkAuctionConfig } from "./slugConfigs/park";
 import { lilToadzAuctionConfig } from "./slugConfigs/lilToadz";
+import { memberAuctionConfig } from "./slugConfigs/member";
 
 export type SupportedNounsBuilderDao =
   | "gnars"
@@ -17,7 +18,8 @@ export type SupportedNounsBuilderDao =
   | "yellow-collective"
   | "africa"
   | "park"
-  | "lil-toadz";
+  | "lil-toadz"
+  | "member";
 
 export interface NounsBuilderAuctionConfig {
   client: Client;
@@ -35,4 +37,5 @@ export const nounsBuilderAuctionConfigs: Record<SupportedNounsBuilderDao, NounsB
   africa: africaAuctionConfig,
   park: parkAuctionConfig,
   "lil-toadz": lilToadzAuctionConfig,
+  member: memberAuctionConfig,
 };
