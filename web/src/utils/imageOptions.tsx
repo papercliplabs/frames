@@ -135,12 +135,12 @@ const fontConfigs: Record<FontType, FontConfig[]> = {
   ],
   "arial-narrow": [
     {
-      path: "fonts/arial-narrow/regular.ttf",
+      path: "fonts/arial-narrow-2/regular.ttf",
       weight: 400,
       style: "normal",
     },
     {
-      path: "fonts/arial-narrow/bold.ttf",
+      path: "fonts/arial-narrow-2/bold.ttf",
       weight: 700,
       style: "normal",
     },
