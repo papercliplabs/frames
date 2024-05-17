@@ -10,7 +10,8 @@ export type FontType =
   | "noto"
   | "roboto"
   | "roboto-mono"
-  | "arial-narrow";
+  | "arial-narrow"
+  | "helvetica-neue";
 
 interface FontConfig {
   path: string;
@@ -140,6 +141,18 @@ const fontConfigs: Record<FontType, FontConfig[]> = {
     },
     {
       path: "fonts/arial-narrow/bold.ttf",
+      weight: 700,
+      style: "normal",
+    },
+  ],
+  "helvetica-neue": [
+    {
+      path: "fonts/helvetica-neue/regular.ttf",
+      weight: 400,
+      style: "normal",
+    },
+    {
+      path: "fonts/helvetica-neue/bold.ttf",
       weight: 700,
       style: "normal",
     },
