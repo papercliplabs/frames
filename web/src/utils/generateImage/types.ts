@@ -10,7 +10,7 @@ export interface Size {
 interface BaseImageLayer {
   size: Size;
   position?: { left: number; top: number };
-  extrude?: { left: number; right: number };
+  extrude?: { left?: number; right?: number; top?: number; bottom?: number };
   borderRadius?: number;
 }
 
