@@ -77,9 +77,16 @@ async function generateLayerImageBufferUncached({
   }
 
   if (layer.extrude) {
+    sharpImage = sharpImage.resize(
+      layer.size.width - (layer.extrude.left ?? 0) - (layer.extrude.right ?? 0),
+      layer.size.height - (layer.extrude.top ?? 0) - (layer.extrude.bottom ?? 0)
+    );
+    sharpImage.toFile("beforeExtrude.png");
     const extrudedImage = sharpImage.extend({
       left: layer.extrude.left,
       right: layer.extrude.right,
+      top: layer.extrude.top,
+      bottom: layer.extrude.bottom,
       extendWith: "copy",
     });
     sharpImage = await sharp(await extrudedImage.toBuffer());

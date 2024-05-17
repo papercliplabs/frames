@@ -42,7 +42,7 @@ export async function myBeanImageResponse({
         src: beanImgSrc,
         size: { width: Math.floor(820 * SCALER), height: Math.floor(740 * SCALER) },
         position: { left: Math.floor(200 * SCALER), top: Math.floor(188 * SCALER) },
-        extrude: { left: Math.floor(240 * SCALER), right: Math.floor(240 * SCALER) },
+        extrude: { left: Math.floor(40 * SCALER), right: Math.floor(40 * SCALER) },
         animated: false,
       },
       {

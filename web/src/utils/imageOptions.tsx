@@ -9,7 +9,8 @@ export type FontType =
   | "inter"
   | "noto"
   | "roboto"
-  | "roboto-mono";
+  | "roboto-mono"
+  | "arial-narrow";
 
 interface FontConfig {
   path: string;
@@ -127,6 +128,18 @@ const fontConfigs: Record<FontType, FontConfig[]> = {
     },
     {
       path: "fonts/roboto-mono/bold.ttf",
+      weight: 700,
+      style: "normal",
+    },
+  ],
+  "arial-narrow": [
+    {
+      path: "fonts/arial-narrow/regular.ttf",
+      weight: 400,
+      style: "normal",
+    },
+    {
+      path: "fonts/arial-narrow/bold.ttf",
       weight: 700,
       style: "normal",
     },
