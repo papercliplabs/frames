@@ -47,7 +47,9 @@ export type SupportedTransactionFlowSlug =
   | "gnars-auction"
   | "africa-auction"
   | "energy-auction"
-  | "purple-auction";
+  | "purple-auction"
+  | "park-auction"
+  | "lil-toadz-auction";
 
 export const transactionFlowConfigs: Record<SupportedTransactionFlowSlug, TransactionFlowConfig> = {
   "yellow-collective-auction": yellowCollectiveAuctionTransactionFlowConfig,
@@ -59,4 +61,6 @@ export const transactionFlowConfigs: Record<SupportedTransactionFlowSlug, Transa
   "africa-auction": nounsBuilderAuctionGenericTransactionFlowConfig(basePublicClient, "africa"),
   "purple-auction": nounsBuilderAuctionGenericTransactionFlowConfig(basePublicClient, "purple"),
   "energy-auction": nounsBuilderAuctionGenericTransactionFlowConfig(zoraPublicClient, "energy"),
+  "park-auction": nounsBuilderAuctionGenericTransactionFlowConfig(basePublicClient, "park"),
+  "lil-toadz-auction": nounsBuilderAuctionGenericTransactionFlowConfig(basePublicClient, "lil-toadz"),
 };

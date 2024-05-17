@@ -7,8 +7,17 @@ import { purpleAuctionConfig } from "./slugConfigs/purple";
 import { energyAuctionConfig } from "./slugConfigs/energy";
 import { yellowCollectiveAuctionConfig } from "./slugConfigs/yellow";
 import { africaAuctionConfig } from "./slugConfigs/africa";
+import { parkAuctionConfig } from "./slugConfigs/park";
+import { lilToadzAuctionConfig } from "./slugConfigs/lilToadz";
 
-export type SupportedNounsBuilderDao = "gnars" | "purple" | "energy" | "yellow-collective" | "africa";
+export type SupportedNounsBuilderDao =
+  | "gnars"
+  | "purple"
+  | "energy"
+  | "yellow-collective"
+  | "africa"
+  | "park"
+  | "lil-toadz";
 
 export interface NounsBuilderAuctionConfig {
   client: Client;
@@ -24,4 +33,6 @@ export const nounsBuilderAuctionConfigs: Record<SupportedNounsBuilderDao, NounsB
   energy: energyAuctionConfig,
   "yellow-collective": yellowCollectiveAuctionConfig,
   africa: africaAuctionConfig,
+  park: parkAuctionConfig,
+  "lil-toadz": lilToadzAuctionConfig,
 };
