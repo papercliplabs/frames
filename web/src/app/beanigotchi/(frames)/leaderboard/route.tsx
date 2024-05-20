@@ -18,7 +18,7 @@ async function response(req: Request): Promise<Response> {
       "text",
       `I made it to trainer level ${trainer.levelStatus.level} and rank ${userRank} on the Beanigotchi leaderboard!`
     );
-    shareLinkParams.append("embeds[]", `${BEANIGOTCHI_FRAME_BASE_URL}/leaderboard`);
+    shareLinkParams.append("embeds[]", `${BEANIGOTCHI_FRAME_BASE_URL}/leaderboard?t=${Date.now()}`);
   }
 
   return frameResponseWrapper({
