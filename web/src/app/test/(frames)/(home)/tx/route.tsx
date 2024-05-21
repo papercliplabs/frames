@@ -2,11 +2,9 @@ import { NextRequest } from "next/server";
 import { FrameRequest } from "@coinbase/onchainkit/frame";
 import { FrameTransactionResponse } from "@coinbase/onchainkit/frame";
 import { base } from "viem/chains";
-import { SUPERRARE_BRAZZER_ADDRESS } from "@/app/superrare/utils/constants";
 import { encodeFunctionData, erc20Abi, getAddress } from "viem";
 import { getFrameMessageWithNeynarApiKey } from "@/utils/farcaster";
 import { frameErrorResponse } from "@/utils/frameErrorResponse";
-import { brazzerAbi } from "@/abis/superrare/brazzer";
 import { readContract } from "viem/actions";
 import { basePublicClient } from "@/utils/wallet";
 
