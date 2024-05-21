@@ -4,7 +4,7 @@ import { FrameTransactionResponse } from "@coinbase/onchainkit/frame";
 import { mainnet } from "viem/chains";
 import { SUPERRARE_MINTER_PROXY_ADDRESS, SUPERRARE_NETWORK_FEE_PERCENT } from "@/app/superrare/utils/constants";
 import { encodeFunctionData, getAddress } from "viem";
-import { rareMinterAbi } from "@/abis/superrare/rareMinter";
+import { rareMinterAbi } from "@/app/superrare/abis/rareMinter";
 import { getLimitedMintDataUncached } from "@/app/superrare/data/queries/getLimitedMintData";
 import { readContract } from "viem/actions";
 import { getFrameMessageWithNeynarApiKey } from "@/utils/farcaster";

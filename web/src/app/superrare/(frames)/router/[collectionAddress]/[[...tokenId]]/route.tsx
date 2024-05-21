@@ -17,6 +17,7 @@ async function response(
     // Interact button
     if (frameRequest.untrustedData.buttonIndex == 1) {
       const artworkState = await getArtworkState({ collectionAddress, tokenId });
+
       switch (artworkState) {
         case "auction":
           return Response.redirect(
@@ -25,6 +26,11 @@ async function response(
           );
         case "limited-mint":
           return Response.redirect(`${process.env.NEXT_PUBLIC_URL}/superrare/limited-mint/${collectionAddress}`, 302);
+        case "buy-now":
+          return Response.redirect(
+            `${process.env.NEXT_PUBLIC_URL}/superrare/buy-now/${collectionAddress}/${tokenId?.toString()}`,
+            302
+          );
         case "fallback":
           if (tokenId != undefined) {
             return Response.redirect(

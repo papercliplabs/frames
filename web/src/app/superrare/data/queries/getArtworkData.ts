@@ -3,11 +3,11 @@ import { gql } from "../generated";
 import { getSuperrareApolloClient } from "../client";
 import { mainnetPublicClient } from "@/utils/wallet";
 import { fetchIpfsData } from "@/utils/fetchIpfsDats";
-import { baseNft } from "@/abis/superrare/baseNft";
 import { User, getUserData } from "./getUserData";
 import { readContractCached } from "@/common/utils/caching/readContractCached";
 import { SECONDS_PER_DAY } from "@/utils/constants";
 import { customUnstableCache } from "@/common/utils/caching/customUnstableCache";
+import { baseNft } from "../../abis/baseNft";
 
 interface GetArtworkDataParams {
   collectionAddress: Address;

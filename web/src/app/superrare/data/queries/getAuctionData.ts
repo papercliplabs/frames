@@ -2,13 +2,13 @@ import { Address, isAddressEqual, zeroAddress } from "viem";
 import { readContract } from "viem/actions";
 import { mainnetPublicClient } from "@/utils/wallet";
 import { SUPERRARE_BRAZZER_ADDRESS } from "../../utils/constants";
-import { brazzerAbi } from "@/abis/superrare/brazzer";
 import { User, getUserData } from "./getUserData";
 import { bigIntMax } from "@/common/utils/bigInt";
 import { TokenData, getTokenData } from "./getTokenData";
 import { formatTimeLeft } from "@/utils/format";
 import { customUnstableCache } from "@/common/utils/caching/customUnstableCache";
 import { readContractCached } from "@/common/utils/caching/readContractCached";
+import { brazzerAbi } from "../../abis/brazzer";
 
 interface GetAuctionDataParams {
   collectionAddress: Address;
