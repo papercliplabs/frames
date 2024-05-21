@@ -66,8 +66,8 @@ export function artworkImageResponse({
             {tag ? (
               <div
                 tw={clsx(
-                  "flex px-8 py-4 rounded-[16px] border items-center mr-auto",
-                  tag.active ? "bg-white text-black border-black/20" : "bg-background-secondary border-white/20"
+                  "flex px-6 py-2 rounded-[16px] border-[2px] items-center mr-auto ",
+                  tag.active ? "bg-white/90 text-black border-black/20" : "bg-background-secondary/90 border-white/20"
                 )}
                 style={{ gap: "32px", flexShrink: 1 }}
               >
@@ -79,7 +79,7 @@ export function artworkImageResponse({
             ) : (
               <div />
             )}
-            <div tw="flex flex-col w-full" style={{ gap: "64px", textShadow: "0px 0px 2px rgba(0, 0, 0, 0.90)" }}>
+            <div tw="flex flex-col w-full" style={{ gap: "48px", textShadow: "0px 0px 2px rgba(0, 0, 0, 0.90)" }}>
               <div
                 tw="flex text-title"
                 style={{

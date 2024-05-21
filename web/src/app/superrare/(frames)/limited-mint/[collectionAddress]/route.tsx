@@ -4,9 +4,9 @@ import { relativeEndpointUrl } from "@/utils/urlHelpers";
 import { getAddress } from "viem";
 import { getLimitedMintData } from "../../../data/queries/getLimitedMintData";
 import { readContract } from "viem/actions";
-import { baseNft } from "@/abis/superrare/baseNft";
 import { mainnetPublicClient } from "@/utils/wallet";
 import { FrameButtonMetadata } from "@coinbase/onchainkit/frame";
+import { baseNft } from "@/app/superrare/abis/baseNft";
 
 async function response(req: Request, { params }: { params: { collectionAddress: string } }): Promise<Response> {
   const collectionAddress = getAddress(params.collectionAddress);
