@@ -39,3 +39,5 @@ next-env.d.ts
 
 src/supabase/codegen*
 **/generated/**
+
+supabase/**

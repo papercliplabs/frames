@@ -20,12 +20,12 @@ export const nounsAuctionTransactionFlowConfig: TransactionFlowConfig = {
     success: {
       label: "Back to auction",
       action: "post",
-      target: `${process.env.NEXT_PUBLIC_URL}/nounish-auction/nouns`,
+      target: `${process.env.NEXT_PUBLIC_URL}/nounish-auction/v2/nouns`,
     },
     failed: {
       label: "Try Again",
       action: "post",
-      target: `${process.env.NEXT_PUBLIC_URL}/nounish-auction/nouns`,
+      target: `${process.env.NEXT_PUBLIC_URL}/nounish-auction/v2/nouns`,
     },
   },
 };
