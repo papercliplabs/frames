@@ -5,7 +5,7 @@
   "scripts": {
     "codegen": "graphql-codegen --config src/app/superrare/data/codegen.ts; graphql-codegen --config src/common/data/yellowCollective/codegen.ts; npx --silent supabase gen types typescript --project-id maigwjhtcdimlttkflad > src/supabase/codegen.types.ts",
     "dev": "next dev",
-    "build": "yarn codegen; next build",
+    "build": "pnpm codegen; next build",
     "start": "next start",
     "lint": "next lint",
     "watch": "graphql-codegen --config src/data/superrare/codegen.ts -w && graphql-codegen --config src/data/yellowCollective/codegen.ts -w"
