@@ -1,14 +1,12 @@
 import { NextRequest } from "next/server";
 import { FrameRequest } from "@coinbase/onchainkit/frame";
 import { FrameTransactionResponse } from "@coinbase/onchainkit/frame";
-import { mainnet } from "viem/chains";
-import { SUPERRARE_MINTER_PROXY_ADDRESS, SUPERRARE_NETWORK_FEE_PERCENT } from "@/app/superrare/utils/constants";
+import { SUPERRARE_CHAIN_CONFIG } from "@/app/superrare/config";
 import { encodeFunctionData, getAddress } from "viem";
 import { rareMinterAbi } from "@/app/superrare/abis/rareMinter";
 import { getLimitedMintDataUncached } from "@/app/superrare/data/queries/getLimitedMintData";
 import { readContract } from "viem/actions";
 import { getFrameMessageWithNeynarApiKey } from "@/utils/farcaster";
-import { mainnetPublicClient } from "@/common/utils/walletClients";
 import { frameErrorResponse } from "@/common/utils/frameResponse";
 
 export async function POST(req: NextRequest, { params }: { params: { collectionAddress: string } }): Promise<Response> {
@@ -36,14 +34,14 @@ export async function POST(req: NextRequest, { params }: { params: { collectionA
   const userAddress = getAddress(userAddressString);
 
   const [userMintCount, userTxnCount] = await Promise.all([
-    readContract(mainnetPublicClient, {
-      address: SUPERRARE_MINTER_PROXY_ADDRESS,
+    readContract(SUPERRARE_CHAIN_CONFIG.client, {
+      address: SUPERRARE_CHAIN_CONFIG.addresses.superrareMinter,
       abi: rareMinterAbi,
       functionName: "getContractMintsPerAddress",
       args: [collectionAddress, userAddress],
     }),
-    readContract(mainnetPublicClient, {
-      address: SUPERRARE_MINTER_PROXY_ADDRESS,
+    readContract(SUPERRARE_CHAIN_CONFIG.client, {
+      address: SUPERRARE_CHAIN_CONFIG.addresses.superrareMinter,
       abi: rareMinterAbi,
       functionName: "getContractTxsPerAddress",
       args: [collectionAddress, userAddress],
@@ -67,14 +65,15 @@ export async function POST(req: NextRequest, { params }: { params: { collectionA
     return frameErrorResponse(errorMessage);
   }
 
-  const priceWithFee = limitedMintData.price + (limitedMintData.price * SUPERRARE_NETWORK_FEE_PERCENT) / BigInt(100);
+  const priceWithFee =
+    limitedMintData.price + (limitedMintData.price * SUPERRARE_CHAIN_CONFIG.superrareNetworkFeePercent) / BigInt(100);
 
   const txResponse = {
-    chainId: `eip155:${mainnet.id}`,
+    chainId: `eip155:${SUPERRARE_CHAIN_CONFIG.client.chain!.id}`,
     method: "eth_sendTransaction",
     params: {
       abi: rareMinterAbi,
-      to: SUPERRARE_MINTER_PROXY_ADDRESS,
+      to: SUPERRARE_CHAIN_CONFIG.addresses.superrareMinter,
       data: encodeFunctionData({
         abi: rareMinterAbi,
         functionName: "mintDirectSale",

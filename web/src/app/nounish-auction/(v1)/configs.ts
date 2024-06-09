@@ -1,7 +1,7 @@
 import { FontType } from "@/utils/imageOptions";
 import { yellowCollectiveAuctionConfig } from "./slugConfigs/yellowCollective";
 import { FrameTransactionResponse } from "@coinbase/onchainkit/frame";
-import { SupportedTransactionFlowSlug } from "../../transaction-flow/config";
+import { SupportedTransactionFlowSlug } from "@/app/transaction-flow/(v0)/config";
 import { beansConfig } from "./slugConfigs/beans";
 import { nounsAuctionConfig } from "./slugConfigs/nouns";
 

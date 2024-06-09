@@ -1,12 +1,11 @@
-import { SUPERRARE_BASE_URL } from "@/app/superrare/utils/constants";
 import { frameResponse } from "@/common/utils/frameResponse";
 import { relativeEndpointUrl } from "@/utils/urlHelpers";
 import { getAddress } from "viem";
 import { getLimitedMintData } from "../../../data/queries/getLimitedMintData";
 import { readContract } from "viem/actions";
-import { mainnetPublicClient } from "@/common/utils/walletClients";
 import { FrameButtonMetadata } from "@coinbase/onchainkit/frame";
 import { baseNft } from "@/app/superrare/abis/baseNft";
+import { SUPERRARE_CHAIN_CONFIG } from "@/app/superrare/config";
 
 async function response(req: Request, { params }: { params: { collectionAddress: string } }): Promise<Response> {
   const collectionAddress = getAddress(params.collectionAddress);
@@ -16,7 +15,7 @@ async function response(req: Request, { params }: { params: { collectionAddress:
   });
 
   if (!limitedMintData) {
-    const tokenId = await readContract(mainnetPublicClient, {
+    const tokenId = await readContract(SUPERRARE_CHAIN_CONFIG.client, {
       address: collectionAddress,
       abi: baseNft,
       functionName: "totalSupply",
@@ -29,7 +28,7 @@ async function response(req: Request, { params }: { params: { collectionAddress:
   }
 
   const transactionFlowSearchParams = new URLSearchParams({ successMessage: "You minted it!" });
-  const href = `${SUPERRARE_BASE_URL}/releases/${params.collectionAddress.toLowerCase()}`;
+  const href = `${SUPERRARE_CHAIN_CONFIG.superrareBaseUrl}/releases/${params.collectionAddress.toLowerCase()}`;
   return frameResponse({
     req,
     // browserRedirectUrl: href,

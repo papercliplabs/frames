@@ -1,7 +1,7 @@
 import { readContractCached } from "@/common/utils/caching/readContractCached";
-import { SECONDS_PER_MONTH, SECONDS_PER_WEEK } from "@/utils/constants";
-import { mainnetPublicClient } from "@/common/utils/walletClients";
+import { SECONDS_PER_MONTH } from "@/utils/constants";
 import { Address, erc20Abi, isAddressEqual, zeroAddress } from "viem";
+import { SUPERRARE_CHAIN_CONFIG } from "../../config";
 
 interface GetTokenDataParams {
   tokenAddress: Address;
@@ -24,7 +24,7 @@ export async function getTokenData({ tokenAddress }: GetTokenDataParams): Promis
 
   const [symbol, decimals] = await Promise.all([
     readContractCached(
-      mainnetPublicClient,
+      SUPERRARE_CHAIN_CONFIG.client,
       {
         address: tokenAddress,
         abi: erc20Abi,
@@ -33,7 +33,7 @@ export async function getTokenData({ tokenAddress }: GetTokenDataParams): Promis
       { revalidate: SECONDS_PER_MONTH }
     ),
     readContractCached(
-      mainnetPublicClient,
+      SUPERRARE_CHAIN_CONFIG.client,
       {
         address: tokenAddress,
         abi: erc20Abi,

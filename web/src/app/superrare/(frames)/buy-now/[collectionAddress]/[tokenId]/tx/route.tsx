@@ -1,8 +1,7 @@
 import { NextRequest } from "next/server";
 import { FrameRequest } from "@coinbase/onchainkit/frame";
 import { FrameTransactionResponse } from "@coinbase/onchainkit/frame";
-import { mainnet } from "viem/chains";
-import { SUPERRARE_BRAZZER_ADDRESS, SUPERRARE_NETWORK_FEE_PERCENT } from "@/app/superrare/utils/constants";
+import { SUPERRARE_CHAIN_CONFIG } from "@/app/superrare/config";
 import { encodeFunctionData, getAddress } from "viem";
 import { getFrameMessageWithNeynarApiKey } from "@/utils/farcaster";
 import { frameErrorResponse } from "@/common/utils/frameResponse";
@@ -39,14 +38,15 @@ export async function POST(
     return frameErrorResponse("Error: no longer for sale");
   }
 
-  const priceWithFee = buyNowData.price + (buyNowData.price * SUPERRARE_NETWORK_FEE_PERCENT) / BigInt(100);
+  const priceWithFee =
+    buyNowData.price + (buyNowData.price * SUPERRARE_CHAIN_CONFIG.superrareNetworkFeePercent) / BigInt(100);
 
   const txResponse = {
-    chainId: `eip155:${mainnet.id}`,
+    chainId: `eip155:${SUPERRARE_CHAIN_CONFIG.client.chain!.id}`,
     method: "eth_sendTransaction",
     params: {
       abi: brazzerAbi,
-      to: SUPERRARE_BRAZZER_ADDRESS,
+      to: SUPERRARE_CHAIN_CONFIG.addresses.superrareBazaar,
       data: encodeFunctionData({
         abi: brazzerAbi,
         functionName: "buy",

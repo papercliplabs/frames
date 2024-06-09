@@ -1,7 +1,6 @@
 import { Address, isAddressEqual, zeroAddress } from "viem";
 import { readContract } from "viem/actions";
-import { mainnetPublicClient } from "@/common/utils/walletClients";
-import { SUPERRARE_MINTER_PROXY_ADDRESS } from "../../utils/constants";
+import { SUPERRARE_CHAIN_CONFIG } from "../../config";
 import { TokenData, getTokenData } from "./getTokenData";
 import { readContractCached } from "@/common/utils/caching/readContractCached";
 import { SECONDS_PER_HOUR } from "@/utils/constants";
@@ -32,13 +31,13 @@ export async function getLimitedMintDataUncached({
   try {
     const [currentSupply, maxSupply, directSaleConfig, maxMintsPerAddress, txnLimitPerAddress, allowListConfig] =
       await Promise.all([
-        readContract(mainnetPublicClient, {
+        readContract(SUPERRARE_CHAIN_CONFIG.client, {
           address: collectionAddress,
           abi: baseNft,
           functionName: "totalSupply",
         }),
         readContractCached(
-          mainnetPublicClient,
+          SUPERRARE_CHAIN_CONFIG.client,
           {
             address: collectionAddress,
             abi: baseNft,
@@ -47,9 +46,9 @@ export async function getLimitedMintDataUncached({
           { revalidate: SECONDS_PER_HOUR }
         ),
         readContractCached(
-          mainnetPublicClient,
+          SUPERRARE_CHAIN_CONFIG.client,
           {
-            address: SUPERRARE_MINTER_PROXY_ADDRESS,
+            address: SUPERRARE_CHAIN_CONFIG.addresses.superrareMinter,
             abi: rareMinterAbi,
             functionName: "getDirectSaleConfig",
             args: [collectionAddress],
@@ -57,9 +56,9 @@ export async function getLimitedMintDataUncached({
           { revalidate: SECONDS_PER_HOUR }
         ),
         readContractCached(
-          mainnetPublicClient,
+          SUPERRARE_CHAIN_CONFIG.client,
           {
-            address: SUPERRARE_MINTER_PROXY_ADDRESS,
+            address: SUPERRARE_CHAIN_CONFIG.addresses.superrareMinter,
             abi: rareMinterAbi,
             functionName: "getContractMintLimit",
             args: [collectionAddress],
@@ -67,9 +66,9 @@ export async function getLimitedMintDataUncached({
           { revalidate: SECONDS_PER_HOUR }
         ),
         readContractCached(
-          mainnetPublicClient,
+          SUPERRARE_CHAIN_CONFIG.client,
           {
-            address: SUPERRARE_MINTER_PROXY_ADDRESS,
+            address: SUPERRARE_CHAIN_CONFIG.addresses.superrareMinter,
             abi: rareMinterAbi,
             functionName: "getContractTxLimit",
             args: [collectionAddress],
@@ -77,9 +76,9 @@ export async function getLimitedMintDataUncached({
           { revalidate: SECONDS_PER_HOUR }
         ),
         readContractCached(
-          mainnetPublicClient,
+          SUPERRARE_CHAIN_CONFIG.client,
           {
-            address: SUPERRARE_MINTER_PROXY_ADDRESS,
+            address: SUPERRARE_CHAIN_CONFIG.addresses.superrareMinter,
             abi: rareMinterAbi,
             functionName: "getContractAllowListConfig",
             args: [collectionAddress],

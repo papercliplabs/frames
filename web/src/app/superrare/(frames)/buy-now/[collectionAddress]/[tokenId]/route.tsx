@@ -1,5 +1,6 @@
+import { Erc20TransactionInputState } from "@/app/erc-20-transaction/types";
 import { getBuyNowData } from "@/app/superrare/data/queries/getBuyNowData";
-import { SUPERRARE_BASE_URL } from "@/app/superrare/utils/constants";
+import { SUPERRARE_CHAIN_CONFIG } from "@/app/superrare/config";
 import { frameResponse } from "@/common/utils/frameResponse";
 import { relativeEndpointUrl } from "@/utils/urlHelpers";
 import { FrameButtonMetadata } from "@coinbase/onchainkit/frame";
@@ -26,7 +27,7 @@ async function response(
   }
 
   const transactionFlowSearchParams = new URLSearchParams({ successMessage: "You bought the artwork." });
-  const href = `${SUPERRARE_BASE_URL}/${params.collectionAddress.toLowerCase()}/${params.tokenId}`;
+  const href = `${SUPERRARE_CHAIN_CONFIG.superrareBaseUrl}/${params.collectionAddress.toLowerCase()}/${params.tokenId}`;
   return frameResponse({
     req,
     image: {
@@ -46,6 +47,9 @@ async function response(
           ]
         : []),
     ],
+    state: {
+      // chainId: SUPERRARE,
+    } as Erc20TransactionInputState,
   });
 }
 

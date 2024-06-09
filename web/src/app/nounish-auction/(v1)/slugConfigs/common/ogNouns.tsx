@@ -9,6 +9,7 @@ import { paperclipIcon } from "@/utils/paperclip";
 import { FrameTransactionResponse } from "@coinbase/onchainkit/frame";
 import { parseBase64String } from "./utils";
 import { bigIntMax } from "@/common/utils/bigInt";
+import { getUser } from "@/common/data/getUser";
 
 export type Colors = {
   background: string;
