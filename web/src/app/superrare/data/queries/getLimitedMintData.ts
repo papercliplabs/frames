@@ -1,6 +1,6 @@
 import { Address, isAddressEqual, zeroAddress } from "viem";
 import { readContract } from "viem/actions";
-import { mainnetPublicClient } from "@/utils/wallet";
+import { mainnetPublicClient } from "@/common/utils/walletClients";
 import { SUPERRARE_MINTER_PROXY_ADDRESS } from "../../utils/constants";
 import { TokenData, getTokenData } from "./getTokenData";
 import { readContractCached } from "@/common/utils/caching/readContractCached";

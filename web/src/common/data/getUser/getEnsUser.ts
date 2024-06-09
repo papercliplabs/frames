@@ -1,5 +1,5 @@
 import { SECONDS_PER_MONTH } from "@/utils/constants";
-import { mainnetPublicClient } from "@/utils/wallet";
+import { mainnetPublicClient } from "@/common/utils/walletClients";
 import { Address } from "viem";
 import { getEnsAvatar, getEnsName } from "viem/actions";
 import { normalize } from "viem/ens";

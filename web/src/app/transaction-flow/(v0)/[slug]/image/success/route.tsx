@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { ImageResponse } from "next/og";
 import { getDefaultSquareImageOptions } from "@/utils/imageOptions";
-import { SupportedTransactionFlowSlug, transactionFlowConfigs } from "@/app/transaction-flow/config";
+import { SupportedTransactionFlowSlug, transactionFlowConfigs } from "@/app/transaction-flow/(v0)/config";
 import { paperclipIcon } from "@/utils/paperclip";
 
 export async function GET(req: NextRequest, { params }: { params: { slug: string } }): Promise<Response> {

@@ -1,5 +1,5 @@
 import { getArtworkState } from "@/app/superrare/data/queries/getArtworkState";
-import frameResponseWrapper from "@/utils/frameResponseWrapper";
+import { frameResponse } from "@/common/utils/frameResponse";
 import { FrameRequest } from "@coinbase/onchainkit/frame";
 import { getAddress } from "viem";
 import { track } from "@vercel/analytics/server";
@@ -49,7 +49,7 @@ async function response(
     }
   }
 
-  return frameResponseWrapper({
+  return frameResponse({
     req,
     postUrl: `${process.env.NEXT_PUBLIC_URL}/superrare/router/${collectionAddress}/${tokenId ? tokenId.toString() : ""}`,
     image: {

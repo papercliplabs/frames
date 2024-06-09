@@ -1,4 +1,4 @@
-import frameResponseWrapper from "@/utils/frameResponseWrapper";
+import { frameResponse } from "@/common/utils/frameResponse";
 import { relativeEndpointUrl } from "@/utils/urlHelpers";
 import { SupportedNounsBuilderDao, nounsBuilderAuctionConfigs } from "../../configs";
 
@@ -11,7 +11,7 @@ async function response(req: Request, { params }: { params: { slug: string } }):
   }
 
   const transactionFlowSearchParams = new URLSearchParams({ successMessage: "Your bid was submitted!" });
-  return frameResponseWrapper({
+  return frameResponse({
     req,
     browserRedirectUrl: config.frontendUrl,
     image: {

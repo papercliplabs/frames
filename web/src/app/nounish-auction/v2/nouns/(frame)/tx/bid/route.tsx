@@ -4,7 +4,7 @@ import { FrameTransactionResponse } from "@coinbase/onchainkit/frame";
 import { base, mainnet } from "viem/chains";
 import { encodeFunctionData, formatEther, getAddress, parseEther } from "viem";
 import { getFrameMessageWithNeynarApiKey } from "@/utils/farcaster";
-import { frameErrorResponse } from "@/utils/frameErrorResponse";
+import { frameErrorResponse } from "@/common/utils/frameResponse";
 import { formatNumber } from "@/utils/format";
 import "@/common/utils/bigIntPolyfill";
 import { getCurrentAuction } from "@/common/nouns/data/getCurrentAuction";

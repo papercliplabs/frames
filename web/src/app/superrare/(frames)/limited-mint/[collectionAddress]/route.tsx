@@ -1,10 +1,10 @@
 import { SUPERRARE_BASE_URL } from "@/app/superrare/utils/constants";
-import frameResponseWrapper from "@/utils/frameResponseWrapper";
+import { frameResponse } from "@/common/utils/frameResponse";
 import { relativeEndpointUrl } from "@/utils/urlHelpers";
 import { getAddress } from "viem";
 import { getLimitedMintData } from "../../../data/queries/getLimitedMintData";
 import { readContract } from "viem/actions";
-import { mainnetPublicClient } from "@/utils/wallet";
+import { mainnetPublicClient } from "@/common/utils/walletClients";
 import { FrameButtonMetadata } from "@coinbase/onchainkit/frame";
 import { baseNft } from "@/app/superrare/abis/baseNft";
 
@@ -30,7 +30,7 @@ async function response(req: Request, { params }: { params: { collectionAddress:
 
   const transactionFlowSearchParams = new URLSearchParams({ successMessage: "You minted it!" });
   const href = `${SUPERRARE_BASE_URL}/releases/${params.collectionAddress.toLowerCase()}`;
-  return frameResponseWrapper({
+  return frameResponse({
     req,
     // browserRedirectUrl: href,
     postUrl: `${process.env.NEXT_PUBLIC_URL}/superrare/limited-mint/${collectionAddress}`,

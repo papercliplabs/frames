@@ -1,4 +1,4 @@
-import frameResponseWrapper from "@/utils/frameResponseWrapper";
+import { frameResponse } from "@/common/utils/frameResponse";
 import { relativeEndpointUrl } from "@/utils/urlHelpers";
 import { FrameButtonMetadata } from "@coinbase/onchainkit/frame";
 
@@ -6,7 +6,7 @@ const FRONTEND_AUCTION_URL = "https://vrbs.build/";
 
 async function response(req: Request): Promise<Response> {
   const transactionFlowSearchParams = new URLSearchParams({ successMessage: "Your bid was submitted!" });
-  return frameResponseWrapper({
+  return frameResponse({
     req,
     browserRedirectUrl: FRONTEND_AUCTION_URL,
     postUrl: `${process.env.NEXT_PUBLIC_URL}/nounish-auction/v2/vrbs`,

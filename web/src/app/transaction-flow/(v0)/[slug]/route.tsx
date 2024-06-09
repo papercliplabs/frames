@@ -99,7 +99,7 @@ export async function POST(req: NextRequest, { params }: { params: { slug: strin
         secondButton,
       ],
       postUrl: `${process.env.NEXT_PUBLIC_URL}/transaction-flow/${params.slug}?${searchParams.toString()}`,
-      state: decodedState,
+      state: { ...decodedState, transactionHash },
     })
   );
 }

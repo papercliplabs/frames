@@ -1,6 +1,6 @@
 import { Address, erc721Abi, isAddressEqual, zeroAddress } from "viem";
 import { TokenData, getTokenData } from "./getTokenData";
-import { mainnetPublicClient } from "@/utils/wallet";
+import { mainnetPublicClient } from "@/common/utils/walletClients";
 import { SUPERRARE_BRAZZER_ADDRESS } from "../../utils/constants";
 import { readContract } from "viem/actions";
 import { unstable_cache } from "next/cache";

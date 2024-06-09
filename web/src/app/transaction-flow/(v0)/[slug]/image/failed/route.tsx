@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { ImageResponse } from "next/og";
 import { getDefaultSquareImageOptions } from "@/utils/imageOptions";
-import { SupportedTransactionFlowSlug, transactionFlowConfigs } from "@/app/transaction-flow/config";
+import { SupportedTransactionFlowSlug, transactionFlowConfigs } from "@/app/transaction-flow/(v0)/config";
 import { paperclipIcon } from "@/utils/paperclip";
 
 export async function GET(req: NextRequest, { params }: { params: { slug: string } }): Promise<Response> {
@@ -19,7 +19,7 @@ export async function GET(req: NextRequest, { params }: { params: { slug: string
         style={{ backgroundColor: config.style.backgroundColor }}
       >
         <img
-          src={config.icons?.pending ?? `${process.env.NEXT_PUBLIC_URL}/images/transaction-flow/default/pending.png`}
+          src={config.icons?.failed ?? `${process.env.NEXT_PUBLIC_URL}/images/transaction-flow/default/failed.png`}
           width={200}
           height={200}
         />
@@ -27,13 +27,13 @@ export async function GET(req: NextRequest, { params }: { params: { slug: string
           tw="text-[80px] text-bold pt-[60px] pb-[20px]"
           style={{ fontFamily: config.style.font.primary.type, color: config.style.font.primary.color }}
         >
-          Transaction Pending
+          Transaction Failed
         </div>
         <div
           tw="text-[52px]"
           style={{ fontFamily: config.style.font.secondary.type, color: config.style.font.secondary.color }}
         >
-          Refresh to check status...
+          An error occurred, please try again.
         </div>
         {!config.hidePaperclipLogo && paperclipIcon}
       </div>

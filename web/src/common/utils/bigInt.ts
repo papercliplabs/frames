@@ -1,3 +1,5 @@
+export type BigIntString = string;
+
 export function bigIntMin(a: bigint, b: bigint): bigint {
   return b < a ? b : a;
 }

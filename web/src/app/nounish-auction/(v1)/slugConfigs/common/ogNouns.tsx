@@ -1,7 +1,6 @@
 import { encodeFunctionData, formatEther } from "viem";
 import { multicall, readContract } from "viem/actions";
-import { ImageData, getNounData } from "@nouns/assets";
-import { getWalletName } from "@/utils/wallet";
+import { ImageData } from "@nouns/assets";
 import { formatNumber, formatTimeLeft } from "@/utils/format";
 import { GetNounishAuctionDataParams, NounishAuctionData } from "./types";
 import { auctionAbi } from "@/abis/ogNouns/auction";
@@ -86,7 +85,7 @@ export async function getOgNounsAuctionData({
   );
   const requiresSettlement = !settled && timeRemainingSec == 0;
 
-  const bidder = await getWalletName({ address: currentBidder });
+  const bidder = (await getUser({ address: currentBidder, resolverTypes: ["ens", "farcaster"] })).name;
 
   return {
     nounId: Number(nounId.toString()),

@@ -1,5 +1,5 @@
 import { relativeEndpointUrl } from "@/utils/urlHelpers";
-import frameResponseWrapper from "@/utils/frameResponseWrapper";
+import { frameResponse } from "@/common/utils/frameResponse";
 import { BEANS_WEBSITE_URL } from "@/common/beans/config/constants";
 import { FrameButtonMetadata, FrameRequest } from "@coinbase/onchainkit/frame";
 import { BEANIGOTCHI_FRAME_BASE_URL } from "@/app/beanigotchi/utils/constants";
@@ -47,7 +47,7 @@ async function response(req: Request, { params }: { params: { page: string } }):
       break;
   }
 
-  return frameResponseWrapper({
+  return frameResponse({
     req,
     browserRedirectUrl: BEANS_WEBSITE_URL,
     postUrl: relativeEndpointUrl(req, ""),

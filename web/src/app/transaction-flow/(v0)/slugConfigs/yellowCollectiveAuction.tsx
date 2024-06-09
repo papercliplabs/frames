@@ -1,4 +1,4 @@
-import { basePublicClient, mainnetPublicClient } from "@/utils/wallet";
+import { basePublicClient, mainnetPublicClient } from "@/common/utils/walletClients";
 import { TransactionFlowConfig } from "../config";
 
 export const yellowCollectiveAuctionTransactionFlowConfig: TransactionFlowConfig = {

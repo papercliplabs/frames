@@ -5,7 +5,7 @@ import { mainnet } from "viem/chains";
 import { SUPERRARE_BRAZZER_ADDRESS, SUPERRARE_NETWORK_FEE_PERCENT } from "@/app/superrare/utils/constants";
 import { encodeFunctionData, getAddress } from "viem";
 import { getFrameMessageWithNeynarApiKey } from "@/utils/farcaster";
-import { frameErrorResponse } from "@/utils/frameErrorResponse";
+import { frameErrorResponse } from "@/common/utils/frameResponse";
 import { brazzerAbi } from "@/app/superrare/abis/brazzer";
 import { getBuyNowDataUncached } from "@/app/superrare/data/queries/getBuyNowData";
 

@@ -1,6 +1,6 @@
 import { readContractCached } from "@/common/utils/caching/readContractCached";
 import { SECONDS_PER_MONTH, SECONDS_PER_WEEK } from "@/utils/constants";
-import { mainnetPublicClient } from "@/utils/wallet";
+import { mainnetPublicClient } from "@/common/utils/walletClients";
 import { Address, erc20Abi, isAddressEqual, zeroAddress } from "viem";
 
 interface GetTokenDataParams {

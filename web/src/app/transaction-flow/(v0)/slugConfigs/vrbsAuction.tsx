@@ -1,4 +1,4 @@
-import { basePublicClient } from "@/utils/wallet";
+import { basePublicClient } from "@/common/utils/walletClients";
 import { TransactionFlowConfig } from "../config";
 
 export const vrbsAuctionFlowConfig: TransactionFlowConfig = {

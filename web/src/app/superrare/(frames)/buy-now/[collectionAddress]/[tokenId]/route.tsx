@@ -1,6 +1,6 @@
 import { getBuyNowData } from "@/app/superrare/data/queries/getBuyNowData";
 import { SUPERRARE_BASE_URL } from "@/app/superrare/utils/constants";
-import frameResponseWrapper from "@/utils/frameResponseWrapper";
+import { frameResponse } from "@/common/utils/frameResponse";
 import { relativeEndpointUrl } from "@/utils/urlHelpers";
 import { FrameButtonMetadata } from "@coinbase/onchainkit/frame";
 import { NextRequest } from "next/server";
@@ -27,7 +27,7 @@ async function response(
 
   const transactionFlowSearchParams = new URLSearchParams({ successMessage: "You bought the artwork." });
   const href = `${SUPERRARE_BASE_URL}/${params.collectionAddress.toLowerCase()}/${params.tokenId}`;
-  return frameResponseWrapper({
+  return frameResponse({
     req,
     image: {
       src: relativeEndpointUrl(req, `/image?t=${Date.now()}`),

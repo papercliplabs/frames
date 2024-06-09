@@ -1,6 +1,6 @@
 import { Address, isAddressEqual, zeroAddress } from "viem";
 import { readContract } from "viem/actions";
-import { mainnetPublicClient } from "@/utils/wallet";
+import { mainnetPublicClient } from "@/common/utils/walletClients";
 import { SUPERRARE_BRAZZER_ADDRESS } from "../../utils/constants";
 import { User, getUserData } from "./getUserData";
 import { bigIntMax } from "@/common/utils/bigInt";

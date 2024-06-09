@@ -8,8 +8,8 @@ import { rareMinterAbi } from "@/app/superrare/abis/rareMinter";
 import { getLimitedMintDataUncached } from "@/app/superrare/data/queries/getLimitedMintData";
 import { readContract } from "viem/actions";
 import { getFrameMessageWithNeynarApiKey } from "@/utils/farcaster";
-import { mainnetPublicClient } from "@/utils/wallet";
-import { frameErrorResponse } from "@/utils/frameErrorResponse";
+import { mainnetPublicClient } from "@/common/utils/walletClients";
+import { frameErrorResponse } from "@/common/utils/frameResponse";
 
 export async function POST(req: NextRequest, { params }: { params: { collectionAddress: string } }): Promise<Response> {
   const collectionAddress = getAddress(params.collectionAddress);

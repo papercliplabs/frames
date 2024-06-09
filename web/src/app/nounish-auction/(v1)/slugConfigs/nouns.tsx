@@ -8,7 +8,7 @@ import {
   getNounsBidTransactionData,
   getOgNounsAuctionData,
 } from "./common/ogNouns";
-import { mainnetPublicClient } from "@/utils/wallet";
+import { mainnetPublicClient } from "@/common/utils/walletClients";
 
 type PermittedBackgroundAttribute = "0" | "1";
 

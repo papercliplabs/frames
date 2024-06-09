@@ -1,7 +1,7 @@
 import { Address, getAddress } from "viem";
 import { gql } from "../generated";
 import { getSuperrareApolloClient } from "../client";
-import { mainnetPublicClient } from "@/utils/wallet";
+import { mainnetPublicClient } from "@/common/utils/walletClients";
 import { fetchIpfsData } from "@/utils/fetchIpfsDats";
 import { User, getUserData } from "./getUserData";
 import { readContractCached } from "@/common/utils/caching/readContractCached";

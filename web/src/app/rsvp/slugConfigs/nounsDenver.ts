@@ -1,7 +1,7 @@
 import { FrameValidationData } from "@coinbase/onchainkit/frame";
 import { RsvpConfig } from "../configs";
 import { isNftBalanceAboveThreshold } from "@/app/mint/commonChecks/nftBalance";
-import { basePublicClient, mainnetPublicClient } from "@/utils/wallet";
+import { basePublicClient, mainnetPublicClient } from "@/common/utils/walletClients";
 import { getAddress } from "viem";
 import { getNumApprovedGuestsForEvent } from "@/utils/luma";
 

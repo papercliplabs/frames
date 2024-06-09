@@ -1,4 +1,4 @@
-import { mainnetPublicClient } from "@/utils/wallet";
+import { mainnetPublicClient } from "@/common/utils/walletClients";
 import { TransactionFlowConfig } from "../config";
 import { localImageUrl } from "@/utils/urlHelpers";
 

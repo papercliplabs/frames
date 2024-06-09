@@ -3,7 +3,7 @@ import { FrameRequest } from "@coinbase/onchainkit/frame";
 import { FrameTransactionResponse } from "@coinbase/onchainkit/frame";
 import { encodeFunctionData, formatEther, getAddress, parseEther } from "viem";
 import { getFrameMessageWithNeynarApiKey } from "@/utils/farcaster";
-import { frameErrorResponse } from "@/utils/frameErrorResponse";
+import { frameErrorResponse } from "@/common/utils/frameResponse";
 import { formatNumber } from "@/utils/format";
 import { SupportedNounsBuilderDao, nounsBuilderAuctionConfigs } from "../../../../configs";
 import { nounsBuilderAuctionAbi } from "@/common/nounsBuilder/abis/auction";

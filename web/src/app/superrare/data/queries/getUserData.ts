@@ -1,8 +1,8 @@
 import { Address } from "viem";
 import { gql } from "../generated";
 import { getSuperrareApolloClient } from "../client";
-import { shortenAddress } from "@/utils/wallet";
 import { customUnstableCache } from "@/common/utils/caching/customUnstableCache";
+import { shortenAddress } from "@/utils/format";
 
 interface GetUserDataParams {
   userAddress: Address;

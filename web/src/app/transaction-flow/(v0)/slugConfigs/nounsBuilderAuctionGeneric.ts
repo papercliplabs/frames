@@ -1,4 +1,4 @@
-import { basePublicClient } from "@/utils/wallet";
+import { basePublicClient } from "@/common/utils/walletClients";
 import { TransactionFlowConfig } from "../config";
 import { Client } from "viem";
 import { SupportedNounsBuilderDao } from "@/app/nounish-auction/v2/nouns-builder/configs";

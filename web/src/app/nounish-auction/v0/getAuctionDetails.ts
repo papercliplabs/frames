@@ -2,8 +2,8 @@ import { Address, Client, formatEther } from "viem";
 import { readContract } from "viem/actions";
 import { ImageData, getNounData } from "@nouns/assets";
 import { buildSVG } from "@nouns/sdk";
-import { getWalletName } from "@/utils/wallet";
 import { formatNumber, formatTimeLeft } from "@/utils/format";
+import { getUser } from "@/common/data/getUser";
 
 const { palette } = ImageData; // Used with `buildSVG``
 
@@ -87,7 +87,7 @@ export async function getNounOgAuctionDetails({
   const timeRemainingFormatter = formatTimeLeft(settled ? 0 : Math.max(Number(endTime.toString()) - now, 0));
   const currentBidFormatted = formatNumber(formatEther(currentBid), 4);
 
-  const bidder = await getWalletName({ address: currentBidder });
+  const bidder = (await getUser({ address: currentBidder, resolverTypes: ["ens", "farcaster"] })).name;
 
   return {
     nounId: Number(nounId.toString()),
@@ -150,7 +150,7 @@ export async function getNounBuilderAuctionDetails({
   const timeRemainingFormatter = formatTimeLeft(settled ? 0 : Math.max(Number(endTime.toString()) - now, 0));
   const currentBidFormatted = formatNumber(formatEther(currentBid), 4);
 
-  const bidder = await getWalletName({ address: currentBidder });
+  const bidder = (await getUser({ address: currentBidder, resolverTypes: ["ens", "farcaster"] })).name;
 
   return {
     nounId: Number(nounId.toString()),
@@ -266,7 +266,7 @@ export async function getBeansDaoAuctionDetails({
   const timeRemainingFormatter = formatTimeLeft(settled ? 0 : Math.max(Number(endTime.toString()) - now, 0));
   const currentBidFormatted = formatNumber(formatEther(currentBid), 4);
 
-  const bidder = await getWalletName({ address: currentBidder });
+  const bidder = (await getUser({ address: currentBidder, resolverTypes: ["ens", "farcaster"] })).name;
 
   return {
     nounId: Number(beanId.toString()),

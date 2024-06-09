@@ -1,7 +1,7 @@
 import { getAddress } from "viem";
 import { getArtworkState } from "@/app/superrare/data/queries/getArtworkState";
 import { readContract } from "viem/actions";
-import { mainnetPublicClient } from "@/utils/wallet";
+import { mainnetPublicClient } from "@/common/utils/walletClients";
 import { NextRequest } from "next/server";
 import { limitedMintImage } from "@/app/superrare/(frames)/limited-mint/[collectionAddress]/image/limitedMintImage";
 import { fallbackImage } from "@/app/superrare/(frames)/fallback/[collectionAddress]/[tokenId]/image/fallbackImage";

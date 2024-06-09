@@ -1,5 +1,5 @@
 import { NounishAuctionConfig } from "../configs";
-import { basePublicClient, getWalletName } from "@/utils/wallet";
+import { basePublicClient } from "@/common/utils/walletClients";
 import { FrameTransactionResponse } from "@coinbase/onchainkit/frame";
 import { NounishAuctionData } from "./common/types";
 import { multicall, readContract } from "viem/actions";
@@ -11,6 +11,7 @@ import { formatNumber, formatTimeLeft } from "@/utils/format";
 import { encodeFunctionData, formatEther } from "viem";
 import { paperclipIcon } from "@/utils/paperclip";
 import { bigIntMax } from "@/common/utils/bigInt";
+import { getUser } from "@/common/data/getUser";
 
 const AUCTION_ADDRESS = "0xE56a5C5761467888ad95E43a5B172A631C15E376";
 const TOKEN_ADDRESS = "0x65EB64E86b71f8Be76b2aedacE781209Db25879D";
@@ -91,7 +92,7 @@ export async function getAuctionData(): Promise<BeansAuctionData> {
   const timeRemainingFormatted = formatTimeLeft(timeRemainingSec);
   const currentBidFormatted = formatNumber(formatEther(currentBid), 4);
 
-  const bidder = await getWalletName({ address: currentBidder });
+  const bidder = (await getUser({ address: currentBidder, resolverTypes: ["ens", "farcaster"] })).name;
 
   // Force rounding up so we guarantee at least the min bid
   const nextBidMin = formatNumber(
