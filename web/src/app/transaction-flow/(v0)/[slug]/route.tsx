@@ -60,7 +60,6 @@ export async function POST(req: NextRequest, { params }: { params: { slug: strin
     status = receipt.status == "success" ? "success" : "failed";
   } catch (e) {
     // Don't have receipt yet, still pending
-    console.log("ERR", e, config.client.chain?.name);
   }
 
   let decodedState: { txSuccessTarget?: string; txFailedTarget?: string } | undefined = undefined;
@@ -100,7 +99,7 @@ export async function POST(req: NextRequest, { params }: { params: { slug: strin
         secondButton,
       ],
       postUrl: `${process.env.NEXT_PUBLIC_URL}/transaction-flow/${params.slug}?${searchParams.toString()}`,
-      state: { ...decodedState, transactionHash },
+      state: { ...decodedState },
     })
   );
 }

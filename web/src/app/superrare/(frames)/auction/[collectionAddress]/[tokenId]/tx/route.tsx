@@ -7,7 +7,7 @@ import { getFrameMessageWithNeynarApiKey } from "@/utils/farcaster";
 import { frameErrorResponse } from "@/common/utils/frameResponse";
 import { getAuctionDataUncached } from "@/app/superrare/data/queries/getAuctionData";
 import { formatNumber } from "@/utils/format";
-import { brazzerAbi } from "@/app/superrare/abis/brazzer";
+import { bazaarAbi } from "@/app/superrare/abis/bazaar";
 
 export async function POST(
   req: NextRequest,
@@ -60,10 +60,10 @@ export async function POST(
     chainId: `eip155:${SUPERRARE_CHAIN_CONFIG.client.chain!.id}`,
     method: "eth_sendTransaction",
     params: {
-      abi: brazzerAbi,
+      abi: bazaarAbi,
       to: SUPERRARE_CHAIN_CONFIG.addresses.superrareBazaar,
       data: encodeFunctionData({
-        abi: brazzerAbi,
+        abi: bazaarAbi,
         functionName: "bid",
         args: [collectionAddress, tokenId, auctionData.currency.address, bid],
       }),

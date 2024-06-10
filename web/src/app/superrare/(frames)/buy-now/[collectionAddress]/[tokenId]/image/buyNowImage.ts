@@ -1,5 +1,4 @@
 import { artworkImageResponse, errorImageResponse } from "@/app/superrare/utils/artworkImageResponse";
-import { getAuctionData } from "@/app/superrare/data/queries/getAuctionData";
 import { formatNumber } from "@/utils/format";
 import { Address, formatUnits } from "viem";
 import { getArtworkData } from "@/app/superrare/data/queries/getArtworkData";

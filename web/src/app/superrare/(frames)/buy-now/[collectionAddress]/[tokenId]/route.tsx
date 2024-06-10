@@ -2,10 +2,10 @@ import { Erc20TransactionInputState } from "@/app/erc-20-transaction/types";
 import { getBuyNowData } from "@/app/superrare/data/queries/getBuyNowData";
 import { SUPERRARE_CHAIN_CONFIG } from "@/app/superrare/config";
 import { frameResponse } from "@/common/utils/frameResponse";
-import { relativeEndpointUrl } from "@/utils/urlHelpers";
+import { localImageUrl, relativeEndpointUrl } from "@/utils/urlHelpers";
 import { FrameButtonMetadata } from "@coinbase/onchainkit/frame";
 import { NextRequest } from "next/server";
-import { getAddress } from "viem";
+import { getAddress, isAddressEqual, zeroAddress } from "viem";
 
 async function response(
   req: NextRequest,
@@ -26,7 +26,6 @@ async function response(
     );
   }
 
-  const transactionFlowSearchParams = new URLSearchParams({ successMessage: "You bought the artwork." });
   const href = `${SUPERRARE_CHAIN_CONFIG.superrareBaseUrl}/${params.collectionAddress.toLowerCase()}/${params.tokenId}`;
   return frameResponse({
     req,
@@ -39,17 +38,43 @@ async function response(
       ...(buyNowData.isValidForFrameTxn
         ? [
             {
-              label: "Buy now",
+              label: `${isAddressEqual(buyNowData.currency.address, zeroAddress) ? "" : "Approve / "}Buy Now`,
               action: "tx",
-              target: relativeEndpointUrl(req, "/tx"),
-              postUrl: `${process.env.NEXT_PUBLIC_URL}/transaction-flow/superrare?${transactionFlowSearchParams.toString()}`,
+              target: `${process.env.NEXT_PUBLIC_URL}/erc-20-transaction/tx`,
+              postUrl: `${process.env.NEXT_PUBLIC_URL}/erc-20-transaction/pending`,
             } as FrameButtonMetadata,
           ]
         : []),
     ],
     state: {
-      // chainId: SUPERRARE,
-    } as Erc20TransactionInputState,
+      ...({
+        chainId: SUPERRARE_CHAIN_CONFIG.client.chain!.id,
+        appName: "superrare-buy-now",
+
+        tokenAddress: buyNowData.currency.address,
+        spenderAddress: SUPERRARE_CHAIN_CONFIG.addresses.superrareBazaar,
+        tokenAmount: (
+          buyNowData.price +
+          (buyNowData.price * SUPERRARE_CHAIN_CONFIG.superrareNetworkFeePercent) / BigInt(100)
+        ).toString(),
+
+        tryAgainFrameUrl: relativeEndpointUrl(req, "/"),
+
+        txPendingImgUrl: relativeEndpointUrl(req, "/image/tx/pending"),
+        txFailedImgUrl: localImageUrl("/superrare/transaction/failed.png"),
+
+        approveSuccessImgUrl: relativeEndpointUrl(req, "/image/tx/success-approved-rare"),
+        actionName: "Buy",
+
+        actionTxEndpointUrl: relativeEndpointUrl(req, "/tx"),
+        actionSuccessImgUrl: relativeEndpointUrl(req, "/image/tx/success-collected"),
+        actionExitButtonConfig: {
+          label: "View Artwork",
+          action: "link",
+          target: href,
+        },
+      } as Erc20TransactionInputState),
+    },
   });
 }
 

@@ -2,8 +2,8 @@ import { Address, erc721Abi, isAddressEqual, zeroAddress } from "viem";
 import { TokenData, getTokenData } from "./getTokenData";
 import { SUPERRARE_CHAIN_CONFIG } from "../../config";
 import { readContract } from "viem/actions";
-import { unstable_cache } from "next/cache";
-import { brazzerAbi } from "../../abis/brazzer";
+import { bazaarAbi } from "../../abis/bazaar";
+import { customUnstableCache } from "@/common/utils/caching/customUnstableCache";
 
 interface GetBuyNowDataParams {
   collectionAddress: Address;
@@ -25,7 +25,7 @@ export async function getBuyNowDataUncached({
     const [[seller, currencyAddress, price], tokenOwner] = await Promise.all([
       readContract(SUPERRARE_CHAIN_CONFIG.client, {
         address: SUPERRARE_CHAIN_CONFIG.addresses.superrareBazaar,
-        abi: brazzerAbi,
+        abi: bazaarAbi,
         functionName: "tokenSalePrices",
         args: [collectionAddress, tokenId, zeroAddress],
       }),
@@ -53,7 +53,10 @@ export async function getBuyNowDataUncached({
       return null;
     }
 
-    const isValidForFrameTxn = isAddressEqual(currency.address, zeroAddress); // ETH only
+    const isPermittedCurrency =
+      isAddressEqual(currency.address, zeroAddress) ||
+      isAddressEqual(currency.address, SUPERRARE_CHAIN_CONFIG.addresses.rareToken);
+    const isValidForFrameTxn = isPermittedCurrency;
 
     return {
       currency,
@@ -67,4 +70,6 @@ export async function getBuyNowDataUncached({
   }
 }
 
-export const getBuyNowData = unstable_cache(getBuyNowDataUncached, ["superrare-get-buy-now-data"], { revalidate: 30 });
+export const getBuyNowData = customUnstableCache(getBuyNowDataUncached, ["superrare-get-buy-now-data"], {
+  revalidate: 30,
+});

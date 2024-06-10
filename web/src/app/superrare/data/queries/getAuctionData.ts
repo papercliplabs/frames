@@ -6,7 +6,7 @@ import { TokenData, getTokenData } from "./getTokenData";
 import { formatTimeLeft } from "@/utils/format";
 import { customUnstableCache } from "@/common/utils/caching/customUnstableCache";
 import { readContractCached } from "@/common/utils/caching/readContractCached";
-import { brazzerAbi } from "../../abis/brazzer";
+import { bazaarAbi } from "../../abis/bazaar";
 import { SUPERRARE_CHAIN_CONFIG } from "../../config";
 
 interface GetAuctionDataParams {
@@ -41,19 +41,19 @@ export async function getAuctionDataUncached({
     ] = await Promise.all([
       readContract(SUPERRARE_CHAIN_CONFIG.client, {
         address: SUPERRARE_CHAIN_CONFIG.addresses.superrareBazaar,
-        abi: brazzerAbi,
+        abi: bazaarAbi,
         functionName: "getAuctionDetails",
         args: [collectionAddress, tokenId],
       }),
       readContract(SUPERRARE_CHAIN_CONFIG.client, {
         address: SUPERRARE_CHAIN_CONFIG.addresses.superrareBazaar,
-        abi: brazzerAbi,
+        abi: bazaarAbi,
         functionName: "auctionBids",
         args: [collectionAddress, tokenId],
       }),
       readContractCached(SUPERRARE_CHAIN_CONFIG.client, {
         address: SUPERRARE_CHAIN_CONFIG.addresses.superrareBazaar,
-        abi: brazzerAbi,
+        abi: bazaarAbi,
         functionName: "minimumBidIncreasePercentage",
       }),
     ]);

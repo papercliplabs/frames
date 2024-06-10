@@ -1,4 +1,4 @@
-export const brazzerAbi = [
+export const bazaarAbi = [
   {
     anonymous: false,
     inputs: [

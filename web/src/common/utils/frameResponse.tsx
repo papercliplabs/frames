@@ -81,7 +81,5 @@ export function frameTxWriteContractResponse<
     },
   } as FrameTransactionResponse;
 
-  console.log("DEBUG", functionName, frameTx);
-
   return Response.json(frameTx);
 }

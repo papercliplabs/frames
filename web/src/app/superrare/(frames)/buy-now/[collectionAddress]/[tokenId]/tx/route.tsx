@@ -1,11 +1,10 @@
 import { NextRequest } from "next/server";
 import { FrameRequest } from "@coinbase/onchainkit/frame";
-import { FrameTransactionResponse } from "@coinbase/onchainkit/frame";
 import { SUPERRARE_CHAIN_CONFIG } from "@/app/superrare/config";
-import { encodeFunctionData, getAddress } from "viem";
+import { getAddress, isAddressEqual, zeroAddress } from "viem";
 import { getFrameMessageWithNeynarApiKey } from "@/utils/farcaster";
-import { frameErrorResponse } from "@/common/utils/frameResponse";
-import { brazzerAbi } from "@/app/superrare/abis/brazzer";
+import { frameErrorResponse, frameTxWriteContractResponse } from "@/common/utils/frameResponse";
+import { bazaarAbi } from "@/app/superrare/abis/bazaar";
 import { getBuyNowDataUncached } from "@/app/superrare/data/queries/getBuyNowData";
 
 export async function POST(
@@ -41,20 +40,11 @@ export async function POST(
   const priceWithFee =
     buyNowData.price + (buyNowData.price * SUPERRARE_CHAIN_CONFIG.superrareNetworkFeePercent) / BigInt(100);
 
-  const txResponse = {
-    chainId: `eip155:${SUPERRARE_CHAIN_CONFIG.client.chain!.id}`,
-    method: "eth_sendTransaction",
-    params: {
-      abi: brazzerAbi,
-      to: SUPERRARE_CHAIN_CONFIG.addresses.superrareBazaar,
-      data: encodeFunctionData({
-        abi: brazzerAbi,
-        functionName: "buy",
-        args: [collectionAddress, tokenId, buyNowData.currency.address, buyNowData.price],
-      }),
-      value: priceWithFee.toString(),
-    },
-  } as FrameTransactionResponse;
-
-  return Response.json(txResponse);
+  return frameTxWriteContractResponse(SUPERRARE_CHAIN_CONFIG.client.chain!.id, {
+    abi: bazaarAbi,
+    address: SUPERRARE_CHAIN_CONFIG.addresses.superrareBazaar,
+    functionName: "buy",
+    args: [collectionAddress, tokenId, buyNowData.currency.address, buyNowData.price],
+    value: isAddressEqual(buyNowData.currency.address, zeroAddress) ? priceWithFee : BigInt(0),
+  });
 }

@@ -8,7 +8,6 @@ import { superrareTransactionFlowConfig } from "./slugConfigs/superrare";
 import { vrbsAuctionFlowConfig } from "./slugConfigs/vrbsAuction";
 import { nounsBuilderAuctionGenericTransactionFlowConfig } from "./slugConfigs/nounsBuilderAuctionGeneric";
 import { basePublicClient, zoraPublicClient } from "@/common/utils/walletClients";
-import { testTransactionFlowConfig } from "./slugConfigs/test";
 
 // Put this into state to compose
 export interface TransactionFlowConfig {
@@ -51,8 +50,7 @@ export type SupportedTransactionFlowSlug =
   | "purple-auction"
   | "park-auction"
   | "lil-toadz-auction"
-  | "member-auction"
-  | "test";
+  | "member-auction";
 
 export const transactionFlowConfigs: Record<SupportedTransactionFlowSlug, TransactionFlowConfig> = {
   "yellow-collective-auction": yellowCollectiveAuctionTransactionFlowConfig,
@@ -67,5 +65,4 @@ export const transactionFlowConfigs: Record<SupportedTransactionFlowSlug, Transa
   "park-auction": nounsBuilderAuctionGenericTransactionFlowConfig(basePublicClient, "park"),
   "lil-toadz-auction": nounsBuilderAuctionGenericTransactionFlowConfig(basePublicClient, "lil-toadz"),
   "member-auction": nounsBuilderAuctionGenericTransactionFlowConfig(basePublicClient, "member"),
-  test: testTransactionFlowConfig,
 };

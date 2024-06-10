@@ -3,10 +3,8 @@ import { Address, Client, getAddress } from "viem";
 import { mainnet, sepolia } from "viem/chains";
 
 // Config to sepolia for dev
-// const SUPERRARE_CHAIN_ID = mainnet.id;
-const SUPERRARE_CHAIN_ID = sepolia.id;
-
-// TODO(delete): RARE mint on sepolia - 0x72F2FBB0F991470661351fC5F6F8eb10b3Bcd4d7
+const SUPERRARE_CHAIN_ID = mainnet.id;
+// const SUPERRARE_CHAIN_ID = sepolia.id;
 
 interface SuperrareConfig {
   client: Client;

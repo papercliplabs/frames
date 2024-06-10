@@ -1,82 +1,60 @@
 import { NextRequest } from "next/server";
 import { FrameRequest } from "@coinbase/onchainkit/frame";
-import { getFrameMessageWithNeynarApiKey } from "@/utils/farcaster";
 import { frameErrorResponse, frameTxWriteContractResponse } from "@/common/utils/frameResponse";
-import { Address, Client, erc20Abi, getAddress, isAddressEqual, zeroAddress } from "viem";
+import { erc20Abi, getAddress, isAddressEqual, maxUint256, zeroAddress } from "viem";
+import { multicall } from "viem/actions";
+import { extractAndValidateState } from "../utils/validation";
 import { getClientForChainId } from "@/common/utils/walletClients";
-import { readContract } from "viem/actions";
-import { Erc20TransactionInputState } from "../types";
+import { getFrameMessageWithNeynarApiKey } from "@/utils/farcaster";
 
 export async function POST(req: NextRequest): Promise<Response> {
   const frameRequest: FrameRequest = await req.json();
   const frameValidationResponse = await getFrameMessageWithNeynarApiKey(frameRequest);
-  const userAddressString = frameValidationResponse?.message?.address;
-
-  let userAddress: Address;
-  let tokenAddress: Address;
-  let spenderAddress: Address;
-  let tokenAmount: bigint;
-  let chainId: number;
-  let targetTxUrl: string;
-  let client: Client;
-  let error: string | undefined;
-  try {
-    const decodedState = JSON.parse(
-      decodeURIComponent(frameValidationResponse!.message!.state.serialized)
-    ) as Erc20TransactionInputState;
-
-    userAddress = getAddress(userAddressString!);
-    tokenAddress = getAddress(decodedState.tokenAddress);
-    spenderAddress = getAddress(decodedState.spenderAddress);
-    tokenAmount = BigInt(decodedState.tokenAmount);
-    chainId = decodedState.chainId;
-    targetTxUrl = decodedState.targetTxUrl;
-    client = getClientForChainId(chainId);
-
-    if (chainId == undefined) {
-      throw Error("Missing chainId");
-    }
-
-    if (targetTxUrl == undefined) {
-      throw Error("Missing chainId");
-    }
-
-    if (!frameValidationResponse.isValid) {
-      throw Error("Invalid frame request");
-    }
-  } catch (err: unknown) {
-    let errorLog = `Error: Invalid frame request - ${frameRequest}, ${userAddressString}, ${error}`;
-    if (err instanceof Error) {
-      errorLog += `- ${err.message}`;
-    }
-    console.error(errorLog);
-    return frameErrorResponse("Error: Invalid frame request");
+  if (!frameValidationResponse.isValid) {
+    throw Error("Invalid frame request");
   }
+
+  const state = await extractAndValidateState(frameValidationResponse.message);
+  const client = await getClientForChainId(state.chainId);
+  const userAddress = getAddress(frameValidationResponse.message.address as any);
 
   // If ETH, just return target txn (don't need approval)
-  if (isAddressEqual(tokenAddress, zeroAddress)) {
-    return await fetch(targetTxUrl, { method: "POST", body: JSON.stringify(frameRequest) });
+  if (isAddressEqual(state.tokenAddress, zeroAddress)) {
+    return await fetch(state.actionTxEndpointUrl, { method: "POST", body: JSON.stringify(frameRequest) });
   }
 
-  const allowance = await readContract(client, {
-    abi: erc20Abi,
-    address: tokenAddress,
-    functionName: "allowance",
-    args: [userAddress, spenderAddress],
+  const [allowance, balance] = await multicall(client, {
+    contracts: [
+      {
+        abi: erc20Abi,
+        address: state.tokenAddress,
+        functionName: "allowance",
+        args: [userAddress, state.spenderAddress],
+      },
+      {
+        abi: erc20Abi,
+        address: state.tokenAddress,
+        functionName: "balanceOf",
+        args: [userAddress],
+      },
+    ],
+    allowFailure: false,
   });
 
-  const requiresApproval = allowance < tokenAmount;
+  if (balance < BigInt(state.tokenAmount)) {
+    return frameErrorResponse("Error: Insufficient balance");
+  }
 
-  console.log("DEBUG2", allowance, requiresApproval);
+  const requiresApproval = allowance < BigInt(state.tokenAmount);
 
   if (!requiresApproval) {
-    return await fetch(targetTxUrl, { method: "POST", body: JSON.stringify(frameRequest) });
+    return await fetch(state.actionTxEndpointUrl, { method: "POST", body: JSON.stringify(frameRequest) });
   } else {
-    return frameTxWriteContractResponse(chainId, {
-      address: tokenAddress,
+    return frameTxWriteContractResponse(state.chainId, {
+      address: state.tokenAddress,
       abi: erc20Abi,
       functionName: "approve",
-      args: [spenderAddress, tokenAmount],
+      args: [state.spenderAddress, maxUint256], // Always max approve
     });
   }
 }

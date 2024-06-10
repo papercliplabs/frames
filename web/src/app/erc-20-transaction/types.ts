@@ -4,6 +4,7 @@ import { Address } from "viem";
 
 export interface Erc20TransactionInputState {
   chainId: number;
+  appName: string; // For logging only
 
   tokenAddress: Address; // zero address for ETH will bypass approval check/step
   spenderAddress: Address;
@@ -17,7 +18,7 @@ export interface Erc20TransactionInputState {
   approveSuccessImgUrl: string;
   actionName: string;
 
+  actionTxEndpointUrl: string;
   actionSuccessImgUrl: string;
   actionExitButtonConfig: FrameButtonMetadata;
-  actionTxEndpointUrl: string;
 }
