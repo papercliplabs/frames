@@ -1,13 +1,12 @@
 import { NextRequest } from "next/server";
 import { FrameRequest } from "@coinbase/onchainkit/frame";
-import { FrameTransactionResponse } from "@coinbase/onchainkit/frame";
-import { SUPERRARE_CHAIN_CONFIG } from "@/app/superrare/config";
-import { encodeFunctionData, getAddress } from "viem";
+import { getAddress, isAddressEqual, zeroAddress } from "viem";
 import { rareMinterAbi } from "@/app/superrare/abis/rareMinter";
 import { getLimitedMintDataUncached } from "@/app/superrare/data/queries/getLimitedMintData";
 import { readContract } from "viem/actions";
 import { getFrameMessageWithNeynarApiKey } from "@/utils/farcaster";
-import { frameErrorResponse } from "@/common/utils/frameResponse";
+import { frameErrorResponse, frameTxWriteContractResponse } from "@/common/utils/frameResponse";
+import { SUPERRARE_CHAIN_CONFIG } from "@/app/superrare/config";
 
 export async function POST(req: NextRequest, { params }: { params: { collectionAddress: string } }): Promise<Response> {
   const collectionAddress = getAddress(params.collectionAddress);
@@ -68,20 +67,11 @@ export async function POST(req: NextRequest, { params }: { params: { collectionA
   const priceWithFee =
     limitedMintData.price + (limitedMintData.price * SUPERRARE_CHAIN_CONFIG.superrareNetworkFeePercent) / BigInt(100);
 
-  const txResponse = {
-    chainId: `eip155:${SUPERRARE_CHAIN_CONFIG.client.chain!.id}`,
-    method: "eth_sendTransaction",
-    params: {
-      abi: rareMinterAbi,
-      to: SUPERRARE_CHAIN_CONFIG.addresses.superrareMinter,
-      data: encodeFunctionData({
-        abi: rareMinterAbi,
-        functionName: "mintDirectSale",
-        args: [collectionAddress, limitedMintData.currency.address, limitedMintData.price, 1, []],
-      }),
-      value: priceWithFee.toString(),
-    },
-  } as FrameTransactionResponse;
-
-  return Response.json(txResponse);
+  return frameTxWriteContractResponse(SUPERRARE_CHAIN_CONFIG.client.chain!.id, {
+    abi: rareMinterAbi,
+    address: SUPERRARE_CHAIN_CONFIG.addresses.superrareMinter,
+    functionName: "mintDirectSale",
+    args: [collectionAddress, limitedMintData.currency.address, limitedMintData.price, 1, []],
+    value: isAddressEqual(limitedMintData.currency.address, zeroAddress) ? priceWithFee : BigInt(0),
+  });
 }

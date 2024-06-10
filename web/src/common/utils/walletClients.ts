@@ -8,7 +8,7 @@ export const mainnetPublicClient = createPublicClient({
 
 export const sepoliaPublicClient = createPublicClient({
   chain: sepolia,
-  transport: http(),
+  transport: http("https://gateway.tenderly.co/public/sepolia	"),
 });
 
 export const basePublicClient = createPublicClient({

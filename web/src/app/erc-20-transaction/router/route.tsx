@@ -32,6 +32,8 @@ export async function POST(req: NextRequest): Promise<Response> {
     // Error parsing, not an approval
   }
 
+  console.log("ROUTER DEBUG", txWasApprove, decodedState);
+
   if (txWasApprove) {
     return Response.redirect(decodedState.entryFrameUrl);
   } else {

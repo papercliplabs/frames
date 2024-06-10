@@ -2,7 +2,7 @@ import { NextRequest } from "next/server";
 import { FrameRequest } from "@coinbase/onchainkit/frame";
 import { getFrameMessageWithNeynarApiKey } from "@/utils/farcaster";
 import { frameErrorResponse, frameTxWriteContractResponse } from "@/common/utils/frameResponse";
-import { Address, Client, erc20Abi, getAddress } from "viem";
+import { Address, Client, erc20Abi, getAddress, isAddressEqual, zeroAddress } from "viem";
 import { getClientForChainId } from "@/common/utils/walletClients";
 import { readContract } from "viem/actions";
 import { Erc20TransactionInputState } from "../types";
@@ -53,6 +53,11 @@ export async function POST(req: NextRequest): Promise<Response> {
     return frameErrorResponse("Error: Invalid frame request");
   }
 
+  // If ETH, just return target txn (don't need approval)
+  if (isAddressEqual(tokenAddress, zeroAddress)) {
+    return await fetch(targetTxUrl, { method: "POST", body: JSON.stringify(frameRequest) });
+  }
+
   const allowance = await readContract(client, {
     abi: erc20Abi,
     address: tokenAddress,
@@ -61,6 +66,8 @@ export async function POST(req: NextRequest): Promise<Response> {
   });
 
   const requiresApproval = allowance < tokenAmount;
+
+  console.log("DEBUG2", allowance, requiresApproval);
 
   if (!requiresApproval) {
     return await fetch(targetTxUrl, { method: "POST", body: JSON.stringify(frameRequest) });

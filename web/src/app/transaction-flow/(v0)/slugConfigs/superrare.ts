@@ -1,9 +1,9 @@
-import { mainnetPublicClient } from "@/common/utils/walletClients";
 import { TransactionFlowConfig } from "../config";
 import { localImageUrl } from "@/utils/urlHelpers";
+import { SUPERRARE_CHAIN_CONFIG } from "@/app/superrare/config";
 
 export const superrareTransactionFlowConfig: TransactionFlowConfig = {
-  client: mainnetPublicClient,
+  client: SUPERRARE_CHAIN_CONFIG.client,
   hidePaperclipLogo: true,
   icons: {
     success: localImageUrl("/superrare/tx-success.png"),

@@ -60,6 +60,7 @@ export async function POST(req: NextRequest, { params }: { params: { slug: strin
     status = receipt.status == "success" ? "success" : "failed";
   } catch (e) {
     // Don't have receipt yet, still pending
+    console.log("ERR", e, config.client.chain?.name);
   }
 
   let decodedState: { txSuccessTarget?: string; txFailedTarget?: string } | undefined = undefined;

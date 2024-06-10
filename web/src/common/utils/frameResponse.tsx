@@ -66,7 +66,7 @@ export function frameTxWriteContractResponse<
   }
 ): Response {
   const { abi, address, args, functionName, value } = parameters;
-  return Response.json({
+  const frameTx = {
     chainId: `eip155:${chainId}`,
     method: "eth_sendTransaction",
     params: {
@@ -79,5 +79,9 @@ export function frameTxWriteContractResponse<
       } as EncodeFunctionDataParameters),
       value: value?.toString() ?? "0",
     },
-  } as FrameTransactionResponse);
+  } as FrameTransactionResponse;
+
+  console.log("DEBUG", functionName, frameTx);
+
+  return Response.json(frameTx);
 }
