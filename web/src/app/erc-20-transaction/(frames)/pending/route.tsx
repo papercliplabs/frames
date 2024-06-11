@@ -7,6 +7,7 @@ import { relativeEndpointUrl } from "@/utils/urlHelpers";
 import { getClientForChainId } from "@/common/utils/walletClients";
 import { getFrameMessageWithNeynarApiKey } from "@/utils/farcaster";
 import { Hex } from "viem";
+import { getIsTransactionApproval } from "../../data/transactionStorage";
 
 export async function POST(req: NextRequest): Promise<Response> {
   const frameRequest: FrameRequest = await req.json();
@@ -17,14 +18,16 @@ export async function POST(req: NextRequest): Promise<Response> {
   }
 
   const state = extractAndValidateState(frameValidationResponse.message);
-  const client = await getClientForChainId(state.chainId);
+  const client = getClientForChainId(state.chainId);
   const transactionHash = (frameValidationResponse.message.transaction?.hash ?? state.transactionHash) as
     | Hex
     | undefined;
 
   if (!transactionHash) {
-    throw Error("Missing txn hash");
+    throw Error(`Missing txn hash - ${transactionHash}`);
   }
+
+  let isApproval = await getIsTransactionApproval(state.uuid);
 
   // Only track if its the first entry
   if (frameValidationResponse.message.transaction?.hash) {
@@ -51,7 +54,7 @@ export async function POST(req: NextRequest): Promise<Response> {
   return new NextResponse(
     getFrameHtmlResponse({
       image: {
-        src: state.txPendingImgUrl,
+        src: isApproval ? state.approvePendingImgUrl : state.actionPendingImgUrl,
         aspectRatio: "1:1",
       },
       buttons: [
@@ -69,6 +72,7 @@ export async function POST(req: NextRequest): Promise<Response> {
       state: {
         ...state,
         transactionHash,
+        isApproval,
       },
     })
   );

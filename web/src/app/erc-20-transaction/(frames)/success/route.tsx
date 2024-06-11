@@ -56,7 +56,7 @@ export async function POST(req: NextRequest): Promise<Response> {
               {
                 label: state.actionName,
                 action: "tx",
-                target: state.actionTxEndpointUrl,
+                target: `${process.env.NEXT_PUBLIC_URL}/erc-20-transaction/tx`,
                 postUrl: `${process.env.NEXT_PUBLIC_URL}/erc-20-transaction/pending`,
               } as FrameButtonMetadata,
             ]

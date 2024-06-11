@@ -29,7 +29,7 @@ export async function POST(req: NextRequest): Promise<Response> {
   return new NextResponse(
     getFrameHtmlResponse({
       image: {
-        src: state.txPendingImgUrl,
+        src: state.txFailedImgUrl,
         aspectRatio: "1:1",
       },
       buttons: [

@@ -12,13 +12,16 @@ export interface Erc20TransactionInputState {
 
   tryAgainFrameUrl: string;
 
-  txPendingImgUrl: string;
   txFailedImgUrl: string;
 
+  approvePendingImgUrl: string;
   approveSuccessImgUrl: string;
   actionName: string;
 
   actionTxEndpointUrl: string;
+  actionPendingImgUrl: string;
   actionSuccessImgUrl: string;
   actionExitButtonConfig: FrameButtonMetadata;
+
+  uuid: string; // Used to track the transaction, needs to be passed in since tx endpoint can't pass state
 }

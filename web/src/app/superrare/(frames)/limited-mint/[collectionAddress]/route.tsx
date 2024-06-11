@@ -7,6 +7,7 @@ import { FrameButtonMetadata } from "@coinbase/onchainkit/frame";
 import { baseNft } from "@/app/superrare/abis/baseNft";
 import { SUPERRARE_CHAIN_CONFIG } from "@/app/superrare/config";
 import { Erc20TransactionInputState } from "@/app/erc-20-transaction/types";
+import { generateUuid } from "@/common/utils/uuid";
 
 async function response(req: Request, { params }: { params: { collectionAddress: string } }): Promise<Response> {
   const collectionAddress = getAddress(params.collectionAddress);
@@ -68,12 +69,13 @@ async function response(req: Request, { params }: { params: { collectionAddress:
 
         tryAgainFrameUrl: relativeEndpointUrl(req, "/"),
 
-        txPendingImgUrl: relativeEndpointUrl(req, `/image/tx/${limitedMintData.tokenId}/pending`),
         txFailedImgUrl: localImageUrl("/superrare/transaction/failed.png"),
 
+        approvePendingImgUrl: relativeEndpointUrl(req, `/image/tx/${limitedMintData.tokenId}/approve-pending`),
         approveSuccessImgUrl: relativeEndpointUrl(req, `/image/tx/${limitedMintData.tokenId}/success-approved-rare`),
         actionName: "Mint",
 
+        actionPendingImgUrl: relativeEndpointUrl(req, `/image/tx/${limitedMintData.tokenId}/purchase-pending`),
         actionTxEndpointUrl: relativeEndpointUrl(req, "/tx"),
         actionSuccessImgUrl: relativeEndpointUrl(req, `/image/tx/${limitedMintData.tokenId}/success-collected`),
         actionExitButtonConfig: {
@@ -81,6 +83,8 @@ async function response(req: Request, { params }: { params: { collectionAddress:
           action: "link",
           target: href,
         },
+
+        uuid: generateUuid(),
       } as Erc20TransactionInputState),
     },
   });

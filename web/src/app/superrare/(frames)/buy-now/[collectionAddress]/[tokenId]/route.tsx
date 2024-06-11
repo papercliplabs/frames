@@ -6,6 +6,7 @@ import { localImageUrl, relativeEndpointUrl } from "@/utils/urlHelpers";
 import { FrameButtonMetadata } from "@coinbase/onchainkit/frame";
 import { NextRequest } from "next/server";
 import { getAddress, isAddressEqual, zeroAddress } from "viem";
+import { generateUuid } from "@/common/utils/uuid";
 
 async function response(
   req: NextRequest,
@@ -60,12 +61,13 @@ async function response(
 
         tryAgainFrameUrl: relativeEndpointUrl(req, "/"),
 
-        txPendingImgUrl: relativeEndpointUrl(req, "/image/tx/pending"),
         txFailedImgUrl: localImageUrl("/superrare/transaction/failed.png"),
 
+        approvePendingImgUrl: relativeEndpointUrl(req, `/image/tx/approve-pending`),
         approveSuccessImgUrl: relativeEndpointUrl(req, "/image/tx/success-approved-rare"),
         actionName: "Buy",
 
+        actionPendingImgUrl: relativeEndpointUrl(req, `/image/tx/purchase-pending`),
         actionTxEndpointUrl: relativeEndpointUrl(req, "/tx"),
         actionSuccessImgUrl: relativeEndpointUrl(req, "/image/tx/success-collected"),
         actionExitButtonConfig: {
@@ -73,6 +75,8 @@ async function response(
           action: "link",
           target: href,
         },
+
+        uuid: generateUuid(),
       } as Erc20TransactionInputState),
     },
   });

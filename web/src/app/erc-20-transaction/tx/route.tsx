@@ -2,10 +2,11 @@ import { NextRequest } from "next/server";
 import { FrameRequest } from "@coinbase/onchainkit/frame";
 import { frameErrorResponse, frameTxWriteContractResponse } from "@/common/utils/frameResponse";
 import { erc20Abi, getAddress, isAddressEqual, maxUint256, zeroAddress } from "viem";
-import { multicall } from "viem/actions";
 import { extractAndValidateState } from "../utils/validation";
 import { getClientForChainId } from "@/common/utils/walletClients";
 import { getFrameMessageWithNeynarApiKey } from "@/utils/farcaster";
+import { getErc20ApprovalAndBalanceCheck } from "../data/getErc20ApprovalAndBalanceCheck";
+import { getIsTransactionApproval, storeTransactionIsApproval } from "../data/transactionStorage";
 
 export async function POST(req: NextRequest): Promise<Response> {
   const frameRequest: FrameRequest = await req.json();
@@ -23,33 +24,23 @@ export async function POST(req: NextRequest): Promise<Response> {
     return await fetch(state.actionTxEndpointUrl, { method: "POST", body: JSON.stringify(frameRequest) });
   }
 
-  const [allowance, balance] = await multicall(client, {
-    contracts: [
-      {
-        abi: erc20Abi,
-        address: state.tokenAddress,
-        functionName: "allowance",
-        args: [userAddress, state.spenderAddress],
-      },
-      {
-        abi: erc20Abi,
-        address: state.tokenAddress,
-        functionName: "balanceOf",
-        args: [userAddress],
-      },
-    ],
-    allowFailure: false,
+  const { sufficientBalance, requiresApproval } = await getErc20ApprovalAndBalanceCheck({
+    client,
+    tokenAddress: state.tokenAddress,
+    ownerAddress: userAddress,
+    spenderAddress: state.spenderAddress,
+    requiredAmount: BigInt(state.tokenAmount),
   });
 
-  if (balance < BigInt(state.tokenAmount)) {
+  if (!sufficientBalance) {
     return frameErrorResponse("Error: Insufficient balance");
   }
 
-  const requiresApproval = allowance < BigInt(state.tokenAmount);
-
   if (!requiresApproval) {
+    await storeTransactionIsApproval(state.uuid, false);
     return await fetch(state.actionTxEndpointUrl, { method: "POST", body: JSON.stringify(frameRequest) });
   } else {
+    await storeTransactionIsApproval(state.uuid, true);
     return frameTxWriteContractResponse(state.chainId, {
       address: state.tokenAddress,
       abi: erc20Abi,

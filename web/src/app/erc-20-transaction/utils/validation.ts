@@ -47,7 +47,7 @@ function validateFrameButtonMetadata(value: unknown): FrameButtonMetadata {
 
 export function extractAndValidateState(
   frameData: FrameValidationData
-): Erc20TransactionInputState & { transactionHash?: Hex } {
+): Erc20TransactionInputState & { transactionHash?: Hex; userAddress?: Address; isApproval?: boolean } {
   let chainId: number;
   let appName: string;
 
@@ -57,15 +57,18 @@ export function extractAndValidateState(
 
   let tryAgainFrameUrl: string;
 
-  let txPendingImgUrl: string;
   let txFailedImgUrl: string;
 
+  let approvePendingImgUrl: string;
   let approveSuccessImgUrl: string;
   let actionName: string;
 
-  let actionSuccessImgUrl: string;
   let actionTxEndpointUrl: string;
+  let actionPendingImgUrl: string;
+  let actionSuccessImgUrl: string;
   let actionExitButtonConfig: FrameButtonMetadata;
+
+  let uuid: string;
 
   let transactionHash: Hex | undefined = undefined;
 
@@ -82,15 +85,18 @@ export function extractAndValidateState(
 
     tryAgainFrameUrl = validateIsString(decodedState.tryAgainFrameUrl); // throws if invalid
 
-    txPendingImgUrl = validateIsString(decodedState.txPendingImgUrl);
     txFailedImgUrl = validateIsString(decodedState.txFailedImgUrl);
 
+    approvePendingImgUrl = validateIsString(decodedState.approvePendingImgUrl);
     approveSuccessImgUrl = validateIsString(decodedState.approveSuccessImgUrl);
     actionName = validateIsString(decodedState.actionName);
 
     actionTxEndpointUrl = validateIsString(decodedState.actionTxEndpointUrl);
+    actionPendingImgUrl = validateIsString(decodedState.actionPendingImgUrl);
     actionSuccessImgUrl = validateIsString(decodedState.actionSuccessImgUrl);
     actionExitButtonConfig = validateFrameButtonMetadata(decodedState.actionExitButtonConfig);
+
+    uuid = validateIsString(decodedState.uuid);
 
     const transactionHashInternal = (decodedState as any)["transactionHash"];
     if (transactionHashInternal != undefined) {
@@ -117,15 +123,18 @@ export function extractAndValidateState(
 
     tryAgainFrameUrl,
 
-    txPendingImgUrl,
     txFailedImgUrl,
 
+    approvePendingImgUrl,
     approveSuccessImgUrl,
     actionName,
 
+    actionPendingImgUrl,
     actionSuccessImgUrl,
     actionExitButtonConfig,
     actionTxEndpointUrl,
+
+    uuid,
 
     transactionHash,
   };

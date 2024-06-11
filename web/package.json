@@ -46,6 +46,7 @@
     "sharp": "0.32.6",
     "tailwind-merge": "^2.2.1",
     "tailwindcss-animate": "^1.0.7",
+    "uuid": "^10.0.0",
     "viem": "^2.7.20",
     "zod": "^3.22.4"
   },
@@ -57,6 +58,7 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/uuid": "^9.0.8",
     "autoprefixer": "^10.0.1",
     "eslint": "^8",
     "eslint-config-next": "^14.2.3",
