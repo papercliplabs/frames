@@ -1,5 +1,5 @@
-import { SUPERRARE_BASE_URL } from "@/app/superrare/utils/constants";
-import frameResponseWrapper from "@/utils/frameResponseWrapper";
+import { SUPERRARE_CHAIN_CONFIG } from "@/app/superrare/config";
+import { frameResponse } from "@/common/utils/frameResponse";
 import { relativeEndpointUrl } from "@/utils/urlHelpers";
 import { NextRequest } from "next/server";
 
@@ -7,8 +7,8 @@ async function response(
   req: NextRequest,
   { params }: { params: { collectionAddress: string; tokenId: string } }
 ): Promise<Response> {
-  const href = `${SUPERRARE_BASE_URL}/${params.collectionAddress.toLowerCase()}/${params.tokenId}`;
-  return frameResponseWrapper({
+  const href = `${SUPERRARE_CHAIN_CONFIG.superrareBaseUrl}/${params.collectionAddress.toLowerCase()}/${params.tokenId}`;
+  return frameResponse({
     req,
     // browserRedirectUrl: href,
     // Push fallback requests back through the router

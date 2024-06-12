@@ -1,8 +1,8 @@
-import { shortenAddress } from "@/utils/wallet";
 import { Address } from "viem";
 import { getEnsUser } from "./getEnsUser";
 import { getFarcasterUser } from "./getFarcasterUser";
 import { SECONDS_PER_MONTH } from "@/utils/constants";
+import { shortenAddress } from "@/utils/format";
 
 type UserResolverType = "ens" | "farcaster";
 

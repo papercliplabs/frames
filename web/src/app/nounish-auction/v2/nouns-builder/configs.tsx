@@ -2,7 +2,7 @@ import { NounsBuilderAuction } from "@/common/nounsBuilder/data/getCurrentAuctio
 import { NounsBuilderToken } from "@/common/nounsBuilder/data/getToken";
 import { Address, Client } from "viem";
 import { gnarsAuctionConfig } from "./slugConfigs/gnars";
-import { SupportedTransactionFlowSlug } from "@/app/transaction-flow/config";
+import { SupportedTransactionFlowSlug } from "@/app/transaction-flow/(v0)/config";
 import { purpleAuctionConfig } from "./slugConfigs/purple";
 import { energyAuctionConfig } from "./slugConfigs/energy";
 import { yellowCollectiveAuctionConfig } from "./slugConfigs/yellow";

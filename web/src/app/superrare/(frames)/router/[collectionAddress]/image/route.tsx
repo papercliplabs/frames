@@ -1,7 +1,6 @@
 import { getAddress } from "viem";
 import { getArtworkState } from "@/app/superrare/data/queries/getArtworkState";
 import { readContract } from "viem/actions";
-import { mainnetPublicClient } from "@/utils/wallet";
 import { NextRequest } from "next/server";
 import { limitedMintImage } from "@/app/superrare/(frames)/limited-mint/[collectionAddress]/image/limitedMintImage";
 import { fallbackImage } from "@/app/superrare/(frames)/fallback/[collectionAddress]/[tokenId]/image/fallbackImage";
@@ -9,6 +8,7 @@ import { baseNft } from "@/app/superrare/abis/baseNft";
 import { buyNowImage } from "@/app/superrare/(frames)/buy-now/[collectionAddress]/[tokenId]/image/buyNowImage";
 import { auctionImage } from "../../../auction/[collectionAddress]/[tokenId]/image/auctionImage";
 import { errorImageResponse } from "@/app/superrare/utils/artworkImageResponse";
+import { SUPERRARE_CHAIN_CONFIG } from "@/app/superrare/config";
 
 export async function GET(req: NextRequest, { params }: { params: { collectionAddress: string } }): Promise<Response> {
   const collectionAddress = getAddress(params.collectionAddress);
@@ -18,7 +18,7 @@ export async function GET(req: NextRequest, { params }: { params: { collectionAd
   const artworkState = await getArtworkState({ collectionAddress, tokenId });
 
   if (artworkState == "fallback" && tokenId == undefined) {
-    tokenId = await readContract(mainnetPublicClient, {
+    tokenId = await readContract(SUPERRARE_CHAIN_CONFIG.client, {
       address: collectionAddress,
       abi: baseNft,
       functionName: "totalSupply",

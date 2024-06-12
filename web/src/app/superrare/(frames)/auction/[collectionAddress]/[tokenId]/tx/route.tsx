@@ -1,14 +1,13 @@
 import { NextRequest } from "next/server";
 import { FrameRequest } from "@coinbase/onchainkit/frame";
 import { FrameTransactionResponse } from "@coinbase/onchainkit/frame";
-import { mainnet } from "viem/chains";
-import { SUPERRARE_BRAZZER_ADDRESS, SUPERRARE_NETWORK_FEE_PERCENT } from "@/app/superrare/utils/constants";
+import { SUPERRARE_CHAIN_CONFIG } from "@/app/superrare/config";
 import { encodeFunctionData, formatEther, getAddress, parseEther, zeroAddress } from "viem";
 import { getFrameMessageWithNeynarApiKey } from "@/utils/farcaster";
-import { frameErrorResponse } from "@/utils/frameErrorResponse";
+import { frameErrorResponse } from "@/common/utils/frameResponse";
 import { getAuctionDataUncached } from "@/app/superrare/data/queries/getAuctionData";
 import { formatNumber } from "@/utils/format";
-import { brazzerAbi } from "@/app/superrare/abis/brazzer";
+import { bazaarAbi } from "@/app/superrare/abis/bazaar";
 
 export async function POST(
   req: NextRequest,
@@ -55,16 +54,16 @@ export async function POST(
     );
   }
 
-  const bidWithFee = bid + (bid * SUPERRARE_NETWORK_FEE_PERCENT) / BigInt(100);
+  const bidWithFee = bid + (bid * SUPERRARE_CHAIN_CONFIG.superrareNetworkFeePercent) / BigInt(100);
 
   const txResponse = {
-    chainId: `eip155:${mainnet.id}`,
+    chainId: `eip155:${SUPERRARE_CHAIN_CONFIG.client.chain!.id}`,
     method: "eth_sendTransaction",
     params: {
-      abi: brazzerAbi,
-      to: SUPERRARE_BRAZZER_ADDRESS,
+      abi: bazaarAbi,
+      to: SUPERRARE_CHAIN_CONFIG.addresses.superrareBazaar,
       data: encodeFunctionData({
-        abi: brazzerAbi,
+        abi: bazaarAbi,
         functionName: "bid",
         args: [collectionAddress, tokenId, auctionData.currency.address, bid],
       }),

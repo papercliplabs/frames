@@ -1,10 +1,10 @@
 import { relativeEndpointUrl } from "@/utils/urlHelpers";
-import frameResponseWrapper from "@/utils/frameResponseWrapper";
+import { frameResponse } from "@/common/utils/frameResponse";
 import { BEANS_WEBSITE_URL } from "@/common/beans/config/constants";
 import { BEANIGOTCHI_FRAME_BASE_URL } from "../../utils/constants";
 
 async function response(req: Request): Promise<Response> {
-  return frameResponseWrapper({
+  return frameResponse({
     req,
     browserRedirectUrl: BEANS_WEBSITE_URL,
     image: {

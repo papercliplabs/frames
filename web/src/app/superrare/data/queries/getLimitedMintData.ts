@@ -1,7 +1,6 @@
 import { Address, isAddressEqual, zeroAddress } from "viem";
 import { readContract } from "viem/actions";
-import { mainnetPublicClient } from "@/utils/wallet";
-import { SUPERRARE_MINTER_PROXY_ADDRESS } from "../../utils/constants";
+import { SUPERRARE_CHAIN_CONFIG } from "../../config";
 import { TokenData, getTokenData } from "./getTokenData";
 import { readContractCached } from "@/common/utils/caching/readContractCached";
 import { SECONDS_PER_HOUR } from "@/utils/constants";
@@ -23,7 +22,7 @@ interface LimitedMintData {
   maxMintsPerAddress: bigint; // total number of mints an address can make - 0 => no limit
   txnLimitPerAddress: bigint; // total number of a times an address can mint
 
-  isValidForFrameTxn: boolean; // Valid when: token is ETH, doesn't have an allowlist, mint has started, and not minted out
+  isValidForFrameTxn: boolean; // Valid when: token is ETH or RARE, doesn't have an allowlist, mint has started, and not minted out
 }
 
 export async function getLimitedMintDataUncached({
@@ -32,13 +31,13 @@ export async function getLimitedMintDataUncached({
   try {
     const [currentSupply, maxSupply, directSaleConfig, maxMintsPerAddress, txnLimitPerAddress, allowListConfig] =
       await Promise.all([
-        readContract(mainnetPublicClient, {
+        readContract(SUPERRARE_CHAIN_CONFIG.client, {
           address: collectionAddress,
           abi: baseNft,
           functionName: "totalSupply",
         }),
         readContractCached(
-          mainnetPublicClient,
+          SUPERRARE_CHAIN_CONFIG.client,
           {
             address: collectionAddress,
             abi: baseNft,
@@ -47,9 +46,9 @@ export async function getLimitedMintDataUncached({
           { revalidate: SECONDS_PER_HOUR }
         ),
         readContractCached(
-          mainnetPublicClient,
+          SUPERRARE_CHAIN_CONFIG.client,
           {
-            address: SUPERRARE_MINTER_PROXY_ADDRESS,
+            address: SUPERRARE_CHAIN_CONFIG.addresses.superrareMinter,
             abi: rareMinterAbi,
             functionName: "getDirectSaleConfig",
             args: [collectionAddress],
@@ -57,9 +56,9 @@ export async function getLimitedMintDataUncached({
           { revalidate: SECONDS_PER_HOUR }
         ),
         readContractCached(
-          mainnetPublicClient,
+          SUPERRARE_CHAIN_CONFIG.client,
           {
-            address: SUPERRARE_MINTER_PROXY_ADDRESS,
+            address: SUPERRARE_CHAIN_CONFIG.addresses.superrareMinter,
             abi: rareMinterAbi,
             functionName: "getContractMintLimit",
             args: [collectionAddress],
@@ -67,9 +66,9 @@ export async function getLimitedMintDataUncached({
           { revalidate: SECONDS_PER_HOUR }
         ),
         readContractCached(
-          mainnetPublicClient,
+          SUPERRARE_CHAIN_CONFIG.client,
           {
-            address: SUPERRARE_MINTER_PROXY_ADDRESS,
+            address: SUPERRARE_CHAIN_CONFIG.addresses.superrareMinter,
             abi: rareMinterAbi,
             functionName: "getContractTxLimit",
             args: [collectionAddress],
@@ -77,9 +76,9 @@ export async function getLimitedMintDataUncached({
           { revalidate: SECONDS_PER_HOUR }
         ),
         readContractCached(
-          mainnetPublicClient,
+          SUPERRARE_CHAIN_CONFIG.client,
           {
-            address: SUPERRARE_MINTER_PROXY_ADDRESS,
+            address: SUPERRARE_CHAIN_CONFIG.addresses.superrareMinter,
             abi: rareMinterAbi,
             functionName: "getContractAllowListConfig",
             args: [collectionAddress],
@@ -94,12 +93,14 @@ export async function getLimitedMintDataUncached({
 
     const currentTimestamp = BigInt(Math.floor(Date.now() / 1000)); // sec since unix epoch, same as EVM's timestamp
 
-    const isEthMint = isAddressEqual(directSaleConfig.currencyAddress, zeroAddress);
+    const isPermittedCurrency =
+      isAddressEqual(directSaleConfig.currencyAddress, zeroAddress) ||
+      isAddressEqual(directSaleConfig.currencyAddress, SUPERRARE_CHAIN_CONFIG.addresses.rareToken);
     const noAllowList = 0 == Number(allowListConfig.root) || allowListConfig.endTimestamp < currentTimestamp;
     const mintStarted = directSaleConfig.startTime < currentTimestamp;
     const notMintedOut = currentSupply < maxSupply;
 
-    const isValidForFrameTxn = isEthMint && noAllowList && mintStarted && notMintedOut;
+    const isValidForFrameTxn = isPermittedCurrency && noAllowList && mintStarted && notMintedOut;
 
     const tokenId = notMintedOut ? currentSupply + BigInt(1) : currentSupply;
 

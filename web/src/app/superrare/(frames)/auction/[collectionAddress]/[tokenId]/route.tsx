@@ -1,9 +1,9 @@
-import { SUPERRARE_BASE_URL } from "@/app/superrare/utils/constants";
 import { getAuctionData } from "@/app/superrare/data/queries/getAuctionData";
-import frameResponseWrapper from "@/utils/frameResponseWrapper";
+import { frameResponse } from "@/common/utils/frameResponse";
 import { relativeEndpointUrl } from "@/utils/urlHelpers";
 import { FrameButtonMetadata } from "@coinbase/onchainkit/frame";
 import { getAddress } from "viem";
+import { SUPERRARE_CHAIN_CONFIG } from "@/app/superrare/config";
 
 async function response(
   req: Request,
@@ -25,8 +25,8 @@ async function response(
   }
 
   const transactionFlowSearchParams = new URLSearchParams({ successMessage: "Your bid was submitted." });
-  const href = `${SUPERRARE_BASE_URL}/${params.collectionAddress.toLowerCase()}/${params.tokenId}`;
-  return frameResponseWrapper({
+  const href = `${SUPERRARE_CHAIN_CONFIG.superrareBaseUrl}/${params.collectionAddress.toLowerCase()}/${params.tokenId}`;
+  return frameResponse({
     req,
     // browserRedirectUrl: href,
     postUrl: `${process.env.NEXT_PUBLIC_URL}/superrare/auction/${collectionAddress}/${tokenId}`,

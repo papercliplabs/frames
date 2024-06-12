@@ -5,12 +5,12 @@ import { parseBase64String } from "./utils";
 import { multicall, readContract } from "viem/actions";
 import { formatNumber, formatTimeLeft } from "@/utils/format";
 import { Address, encodeFunctionData, formatEther, getAddress } from "viem";
-import { getWalletName } from "@/utils/wallet";
 import { metadataAbi } from "@/abis/nounsBuilder/metadata";
 import { FrameTransactionResponse } from "@coinbase/onchainkit/frame";
 import { bigIntMax } from "@/common/utils/bigInt";
 import { paperclipIcon } from "@/utils/paperclip";
 import { getImageProps } from "next/image";
+import { getUser } from "@/common/data/getUser";
 
 export type NounsBuilderAuctionData = NounishAuctionData & {
   namePrefix: string;
@@ -75,7 +75,7 @@ export async function getNounBuilderAuctionData({
   );
   const requiresSettlement = !settled && timeRemainingSec == 0;
 
-  const bidder = await getWalletName({ address: currentBidder });
+  const bidder = (await getUser({ address: currentBidder, resolverTypes: ["ens", "farcaster"] })).name;
 
   return {
     nounId: Number(nounId.toString()),

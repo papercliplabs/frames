@@ -2,7 +2,7 @@ import { Address, getAddress } from "viem";
 import { ConditionsNotMetComponentProps, MintConfig } from "../configs";
 import { ReactElement } from "react";
 import { isNftSoldOut } from "../commonChecks/nftSoldOut";
-import { basePublicClient } from "@/utils/wallet";
+import { basePublicClient } from "@/common/utils/walletClients";
 import { mintNftWithSyndicate } from "@/utils/syndicate";
 import { FrameRequest, FrameValidationData } from "@coinbase/onchainkit/frame";
 import { isCastLikedByUser } from "../commonChecks/farcaster";

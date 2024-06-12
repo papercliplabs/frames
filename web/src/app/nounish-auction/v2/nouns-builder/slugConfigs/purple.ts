@@ -1,4 +1,4 @@
-import { basePublicClient } from "@/utils/wallet";
+import { basePublicClient } from "@/common/utils/walletClients";
 import { getAddress } from "viem";
 import { NounsBuilderAuctionConfig } from "../configs";
 import { genericResponseBackgroundBlur } from "../utils/genericResponse";

@@ -1,13 +1,13 @@
 import { Address, getAddress } from "viem";
 import { gql } from "../generated";
 import { getSuperrareApolloClient } from "../client";
-import { mainnetPublicClient } from "@/utils/wallet";
 import { fetchIpfsData } from "@/utils/fetchIpfsDats";
 import { User, getUserData } from "./getUserData";
 import { readContractCached } from "@/common/utils/caching/readContractCached";
 import { SECONDS_PER_DAY } from "@/utils/constants";
 import { customUnstableCache } from "@/common/utils/caching/customUnstableCache";
 import { baseNft } from "../../abis/baseNft";
+import { SUPERRARE_CHAIN_CONFIG } from "../../config";
 
 interface GetArtworkDataParams {
   collectionAddress: Address;
@@ -113,7 +113,7 @@ async function getArtworkDataFromContractAndIpfs({
   try {
     [tokenUri, tokenCreator] = await Promise.all([
       readContractCached(
-        mainnetPublicClient,
+        SUPERRARE_CHAIN_CONFIG.client,
         {
           address: collectionAddress,
           abi: baseNft,
@@ -123,7 +123,7 @@ async function getArtworkDataFromContractAndIpfs({
         { revalidate: SECONDS_PER_DAY }
       ),
       readContractCached(
-        mainnetPublicClient,
+        SUPERRARE_CHAIN_CONFIG.client,
         {
           address: collectionAddress,
           abi: baseNft,
@@ -137,7 +137,7 @@ async function getArtworkDataFromContractAndIpfs({
     // Fallback to owner if tokenCreator doesn't exist
     [tokenUri, tokenCreator] = await Promise.all([
       readContractCached(
-        mainnetPublicClient,
+        SUPERRARE_CHAIN_CONFIG.client,
         {
           address: collectionAddress,
           abi: baseNft,
@@ -147,7 +147,7 @@ async function getArtworkDataFromContractAndIpfs({
         { revalidate: SECONDS_PER_DAY }
       ),
       readContractCached(
-        mainnetPublicClient,
+        SUPERRARE_CHAIN_CONFIG.client,
         {
           address: collectionAddress,
           abi: baseNft,

@@ -1,9 +1,9 @@
 import { relativeEndpointUrl } from "@/utils/urlHelpers";
-import frameResponseWrapper from "@/utils/frameResponseWrapper";
+import { frameResponse } from "@/common/utils/frameResponse";
 import { BEANS_WEBSITE_URL } from "@/common/beans/config/constants";
 import { FrameRequest } from "@coinbase/onchainkit/frame";
 import { BEANIGOTCHI_FRAME_BASE_URL } from "../../../utils/constants";
-import { frameErrorResponse } from "@/utils/frameErrorResponse";
+import { frameErrorResponse } from "@/common/utils/frameResponse";
 import { setPreferredBeanId } from "@/app/beanigotchi/data/trainer";
 
 async function response(req: Request): Promise<Response> {
@@ -28,7 +28,7 @@ async function response(req: Request): Promise<Response> {
     }
   }
 
-  return frameResponseWrapper({
+  return frameResponse({
     req,
     browserRedirectUrl: BEANS_WEBSITE_URL,
     postUrl: relativeEndpointUrl(req, ""),

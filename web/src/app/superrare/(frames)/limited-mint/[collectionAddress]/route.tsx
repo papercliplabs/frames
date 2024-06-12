@@ -1,12 +1,13 @@
-import { SUPERRARE_BASE_URL } from "@/app/superrare/utils/constants";
-import frameResponseWrapper from "@/utils/frameResponseWrapper";
-import { relativeEndpointUrl } from "@/utils/urlHelpers";
-import { getAddress } from "viem";
+import { frameResponse } from "@/common/utils/frameResponse";
+import { localImageUrl, relativeEndpointUrl } from "@/utils/urlHelpers";
+import { getAddress, isAddressEqual, zeroAddress } from "viem";
 import { getLimitedMintData } from "../../../data/queries/getLimitedMintData";
 import { readContract } from "viem/actions";
-import { mainnetPublicClient } from "@/utils/wallet";
 import { FrameButtonMetadata } from "@coinbase/onchainkit/frame";
 import { baseNft } from "@/app/superrare/abis/baseNft";
+import { SUPERRARE_CHAIN_CONFIG } from "@/app/superrare/config";
+import { Erc20TransactionInputState } from "@/app/erc-20-transaction/types";
+import { generateUuid } from "@/common/utils/uuid";
 
 async function response(req: Request, { params }: { params: { collectionAddress: string } }): Promise<Response> {
   const collectionAddress = getAddress(params.collectionAddress);
@@ -16,7 +17,7 @@ async function response(req: Request, { params }: { params: { collectionAddress:
   });
 
   if (!limitedMintData) {
-    const tokenId = await readContract(mainnetPublicClient, {
+    const tokenId = await readContract(SUPERRARE_CHAIN_CONFIG.client, {
       address: collectionAddress,
       abi: baseNft,
       functionName: "totalSupply",
@@ -28,9 +29,8 @@ async function response(req: Request, { params }: { params: { collectionAddress:
     );
   }
 
-  const transactionFlowSearchParams = new URLSearchParams({ successMessage: "You minted it!" });
-  const href = `${SUPERRARE_BASE_URL}/releases/${params.collectionAddress.toLowerCase()}`;
-  return frameResponseWrapper({
+  const href = `${SUPERRARE_CHAIN_CONFIG.superrareBaseUrl}/releases/${params.collectionAddress.toLowerCase()}`;
+  return frameResponse({
     req,
     // browserRedirectUrl: href,
     postUrl: `${process.env.NEXT_PUBLIC_URL}/superrare/limited-mint/${collectionAddress}`,
@@ -47,17 +47,45 @@ async function response(req: Request, { params }: { params: { collectionAddress:
       ...(limitedMintData.isValidForFrameTxn
         ? [
             {
-              label: "Mint",
+              label: `${isAddressEqual(limitedMintData.currency.address, zeroAddress) ? "" : "Approve / "}Mint`,
               action: "tx",
-              target: relativeEndpointUrl(req, `/tx`),
-              postUrl: `${process.env.NEXT_PUBLIC_URL}/transaction-flow/superrare?${transactionFlowSearchParams.toString()}`,
+              target: `${process.env.NEXT_PUBLIC_URL}/erc-20-transaction/tx`,
+              postUrl: `${process.env.NEXT_PUBLIC_URL}/erc-20-transaction/pending`,
             } as FrameButtonMetadata,
           ]
         : []),
     ],
     state: {
-      txSuccessTarget: `${process.env.NEXT_PUBLIC_URL}/superrare/fallback/${collectionAddress}/${limitedMintData.tokenId.toString()}`, // Go to the minted artworks frame
-      txFailedTarget: req.url,
+      ...({
+        chainId: SUPERRARE_CHAIN_CONFIG.client.chain!.id,
+        appName: "superrare-limited-mint",
+
+        tokenAddress: limitedMintData.currency.address,
+        spenderAddress: SUPERRARE_CHAIN_CONFIG.addresses.superrareMinter,
+        tokenAmount: (
+          limitedMintData.price +
+          (limitedMintData.price * SUPERRARE_CHAIN_CONFIG.superrareNetworkFeePercent) / BigInt(100)
+        ).toString(),
+
+        tryAgainFrameUrl: relativeEndpointUrl(req, "/"),
+
+        txFailedImgUrl: localImageUrl("/superrare/transaction/failed.png"),
+
+        approvePendingImgUrl: relativeEndpointUrl(req, `/image/tx/${limitedMintData.tokenId}/approve-pending`),
+        approveSuccessImgUrl: relativeEndpointUrl(req, `/image/tx/${limitedMintData.tokenId}/success-approved-rare`),
+        actionName: "Mint",
+
+        actionPendingImgUrl: relativeEndpointUrl(req, `/image/tx/${limitedMintData.tokenId}/purchase-pending`),
+        actionTxEndpointUrl: relativeEndpointUrl(req, "/tx"),
+        actionSuccessImgUrl: relativeEndpointUrl(req, `/image/tx/${limitedMintData.tokenId}/success-collected`),
+        actionExitButtonConfig: {
+          label: "View Collection",
+          action: "link",
+          target: href,
+        },
+
+        uuid: generateUuid(),
+      } as Erc20TransactionInputState),
     },
   });
 }

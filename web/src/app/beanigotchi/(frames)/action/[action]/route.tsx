@@ -1,5 +1,5 @@
 import { relativeEndpointUrl } from "@/utils/urlHelpers";
-import frameResponseWrapper from "@/utils/frameResponseWrapper";
+import { frameResponse } from "@/common/utils/frameResponse";
 import { BEANS_WEBSITE_URL } from "@/common/beans/config/constants";
 import { FrameRequest } from "@coinbase/onchainkit/frame";
 import { Action, takeAction } from "@/app/beanigotchi/data/actions";
@@ -16,7 +16,7 @@ async function response(req: Request, { params }: { params: { action: string } }
   const fid = frameRequest.untrustedData.fid;
   const actionResult = await takeAction({ fid, action });
 
-  return frameResponseWrapper({
+  return frameResponse({
     req,
     browserRedirectUrl: BEANS_WEBSITE_URL,
     postUrl: relativeEndpointUrl(req, ""),

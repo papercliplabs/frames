@@ -1,3 +1,3 @@
-import { basePublicClient } from "@/utils/wallet";
+import { basePublicClient } from "@/common/utils/walletClients";
 
 export const beansClient = basePublicClient;

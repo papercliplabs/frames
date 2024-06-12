@@ -3,7 +3,7 @@ import { readContractCached } from "@/common/utils/caching/readContractCached";
 import { SECONDS_PER_MONTH } from "@/utils/constants";
 import { parseBase64Json } from "@/common/utils/base64";
 import { nounsTokenContract } from "../contracts/token";
-import { mainnetPublicClient } from "@/utils/wallet";
+import { mainnetPublicClient } from "@/common/utils/walletClients";
 
 interface GetNounParams {
   id: bigint;

@@ -3,7 +3,7 @@ import { readContractCached } from "@/common/utils/caching/readContractCached";
 import { Address } from "viem";
 import { SECONDS_PER_DAY } from "@/utils/constants";
 import { bigIntMax } from "@/common/utils/bigInt";
-import { mainnetPublicClient } from "@/utils/wallet";
+import { mainnetPublicClient } from "@/common/utils/walletClients";
 import { nounsAuctionHouseContract } from "../contracts/auctionHouse";
 
 export interface NounsAuction {

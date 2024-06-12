@@ -1,4 +1,4 @@
-import { zoraPublicClient } from "@/utils/wallet";
+import { zoraPublicClient } from "@/common/utils/walletClients";
 import { getAddress } from "viem";
 import { NounsBuilderAuctionConfig } from "../configs";
 import { genericResponseBackgroundBlur } from "../utils/genericResponse";

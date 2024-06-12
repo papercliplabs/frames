@@ -1,5 +1,5 @@
 import { Address, Client } from "viem";
-import { basePublicClient, mainnetPublicClient, zoraPublicClient } from "@/utils/wallet";
+import { basePublicClient, mainnetPublicClient, zoraPublicClient } from "@/common/utils/walletClients";
 import { FontType } from "@/utils/baseImg";
 import {
   AuctionDetails,

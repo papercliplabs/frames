@@ -1,14 +1,13 @@
 import { Address, isAddressEqual, zeroAddress } from "viem";
 import { readContract } from "viem/actions";
-import { mainnetPublicClient } from "@/utils/wallet";
-import { SUPERRARE_BRAZZER_ADDRESS } from "../../utils/constants";
 import { User, getUserData } from "./getUserData";
 import { bigIntMax } from "@/common/utils/bigInt";
 import { TokenData, getTokenData } from "./getTokenData";
 import { formatTimeLeft } from "@/utils/format";
 import { customUnstableCache } from "@/common/utils/caching/customUnstableCache";
 import { readContractCached } from "@/common/utils/caching/readContractCached";
-import { brazzerAbi } from "../../abis/brazzer";
+import { bazaarAbi } from "../../abis/bazaar";
+import { SUPERRARE_CHAIN_CONFIG } from "../../config";
 
 interface GetAuctionDataParams {
   collectionAddress: Address;
@@ -40,21 +39,21 @@ export async function getAuctionDataUncached({
       [bidderAddress, , highestBid],
       minBidIncrementPercentage,
     ] = await Promise.all([
-      readContract(mainnetPublicClient, {
-        address: SUPERRARE_BRAZZER_ADDRESS,
-        abi: brazzerAbi,
+      readContract(SUPERRARE_CHAIN_CONFIG.client, {
+        address: SUPERRARE_CHAIN_CONFIG.addresses.superrareBazaar,
+        abi: bazaarAbi,
         functionName: "getAuctionDetails",
         args: [collectionAddress, tokenId],
       }),
-      readContract(mainnetPublicClient, {
-        address: SUPERRARE_BRAZZER_ADDRESS,
-        abi: brazzerAbi,
+      readContract(SUPERRARE_CHAIN_CONFIG.client, {
+        address: SUPERRARE_CHAIN_CONFIG.addresses.superrareBazaar,
+        abi: bazaarAbi,
         functionName: "auctionBids",
         args: [collectionAddress, tokenId],
       }),
-      readContractCached(mainnetPublicClient, {
-        address: SUPERRARE_BRAZZER_ADDRESS,
-        abi: brazzerAbi,
+      readContractCached(SUPERRARE_CHAIN_CONFIG.client, {
+        address: SUPERRARE_CHAIN_CONFIG.addresses.superrareBazaar,
+        abi: bazaarAbi,
         functionName: "minimumBidIncreasePercentage",
       }),
     ]);

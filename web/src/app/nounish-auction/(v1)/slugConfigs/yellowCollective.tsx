@@ -7,7 +7,7 @@ import {
   getNounsBuilderBidTransactionData,
   getNounsBuilderSettleTransactionData,
 } from "./common/nounsBuilder";
-import { basePublicClient } from "@/utils/wallet";
+import { basePublicClient } from "@/common/utils/walletClients";
 import { FrameTransactionResponse } from "@coinbase/onchainkit/frame";
 import { ColorConfig } from "./common/types";
 import { getAuctionImage } from "@/common/data/yellowCollective/queries/getAuctionData";
