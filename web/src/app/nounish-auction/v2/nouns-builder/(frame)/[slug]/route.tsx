@@ -14,6 +14,10 @@ async function response(req: Request, { params }: { params: { slug: string } }):
   return frameResponse({
     req,
     browserRedirectUrl: config.frontendUrl,
+    ogTitle: params.slug
+      .split("-")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" "),
     image: {
       src: relativeEndpointUrl(req, `/image?t=${Date.now()}`),
       aspectRatio: "1:1",

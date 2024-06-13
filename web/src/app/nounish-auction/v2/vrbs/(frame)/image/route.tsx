@@ -7,10 +7,13 @@ import { SatoriOptions } from "satori";
 import sharp, { Sharp } from "sharp";
 import "@/common/utils/bigIntPolyfill";
 import { generateImageResponse } from "@/utils/generateImage/generateImage";
+import { track } from "@vercel/analytics/server";
 
 export async function GET(req: Request): Promise<Response> {
   const auctionData = await getCurrentAuctionDataCached();
   const backgroundImage = formBackgroundImage(auctionData.artworkImageSrc);
+
+  await track("image-regeneration", { app: "nounish-auction/v2/vrbs" });
 
   return generateImageResponse({
     frameSize: { width: 1200, height: 1200 },
