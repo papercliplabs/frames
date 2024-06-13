@@ -9,6 +9,7 @@ async function response(req: Request): Promise<Response> {
   return frameResponse({
     req,
     browserRedirectUrl: FRONTEND_AUCTION_URL,
+    ogTitle: "Vrbs",
     postUrl: `${process.env.NEXT_PUBLIC_URL}/nounish-auction/v2/vrbs`,
     image: {
       src: relativeEndpointUrl(req, `/image?t=${Date.now()}`),
