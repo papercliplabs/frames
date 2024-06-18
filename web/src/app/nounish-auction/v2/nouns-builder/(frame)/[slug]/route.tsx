@@ -23,6 +23,7 @@ async function response(req: Request, { params }: { params: { slug: string } }):
       aspectRatio: "1:1",
     },
     input: { text: "Enter ETH bid amount" },
+    postUrl: `${process.env.NEXT_PUBLIC_URL}/nounish-auction/v2/nouns-builder/${params.slug}`,
     buttons: [
       {
         label: "Refresh",
