@@ -1,6 +1,5 @@
 import { frameResponse } from "@/common/utils/frameResponse";
 import { relativeEndpointUrl } from "@/utils/urlHelpers";
-import { toHex } from "viem";
 import { CHAIN_FOR_ID } from "../../../../../config";
 
 async function response(
@@ -26,7 +25,7 @@ async function response(
       {
         label: "View Tx",
         action: "link",
-        target: `${chain.blockExplorers?.default.url}/tx/${toHex(params.txHash)}`,
+        target: `${chain.blockExplorers?.default.url}/tx/${params.txHash}`,
       },
       {
         label: "NounSwap",
