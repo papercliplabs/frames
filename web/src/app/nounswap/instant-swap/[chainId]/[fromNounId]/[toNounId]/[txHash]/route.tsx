@@ -1,6 +1,8 @@
 import { frameResponse } from "@/common/utils/frameResponse";
 import { relativeEndpointUrl } from "@/utils/urlHelpers";
 import { CHAIN_FOR_ID } from "../../../../../config";
+import { FrameRequest } from "@coinbase/onchainkit/frame";
+import { track } from "@vercel/analytics/server";
 
 async function response(
   req: Request,
@@ -12,10 +14,23 @@ async function response(
     return Response.error();
   }
 
+  // Handle link clicks with logging
+  if (req.method === "POST") {
+    const frameRequest: FrameRequest = await req.json();
+    if (frameRequest.untrustedData.buttonIndex == 1) {
+      track("link-clicked", { app: "nounswap/instant-swap", label: "View Tx" });
+      return Response.redirect(`${chain.blockExplorers?.default.url}/tx/${params.txHash}`, 302);
+    } else if (frameRequest.untrustedData.buttonIndex == 2) {
+      track("link-clicked", { app: "nounswap/instant-swap", label: "NounSwap" });
+      return Response.redirect("https://nounswap.wtf", 302);
+    }
+  }
+
   return frameResponse({
     req,
     browserRedirectUrl: "https://nounswap.wtf",
     ogTitle: "NounSwap Swap",
+    appName: "nounswap/instant-swap",
     postUrl: relativeEndpointUrl(req, ""),
     image: {
       src: relativeEndpointUrl(req, `/image?t=${Date.now()}`),
@@ -24,13 +39,11 @@ async function response(
     buttons: [
       {
         label: "View Tx",
-        action: "link",
-        target: `${chain.blockExplorers?.default.url}/tx/${params.txHash}`,
+        action: "post_redirect",
       },
       {
         label: "NounSwap",
-        action: "link",
-        target: "https://nounswap.wtf",
+        action: "post_redirect",
       },
     ],
   });
