@@ -29,7 +29,7 @@ export async function GET(
     layers: [
       {
         type: "static",
-        src: "/images/nounswap/instant-swap-background.png",
+        src: "/images/nounswap/instant-swap/background.png",
         size: { width: 1200, height: 1200 },
       },
       {
@@ -66,7 +66,7 @@ export async function GET(
       },
       {
         type: "static",
-        src: "/images/nounswap/swap-icon.png",
+        src: "/images/nounswap/instant-swap/icon.png",
         size: { width: 112, height: 112 },
         position: {
           left: 828,
