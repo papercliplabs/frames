@@ -1,4 +1,5 @@
 import { FrameTransactionResponse, getFrameHtmlResponse } from "@coinbase/onchainkit/frame";
+import { track } from "@vercel/analytics/server";
 import { detect } from "detect-browser";
 import {
   Abi,
@@ -18,16 +19,21 @@ import { writeContract } from "viem/actions";
 type FrameResponseWrapperParams = {
   req: Request;
   browserRedirectUrl?: string;
+  appName?: string;
 } & Parameters<typeof getFrameHtmlResponse>[0];
 
 export function frameResponse({
   req,
   browserRedirectUrl,
+  appName,
   ...getFrameHtmlResponseParams
 }: FrameResponseWrapperParams): Response {
   // Handle redirect if clicked on frame
   const browser = detect(req.headers.get("user-agent") ?? "");
   if (browser?.name && browserRedirectUrl) {
+    if (appName) {
+      track("frame-clicked", { app: appName });
+    }
     return Response.redirect(browserRedirectUrl);
   }
 
