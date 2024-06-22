@@ -114,7 +114,7 @@ function artworkImageLayers({ artwork, artist, tag, extra }: ArtworkImageRespons
 
 export function artworkImageResponse({ imageCacheMaxAgeS, ...params }: ArtworkImageResponseParams): Promise<Response> {
   return generateImageResponse({
-    imageCacheMaxAgeS: imageCacheMaxAgeS ?? 30, // Every 30s at most
+    imageCacheMaxAgeS: imageCacheMaxAgeS ?? 60 * 10, // Every 5min by default
     frameSize: {
       width: 1200,
       height: 1200,
@@ -132,7 +132,7 @@ export function overlayedArtworkImageResponse({
   ...params
 }: ArtworkImageResponseParams & { overlaySrc: string }): Promise<Response> {
   return generateImageResponse({
-    imageCacheMaxAgeS: imageCacheMaxAgeS ?? 30, // Every 30s at most
+    imageCacheMaxAgeS: imageCacheMaxAgeS ?? 60 * 10, // Every 10min by default
     frameSize: {
       width: 1200,
       height: 1200,
@@ -150,6 +150,7 @@ export function errorImageResponse() {
       width: 1200,
       height: 1200,
     },
+    imageCacheMaxAgeS: 60 * 30, // Every 30min by default
     backgroundColor: { r: 0x00, g: 0x00, b: 0x00 },
     twConfig,
     fontTypes: ["inter"],
