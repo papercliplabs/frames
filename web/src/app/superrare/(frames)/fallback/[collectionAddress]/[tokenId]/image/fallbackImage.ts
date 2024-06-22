@@ -10,7 +10,7 @@ export async function fallbackImage(collectionAddress: Address, tokenId: bigint)
 
   return artworkData
     ? artworkImageResponse({
-        imageCacheMaxAgeS: 900, // Refetch this image every 15min, only dynamic on a state change
+        imageCacheMaxAgeS: 2 * 60 * 60, // Refetch this image every 3hr, only dynamic on a state change
         artwork: {
           title: artworkData.title,
           imgSrc: artworkData.imageSrc,
