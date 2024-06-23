@@ -17,12 +17,17 @@ export async function GET(req: NextRequest, { params }: { params: { collectionAd
 
   const artworkState = await getArtworkState({ collectionAddress, tokenId });
 
+  // Superrare frontend forgot to provide fetch tokenId previously for a collection (not release)
+  // So we are tracking tip of their main NFT collection, and sucking crazy bandwidth.
+  // Throw error for these kind of frames.
   if (artworkState == "fallback" && tokenId == undefined) {
-    tokenId = await readContract(SUPERRARE_CHAIN_CONFIG.client, {
-      address: collectionAddress,
-      abi: baseNft,
-      functionName: "totalSupply",
-    });
+    // tokenId = await readContract(SUPERRARE_CHAIN_CONFIG.client, {
+    //   address: collectionAddress,
+    //   abi: baseNft,
+    //   functionName: "totalSupply",
+    // });
+    console.log("router image - not limited-mint and no tokenId", collectionAddress);
+    return errorImageResponse();
   }
 
   if (artworkState != "limited-mint" && tokenId == undefined) {
