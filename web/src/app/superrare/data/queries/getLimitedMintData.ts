@@ -121,5 +121,5 @@ export async function getLimitedMintDataUncached({
 }
 
 export const getLimitedMintData = customUnstableCache(getLimitedMintDataUncached, ["get-limited-mint-data"], {
-  revalidate: 10,
+  revalidate: 60,
 });

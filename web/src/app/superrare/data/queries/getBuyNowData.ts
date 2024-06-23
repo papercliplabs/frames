@@ -71,5 +71,5 @@ export async function getBuyNowDataUncached({
 }
 
 export const getBuyNowData = customUnstableCache(getBuyNowDataUncached, ["superrare-get-buy-now-data"], {
-  revalidate: 30,
+  revalidate: 60 * 15, // 15min
 });
