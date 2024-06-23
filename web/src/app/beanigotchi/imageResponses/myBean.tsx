@@ -1,6 +1,5 @@
 import { generateImageResponse } from "@/utils/generateImage/generateImage";
 import { beanedexFrameLayers } from "./partial/beanidexFrameLayers";
-import { twConfig } from "./partial/twConfig";
 import { ENABLE_ANIMATIONS, SCALER } from "../utils/constants";
 
 interface MyBeanImageResponseParams {
@@ -34,7 +33,6 @@ export async function myBeanImageResponse({
     },
     backgroundColor: primaryColor,
     fontTypes: ["graphik"],
-    twConfig,
     gifOverrideDelay: 120,
     layers: [
       {

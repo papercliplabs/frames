@@ -60,7 +60,7 @@ export async function beanedexFrameLayers({
             }}
           />
           <div
-            tw="text-content-primary justify-center items-center text-body font-bold text-center absolute"
+            tw="text-[#FFFFFF] justify-center items-center text-[21.6px] tracking-[1.73px] font-bold text-center absolute"
             style={{
               width: 355 * SCALER,
               height: 75 * SCALER,
@@ -127,7 +127,7 @@ export async function beanedexFrameLayers({
           )}
           {level != undefined && (
             <div
-              tw="flex absolute text-center items-center justify-center text-body font-bold text-content-primary "
+              tw="flex absolute text-center items-center justify-center text-[21.6px] tracking-[1.73px] font-bold text-[#FFFFFF] "
               style={{
                 left: Math.floor(262 * SCALER),
                 top: Math.floor(284 * SCALER),

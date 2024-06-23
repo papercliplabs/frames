@@ -4,7 +4,6 @@ import { generateImageResponse } from "@/utils/generateImage/generateImage";
 import { ImageLayer } from "@/utils/generateImage/types";
 import { localImageUrl } from "@/utils/urlHelpers";
 import clsx from "clsx";
-import { SatoriOptions } from "satori";
 
 interface ArtworkImageResponseParams {
   artwork: {
@@ -47,12 +46,12 @@ function artworkImageLayers({ artwork, artist, tag, extra }: ArtworkImageRespons
     {
       type: "dynamic",
       src: (
-        <div tw="w-full h-full p-16 flex flex-col justify-between text-content-primary text-body">
+        <div tw="w-full h-full p-16 flex flex-col justify-between text-[#FFFFFF] text-[56px] leading-[72px] tracking-[1.2px]">
           {tag ? (
             <div
               tw={clsx(
                 "flex px-6 py-2 rounded-[16px] border-[2px] items-center mr-auto ",
-                tag.active ? "bg-white/90 text-black border-black/20" : "bg-background-secondary/90 border-white/20"
+                tag.active ? "bg-white/90 text-black border-black/20" : "bg-[#191919]/90 border-white/20"
               )}
               style={{ gap: "32px", flexShrink: 1 }}
             >
@@ -66,7 +65,7 @@ function artworkImageLayers({ artwork, artist, tag, extra }: ArtworkImageRespons
           )}
           <div tw="flex flex-col w-full" style={{ gap: "48px", textShadow: "0px 0px 2px rgba(0, 0, 0, 0.90)" }}>
             <div
-              tw="flex text-title"
+              tw="flex text-[64px] leading-[96px] tracking-[0px]"
               style={{
                 wordBreak: "break-word",
                 textWrap: "wrap",
@@ -81,13 +80,13 @@ function artworkImageLayers({ artwork, artist, tag, extra }: ArtworkImageRespons
               <div tw="flex flex-row items-center" style={{ gap: "16px" }}>
                 {artist.imgSrc && <div tw="w-[112px] h-[112px]" />} {/* Create a hole for the user image*/}
                 <div tw="flex flex-col">
-                  <div tw="text-caption text-content-secondary">Artist</div>
+                  <div tw="text-[48px] leading-[64px] tracking-[1.2px] text-[#A0A0A0]">Artist</div>
                   <div>{truncateString(artist.name, 15)}</div>
                 </div>
               </div>
               {extra && (
                 <div tw="flex flex-col">
-                  <div tw="text-caption text-content-secondary">{extra.title}</div>
+                  <div tw="text-[48px] leading-[64px] tracking-[1.2px] text-[#A0A0A0]">{extra.title}</div>
                   <div>{extra.content}</div>
                 </div>
               )}
@@ -120,7 +119,6 @@ export function artworkImageResponse({ imageCacheMaxAgeS, ...params }: ArtworkIm
       height: 1200,
     },
     backgroundColor: { r: 0x00, g: 0x00, b: 0x00 },
-    twConfig,
     fontTypes: ["inter"],
     layers: artworkImageLayers(params),
   });
@@ -138,7 +136,6 @@ export function overlayedArtworkImageResponse({
       height: 1200,
     },
     backgroundColor: { r: 0x00, g: 0x00, b: 0x00 },
-    twConfig,
     fontTypes: ["inter"],
     layers: [...artworkImageLayers(params), { type: "static", size: { width: 1200, height: 1200 }, src: overlaySrc }],
   });
@@ -152,7 +149,6 @@ export function errorImageResponse() {
     },
     imageCacheMaxAgeS: 60 * 60 * 6, // Every 6hr by default
     backgroundColor: { r: 0x00, g: 0x00, b: 0x00 },
-    twConfig,
     fontTypes: ["inter"],
     layers: [
       {
@@ -165,7 +161,7 @@ export function errorImageResponse() {
       {
         type: "dynamic",
         src: (
-          <div tw="w-full h-full p-16 flex flex-col justify-center items-center text-content-primary text-body">
+          <div tw="w-full h-full p-16 flex flex-col justify-center items-center text-[#FFFFFF] text-[56px] leading-[72px] tracking-[1.2px]">
             Unable to fetch the image
           </div>
         ),
@@ -175,43 +171,3 @@ export function errorImageResponse() {
     ],
   });
 }
-
-const twConfig: SatoriOptions["tailwindConfig"] = {
-  theme: {
-    extend: {
-      colors: {
-        content: {
-          primary: "#FFFFFF",
-          secondary: "#A0A0A0",
-        },
-        background: {
-          primary: "#0A0A0A",
-          secondary: "#191919",
-        },
-      },
-      fontSize: {
-        title: [
-          "64px",
-          {
-            lineHeight: "96px",
-            letterSpacing: "0px",
-          },
-        ],
-        body: [
-          "56px",
-          {
-            lineHeight: "72px",
-            letterSpacing: "1.2px",
-          },
-        ],
-        caption: [
-          "48px",
-          {
-            lineHeight: "64px",
-            letterSpacing: "1.2px",
-          },
-        ],
-      },
-    },
-  },
-};
