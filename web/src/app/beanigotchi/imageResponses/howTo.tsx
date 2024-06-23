@@ -1,7 +1,6 @@
 import { SECONDS_PER_DAY } from "@/utils/constants";
 import { generateImageResponse } from "@/utils/generateImage/generateImage";
 import { beanedexFrameLayers } from "./partial/beanidexFrameLayers";
-import { twConfig } from "./partial/twConfig";
 import { SCALER } from "../utils/constants";
 
 interface HowToImageResponseParams {
@@ -41,7 +40,6 @@ export async function howToImageResponse({
     },
     backgroundColor: primaryColor,
     fontTypes: ["graphik"],
-    twConfig,
     layers: [
       {
         type: "dynamic",
@@ -62,12 +60,14 @@ export async function howToImageResponse({
         position: { left: Math.floor(240 * SCALER), top: Math.floor(260 * SCALER) },
         src: (
           <div
-            tw="flex flex-col w-full h-full text-content-primary justify-center"
+            tw="flex flex-col w-full h-full text-[#FFFFFF] justify-center"
             style={{ gap: 70 * SCALER, padding: 40 * SCALER }}
           >
-            <div tw="text-title font-bold w-full flex items-center justify-center text-center">HOW IT WORKS</div>
-            <div tw="text-body">{content.body1}</div>
-            <div tw="text-body">{content.body2}</div>
+            <div tw="text-[37px] tracking-[4.18px] font-bold w-full flex items-center justify-center text-center">
+              HOW IT WORKS
+            </div>
+            <div tw="text-[21.6px] tracking-[1.73px]">{content.body1}</div>
+            <div tw="text-[21.6px] tracking-[1.73px]">{content.body2}</div>
           </div>
         ),
       },

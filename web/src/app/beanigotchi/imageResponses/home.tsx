@@ -1,7 +1,6 @@
 import { SECONDS_PER_DAY } from "@/utils/constants";
 import { generateImageResponse } from "@/utils/generateImage/generateImage";
 import { beanedexFrameLayers } from "./partial/beanidexFrameLayers";
-import { twConfig } from "./partial/twConfig";
 import { ENABLE_ANIMATIONS, SCALER } from "../utils/constants";
 
 interface HomeImageResponseParams {
@@ -18,7 +17,6 @@ export async function homeImageResponse({ primaryColor, secondaryColor }: HomeIm
     },
     backgroundColor: primaryColor,
     fontTypes: ["graphik"],
-    twConfig,
     layers: [
       {
         type: "dynamic",

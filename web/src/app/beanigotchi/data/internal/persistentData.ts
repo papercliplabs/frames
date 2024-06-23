@@ -1,5 +1,5 @@
 import { customUnstableCache } from "@/common/utils/caching/customUnstableCache";
-import { Database } from "@/supabase/codegen.types";
+import { Database } from "@/supabase/generated";
 import { supabase } from "@/supabase/supabase";
 import { revalidateTag } from "next/cache";
 
