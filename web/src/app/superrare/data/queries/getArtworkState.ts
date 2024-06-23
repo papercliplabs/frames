@@ -2,6 +2,7 @@ import { Address } from "viem";
 import { getLimitedMintData } from "./getLimitedMintData";
 import { getAuctionData } from "./getAuctionData";
 import { getBuyNowData } from "./getBuyNowData";
+import { customUnstableCache } from "@/common/utils/caching/customUnstableCache";
 
 type ArtworkState = "fallback" | "auction" | "limited-mint" | "buy-now";
 
@@ -10,7 +11,7 @@ interface GetArtworkStateParams {
   tokenId?: bigint;
 }
 
-export async function getArtworkState({ collectionAddress, tokenId }: GetArtworkStateParams): Promise<ArtworkState> {
+async function getArtworkStateUncached({ collectionAddress, tokenId }: GetArtworkStateParams): Promise<ArtworkState> {
   if (tokenId == undefined) {
     const limitedMintData = await getLimitedMintData({ collectionAddress });
     return limitedMintData ? "limited-mint" : "fallback";
@@ -24,3 +25,7 @@ export async function getArtworkState({ collectionAddress, tokenId }: GetArtwork
     }
   }
 }
+
+export const getArtworkState = customUnstableCache(getArtworkStateUncached, ["get-artwork-state"], {
+  revalidate: 60 * 15,
+}); // 15min

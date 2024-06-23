@@ -175,4 +175,6 @@ async function getArtworkDataFromContractAndIpfs({
   };
 }
 
-export const getArtworkData = customUnstableCache(getArtworkDataUncached, ["get-artwork-data"], { revalidate: 600 }); // Revalidate every 10min
+export const getArtworkData = customUnstableCache(getArtworkDataUncached, ["get-artwork-data"], {
+  revalidate: SECONDS_PER_DAY, // Every day, really should never change
+});
