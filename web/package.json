@@ -7,7 +7,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "codegen": "graphql-codegen --config src/app/superrare/data/codegen.ts; graphql-codegen --config src/common/data/yellowCollective/codegen.ts;",
+    "codegen": "graphql-codegen --config src/app/superrare/data/codegen.ts; graphql-codegen --config src/common/data/yellowCollective/codegen.ts; supabase gen types typescript --project-id maigwjhtcdimlttkflad > src/supabase/generated.ts",
     "dev": "next dev",
     "build": "pnpm codegen && next build",
     "start": "next start",
