@@ -1,8 +1,8 @@
 import { CHAIN_FOR_ID } from "@/app/nounswap/config";
+import { sendAnalyticsEvent } from "@/common/utils/analytics";
 import { frameResponse } from "@/common/utils/frameResponse";
 import { relativeEndpointUrl } from "@/utils/urlHelpers";
 import { FrameRequest } from "@coinbase/onchainkit/frame";
-import { track } from "@vercel/analytics/server";
 
 async function response(
   req: Request,
@@ -18,10 +18,10 @@ async function response(
   if (req.method === "POST") {
     const frameRequest: FrameRequest = await req.json();
     if (frameRequest.untrustedData.buttonIndex == 1) {
-      track("link-clicked", { app: "nounswap/redeem", label: "View Tx" });
+      sendAnalyticsEvent("link-clicked", { app: "nounswap/redeem", label: "View Tx" });
       return Response.redirect(`${chain.blockExplorers?.default.url}/tx/${params.txHash}`, 302);
     } else if (frameRequest.untrustedData.buttonIndex == 2) {
-      track("link-clicked", { app: "nounswap/redeem", label: "NounSwap" });
+      sendAnalyticsEvent("link-clicked", { app: "nounswap/redeem", label: "NounSwap" });
       return Response.redirect("https://nounswap.wtf", 302);
     }
   }

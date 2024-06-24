@@ -3,9 +3,9 @@ import { getAddress } from "viem";
 import { getFrameMessageWithNeynarApiKey } from "@/utils/farcaster";
 import { SupportedMintCollection, mintConfigs } from "../configs";
 import { extractComposableQueryParams, getComposeResponse } from "@/utils/composableParams";
-import { track } from "@vercel/analytics/server";
 import { isAllowedCaster, restrictedFrameResponse } from "@/utils/restrictedFrame";
 import { FrameButtonMetadata, FrameRequest, getFrameHtmlResponse } from "@coinbase/onchainkit/frame";
+import { sendAnalyticsEvent } from "@/common/utils/analytics";
 
 export async function GET(req: NextRequest, { params }: { params: { collection: string } }): Promise<Response> {
   const config = mintConfigs[params.collection as SupportedMintCollection];
@@ -60,7 +60,7 @@ export async function POST(req: NextRequest, { params }: { params: { collection:
     },
   ];
 
-  await track("mint-interaction", {
+  sendAnalyticsEvent("mint-interaction", {
     dao: params.collection,
   });
 

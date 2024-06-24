@@ -3,17 +3,16 @@ import { formatEther } from "viem";
 import { getCurrentAuctionDataCached } from "../../data/getCurrentAuctionData";
 import ServerImage from "@/components/ServerImage";
 import { localImageUrl } from "@/utils/urlHelpers";
-import { SatoriOptions } from "satori";
 import sharp, { Sharp } from "sharp";
 import "@/common/utils/bigIntPolyfill";
 import { generateImageResponse } from "@/utils/generateImage/generateImage";
-import { track } from "@vercel/analytics/server";
+import { sendAnalyticsEvent } from "@/common/utils/analytics";
 
 export async function GET(req: Request): Promise<Response> {
   const auctionData = await getCurrentAuctionDataCached();
   const backgroundImage = formBackgroundImage(auctionData.artworkImageSrc);
 
-  await track("image-regeneration", { app: "nounish-auction/v2/vrbs" });
+  sendAnalyticsEvent("image-regeneration", { app: "nounish-auction/v2/vrbs" });
 
   return generateImageResponse({
     frameSize: { width: 1200, height: 1200 },

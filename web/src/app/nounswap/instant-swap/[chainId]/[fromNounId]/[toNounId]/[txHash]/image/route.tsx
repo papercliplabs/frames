@@ -1,9 +1,7 @@
 import { CHAIN_FOR_ID } from "@/app/nounswap/config";
 import { getNoun } from "@/common/nouns/data/getNoun";
-import ServerImage from "@/components/ServerImage";
+import { sendAnalyticsEvent } from "@/common/utils/analytics";
 import { generateImageResponse } from "@/utils/generateImage/generateImage";
-import { track } from "@vercel/analytics/server";
-import { transform } from "next/dist/build/swc";
 
 export async function GET(
   req: Request,
@@ -20,7 +18,7 @@ export async function GET(
 
   const [fromNoun, toNoun] = await Promise.all([getNoun({ id: fromNounId }), getNoun({ id: toNounId })]);
 
-  await track("image-regeneration", { app: "nounswap/instant-swap" });
+  sendAnalyticsEvent("image-regeneration", { app: "nounswap/instant-swap" });
 
   return generateImageResponse({
     frameSize: { width: 1200, height: 1200 },

@@ -1,7 +1,7 @@
 import { CHAIN_FOR_ID } from "@/app/nounswap/config";
 import { getNoun } from "@/common/nouns/data/getNoun";
+import { sendAnalyticsEvent } from "@/common/utils/analytics";
 import { generateImageResponse } from "@/utils/generateImage/generateImage";
-import { track } from "@vercel/analytics/server";
 
 export async function GET(
   req: Request,
@@ -15,7 +15,7 @@ export async function GET(
 
   const nounId = BigInt(params.nounId);
   const noun = await getNoun({ id: nounId });
-  await track("image-regeneration", { app: "nounswap/deposit" });
+  sendAnalyticsEvent("image-regeneration", { app: "nounswap/deposit" });
 
   return generateImageResponse({
     frameSize: { width: 1200, height: 1200 },

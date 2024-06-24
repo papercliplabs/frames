@@ -1,20 +1,14 @@
 import { FrameTransactionResponse, getFrameHtmlResponse } from "@coinbase/onchainkit/frame";
-import { track } from "@vercel/analytics/server";
 import { detect } from "detect-browser";
 import {
   Abi,
-  Account,
   Address,
-  Chain,
-  Client,
   ContractFunctionArgs,
   ContractFunctionName,
   EncodeFunctionDataParameters,
-  Transport,
-  WriteContractParameters,
   encodeFunctionData,
 } from "viem";
-import { writeContract } from "viem/actions";
+import { sendAnalyticsEvent } from "./analytics";
 
 type FrameResponseWrapperParams = {
   req: Request;
@@ -32,7 +26,7 @@ export function frameResponse({
   const browser = detect(req.headers.get("user-agent") ?? "");
   if (browser?.name && browserRedirectUrl) {
     if (appName) {
-      track("frame-clicked", { app: appName });
+      sendAnalyticsEvent("frame-clicked", { app: appName });
     }
     return Response.redirect(browserRedirectUrl);
   }
