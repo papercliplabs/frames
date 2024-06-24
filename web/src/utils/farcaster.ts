@@ -1,11 +1,8 @@
 import { FrameRequest, getFrameMessage } from "@coinbase/onchainkit/frame";
-import { NeynarAPIClient } from "@neynar/nodejs-sdk";
 import { User as FarcasterUser } from "@neynar/nodejs-sdk/build/neynar-api/v2";
 
 export const NEYNAR_KEY = process.env.NEYNAR_API_KEY!;
 const REVALIDATION_TIME_S = 15;
-
-export const neynarClient = new NeynarAPIClient(NEYNAR_KEY);
 
 interface User extends FarcasterUser {
   power_badge: boolean;

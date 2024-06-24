@@ -1,12 +1,10 @@
 import { Address, getAddress } from "viem";
 import { ConditionsNotMetComponentProps, MintConfig } from "../configs";
-import { ValidateFrameActionResponse } from "@neynar/nodejs-sdk/build/neynar-api/v2";
 import { ReactElement } from "react";
 import { isNftSoldOut } from "../commonChecks/nftSoldOut";
 import { basePublicClient } from "@/common/utils/walletClients";
 import { isNftBalanceAboveThreshold } from "../commonChecks/nftBalance";
 import { isCastLikedByUser, isChannelFollowedByUser, isUserFollowedByUser } from "../commonChecks/farcaster";
-import { mintNftWithSyndicate } from "@/utils/syndicate";
 import { FrameRequest, FrameValidationData } from "@coinbase/onchainkit/frame";
 
 const CLIENT = basePublicClient;
