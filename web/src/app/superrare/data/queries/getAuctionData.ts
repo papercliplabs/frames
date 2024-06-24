@@ -103,5 +103,5 @@ export async function getAuctionDataUncached({
 }
 
 export const getAuctionData = customUnstableCache(getAuctionDataUncached, ["get-auction-data"], {
-  revalidate: 60,
+  revalidate: 15,
 });

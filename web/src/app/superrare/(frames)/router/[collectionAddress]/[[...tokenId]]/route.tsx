@@ -2,7 +2,7 @@ import { getArtworkState } from "@/app/superrare/data/queries/getArtworkState";
 import { frameResponse } from "@/common/utils/frameResponse";
 import { FrameRequest } from "@coinbase/onchainkit/frame";
 import { getAddress } from "viem";
-import { track } from "@vercel/analytics/server";
+import { sendAnalyticsEvent } from "@/common/utils/analytics";
 
 async function response(
   req: Request,
@@ -20,22 +20,22 @@ async function response(
 
       switch (artworkState) {
         case "auction":
-          track("superrare-continue", { state: "auction" });
+          sendAnalyticsEvent("superrare-continue", { state: "auction" });
           return Response.redirect(
             `${process.env.NEXT_PUBLIC_URL}/superrare/auction/${collectionAddress}/${tokenId?.toString()}`,
             302
           );
         case "limited-mint":
-          track("superrare-continue", { state: "limited-mint" });
+          sendAnalyticsEvent("superrare-continue", { state: "limited-mint" });
           return Response.redirect(`${process.env.NEXT_PUBLIC_URL}/superrare/limited-mint/${collectionAddress}`, 302);
         case "buy-now":
-          track("superrare-continue", { state: "buy-now" });
+          sendAnalyticsEvent("superrare-continue", { state: "buy-now" });
           return Response.redirect(
             `${process.env.NEXT_PUBLIC_URL}/superrare/buy-now/${collectionAddress}/${tokenId?.toString()}`,
             302
           );
         case "fallback":
-          track("superrare-continue", { state: "fallback" });
+          sendAnalyticsEvent("superrare-continue", { state: "fallback" });
           if (tokenId != undefined) {
             return Response.redirect(
               `${process.env.NEXT_PUBLIC_URL}/superrare/fallback/${collectionAddress}/${tokenId.toString()}`,

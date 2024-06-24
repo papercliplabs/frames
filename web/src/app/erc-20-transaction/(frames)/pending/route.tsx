@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { FrameRequest, getFrameHtmlResponse } from "@coinbase/onchainkit/frame";
 import { getTransactionReceipt } from "viem/actions";
-import { track } from "@vercel/analytics/server";
 import { extractAndValidateState } from "../../utils/validation";
 import { relativeEndpointUrl } from "@/utils/urlHelpers";
 import { getClientForChainId } from "@/common/utils/walletClients";
 import { getFrameMessageWithNeynarApiKey } from "@/utils/farcaster";
 import { Hex } from "viem";
 import { getIsTransactionApproval } from "../../data/transactionStorage";
+import { sendAnalyticsEvent } from "@/common/utils/analytics";
 
 export async function POST(req: NextRequest): Promise<Response> {
   const frameRequest: FrameRequest = await req.json();
@@ -31,7 +31,7 @@ export async function POST(req: NextRequest): Promise<Response> {
 
   // Only track if its the first entry
   if (frameValidationResponse.message.transaction?.hash) {
-    await track("txn-pending", { hash: transactionHash, appName: state.appName });
+    sendAnalyticsEvent("txn-pending", { hash: transactionHash, appName: state.appName });
   }
 
   let status: "pending" | "success" | "failed" = "pending";

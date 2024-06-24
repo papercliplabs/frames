@@ -24,7 +24,7 @@ export async function GET(req: NextRequest, { params }: { params: { slug: string
           height={200}
         />
         <div
-          tw="text-[80px] text-bold pt-[60px] pb-[20px]"
+          tw="text-[80px] font-bold pt-[60px] pb-[20px]"
           style={{ fontFamily: config.style.font.primary.type, color: config.style.font.primary.color }}
         >
           Transaction Pending

@@ -4,7 +4,7 @@ import { extractAndValidateState } from "../../utils/validation";
 import { getClientForChainId } from "@/common/utils/walletClients";
 import { getFrameMessageWithNeynarApiKey } from "@/utils/farcaster";
 import { Hex } from "viem";
-import { track } from "@vercel/analytics/server";
+import { sendAnalyticsEvent } from "@/common/utils/analytics";
 
 export async function POST(req: NextRequest): Promise<Response> {
   const frameRequest: FrameRequest = await req.json();
@@ -24,7 +24,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     throw Error("Missing txn hash");
   }
 
-  await track("txn-failed", { hash: transactionHash, appName: state.appName });
+  sendAnalyticsEvent("txn-failed", { hash: transactionHash, appName: state.appName });
 
   return new NextResponse(
     getFrameHtmlResponse({

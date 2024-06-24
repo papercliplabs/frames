@@ -1,7 +1,6 @@
 import { SECONDS_PER_DAY } from "@/utils/constants";
 import { generateImageResponse } from "@/utils/generateImage/generateImage";
 import { beanedexFrameLayers } from "./partial/beanidexFrameLayers";
-import { twConfig } from "./partial/twConfig";
 import { Action } from "../data/actions";
 import { FEED_BOOST_TIME_S, SCALER, TRAIN_COOLDOWN_TIME_S, WATER_BOOST_TIME_S } from "../utils/constants";
 import { ReactNode } from "react";
@@ -33,7 +32,6 @@ export async function actionImageResponse({
     },
     backgroundColor: primaryColor,
     fontTypes: ["graphik"],
-    twConfig,
     layers: [
       {
         type: "dynamic",
@@ -58,11 +56,11 @@ export async function actionImageResponse({
         position: { left: Math.floor(200 * SCALER), top: Math.floor(260 * SCALER) },
         src: (
           <div
-            tw="flex flex-col w-full h-full text-content-primary justify-center"
+            tw="flex flex-col w-full h-full text-[#FFFFFF] justify-center"
             style={{ gap: 70 * SCALER, padding: `${40 * SCALER}px ${80 * SCALER}px` }}
           >
-            <div tw="text-title font-bold">{screenContent.title}</div>
-            <div tw="text-body" style={{ whiteSpace: "pre-wrap" }}>
+            <div tw="text-[37px] tracking-[4.18px] font-bold">{screenContent.title}</div>
+            <div tw="text-[21.6px] tracking-[1.73px]" style={{ whiteSpace: "pre-wrap" }}>
               {screenContent.body}
             </div>
             {screenContent.svg}
