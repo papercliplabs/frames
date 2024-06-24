@@ -37,7 +37,6 @@ next-env.d.ts
 
 .env
 
-src/supabase/generated*
 **/generated/**
 
 supabase/**
