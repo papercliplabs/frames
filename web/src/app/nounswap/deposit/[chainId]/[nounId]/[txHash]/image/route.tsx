@@ -15,7 +15,7 @@ export async function GET(
 
   const nounId = BigInt(params.nounId);
   const noun = await getNoun({ id: nounId });
-  sendAnalyticsEvent("image-regeneration", { app: "nounswap/deposit" });
+  sendAnalyticsEvent("image_regeneration", { app: "nounswap/deposit" });
 
   return generateImageResponse({
     frameSize: { width: 1200, height: 1200 },

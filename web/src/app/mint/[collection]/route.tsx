@@ -60,7 +60,7 @@ export async function POST(req: NextRequest, { params }: { params: { collection:
     },
   ];
 
-  sendAnalyticsEvent("mint-interaction", {
+  sendAnalyticsEvent("mint_interaction", {
     dao: params.collection,
   });
 

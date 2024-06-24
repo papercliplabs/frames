@@ -25,7 +25,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     throw Error("Missing txn hash");
   }
 
-  sendAnalyticsEvent("txn-success", { hash: transactionHash, appName: state.appName });
+  sendAnalyticsEvent("txn_success", { hash: transactionHash, appName: state.appName });
 
   const receipt = await getTransactionReceipt(client, {
     hash: transactionHash,

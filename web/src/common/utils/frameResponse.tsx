@@ -26,7 +26,7 @@ export function frameResponse({
   const browser = detect(req.headers.get("user-agent") ?? "");
   if (browser?.name && browserRedirectUrl) {
     if (appName) {
-      sendAnalyticsEvent("frame-clicked", { app: appName });
+      sendAnalyticsEvent("frame_clicked", { app: appName });
     }
     return Response.redirect(browserRedirectUrl);
   }

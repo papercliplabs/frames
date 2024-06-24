@@ -20,22 +20,22 @@ async function response(
 
       switch (artworkState) {
         case "auction":
-          sendAnalyticsEvent("superrare-continue", { state: "auction" });
+          sendAnalyticsEvent("superrare_continue", { state: "auction" });
           return Response.redirect(
             `${process.env.NEXT_PUBLIC_URL}/superrare/auction/${collectionAddress}/${tokenId?.toString()}`,
             302
           );
         case "limited-mint":
-          sendAnalyticsEvent("superrare-continue", { state: "limited-mint" });
+          sendAnalyticsEvent("superrare_continue", { state: "limited-mint" });
           return Response.redirect(`${process.env.NEXT_PUBLIC_URL}/superrare/limited-mint/${collectionAddress}`, 302);
         case "buy-now":
-          sendAnalyticsEvent("superrare-continue", { state: "buy-now" });
+          sendAnalyticsEvent("superrare_continue", { state: "buy-now" });
           return Response.redirect(
             `${process.env.NEXT_PUBLIC_URL}/superrare/buy-now/${collectionAddress}/${tokenId?.toString()}`,
             302
           );
         case "fallback":
-          sendAnalyticsEvent("superrare-continue", { state: "fallback" });
+          sendAnalyticsEvent("superrare_continue", { state: "fallback" });
           if (tokenId != undefined) {
             return Response.redirect(
               `${process.env.NEXT_PUBLIC_URL}/superrare/fallback/${collectionAddress}/${tokenId.toString()}`,

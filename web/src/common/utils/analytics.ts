@@ -1,4 +1,5 @@
 export async function sendAnalyticsEvent(name: string, value: Record<string, string | number>): Promise<void> {
+  console.log("SENDING", name, value);
   const payload = {
     client_id: "frame_server",
     events: [
