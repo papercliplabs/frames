@@ -18,7 +18,7 @@ export async function GET(
 
   const [fromNoun, toNoun] = await Promise.all([getNoun({ id: fromNounId }), getNoun({ id: toNounId })]);
 
-  sendAnalyticsEvent("image-regeneration", { app: "nounswap/instant-swap" });
+  sendAnalyticsEvent("image_regeneration", { app: "nounswap/instant-swap" });
 
   return generateImageResponse({
     frameSize: { width: 1200, height: 1200 },

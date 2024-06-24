@@ -49,7 +49,7 @@ export async function POST(req: NextRequest, { params }: { params: { slug: strin
   } else {
     // First time, so store for next time
     searchParams.append("hash", transactionHash);
-    sendAnalyticsEvent("txn-pending", { slug: params.slug, hash: transactionHash });
+    sendAnalyticsEvent("txn_pending", { slug: params.slug, hash: transactionHash });
   }
 
   let status: "pending" | "success" | "failed" = "pending";
@@ -69,13 +69,13 @@ export async function POST(req: NextRequest, { params }: { params: { slug: strin
 
   let secondButton: FrameButtonMetadata = { label: "Refresh", action: "post" };
   if (status == "success") {
-    sendAnalyticsEvent("txn-successful", { slug: params.slug, hash: transactionHash });
+    sendAnalyticsEvent("txn_successful", { slug: params.slug, hash: transactionHash });
     secondButton = config.terminalButtons.success;
     if (config.deriveTerminalButtonTargetFromState && decodedState?.txSuccessTarget) {
       secondButton.target = decodedState.txSuccessTarget;
     }
   } else if (status == "failed") {
-    sendAnalyticsEvent("txn-failed", { slug: params.slug, hash: transactionHash });
+    sendAnalyticsEvent("txn_failed", { slug: params.slug, hash: transactionHash });
     secondButton = config.terminalButtons.failed;
     if (config.deriveTerminalButtonTargetFromState && decodedState?.txFailedTarget) {
       secondButton.target = decodedState.txFailedTarget;

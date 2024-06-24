@@ -31,7 +31,7 @@ export async function POST(req: NextRequest): Promise<Response> {
 
   // Only track if its the first entry
   if (frameValidationResponse.message.transaction?.hash) {
-    sendAnalyticsEvent("txn-pending", { hash: transactionHash, appName: state.appName });
+    sendAnalyticsEvent("txn_pending", { hash: transactionHash, appName: state.appName });
   }
 
   let status: "pending" | "success" | "failed" = "pending";

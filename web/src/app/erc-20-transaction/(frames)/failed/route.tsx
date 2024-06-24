@@ -24,7 +24,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     throw Error("Missing txn hash");
   }
 
-  sendAnalyticsEvent("txn-failed", { hash: transactionHash, appName: state.appName });
+  sendAnalyticsEvent("txn_failed", { hash: transactionHash, appName: state.appName });
 
   return new NextResponse(
     getFrameHtmlResponse({

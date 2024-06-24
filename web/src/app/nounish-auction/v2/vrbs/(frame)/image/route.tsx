@@ -12,7 +12,7 @@ export async function GET(req: Request): Promise<Response> {
   const auctionData = await getCurrentAuctionDataCached();
   const backgroundImage = formBackgroundImage(auctionData.artworkImageSrc);
 
-  sendAnalyticsEvent("image-regeneration", { app: "nounish-auction/v2/vrbs" });
+  sendAnalyticsEvent("image_regeneration", { app: "nounish-auction/v2/vrbs" });
 
   return generateImageResponse({
     frameSize: { width: 1200, height: 1200 },
