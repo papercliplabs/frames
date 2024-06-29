@@ -8,7 +8,7 @@ import {
   EncodeFunctionDataParameters,
   encodeFunctionData,
 } from "viem";
-import { sendAnalyticsEvent } from "./analytics";
+import { trackEvent } from "./analytics";
 
 type FrameResponseWrapperParams = {
   req: Request;
@@ -26,7 +26,7 @@ export function frameResponse({
   const browser = detect(req.headers.get("user-agent") ?? "");
   if (browser?.name && browserRedirectUrl) {
     if (appName) {
-      sendAnalyticsEvent("frame_clicked", { app: appName });
+      trackEvent("frame_clicked", { app: appName });
     }
     return Response.redirect(browserRedirectUrl);
   }

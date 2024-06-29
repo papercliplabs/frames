@@ -2,7 +2,7 @@ import { frameResponse } from "@/common/utils/frameResponse";
 import { relativeEndpointUrl } from "@/utils/urlHelpers";
 import { CHAIN_FOR_ID } from "../../../../../config";
 import { FrameRequest } from "@coinbase/onchainkit/frame";
-import { sendAnalyticsEvent } from "@/common/utils/analytics";
+import { trackEvent } from "@/common/utils/analytics";
 
 async function response(
   req: Request,
@@ -18,10 +18,10 @@ async function response(
   if (req.method === "POST") {
     const frameRequest: FrameRequest = await req.json();
     if (frameRequest.untrustedData.buttonIndex == 1) {
-      sendAnalyticsEvent("link_clicked", { app: "nounswap/instant-swap", label: "View Tx" });
+      trackEvent("link_clicked", { app: "nounswap/instant-swap", label: "View Tx" });
       return Response.redirect(`${chain.blockExplorers?.default.url}/tx/${params.txHash}`, 302);
     } else if (frameRequest.untrustedData.buttonIndex == 2) {
-      sendAnalyticsEvent("link_clicked", { app: "nounswap/instant-swap", label: "NounSwap" });
+      trackEvent("link_clicked", { app: "nounswap/instant-swap", label: "NounSwap" });
       return Response.redirect("https://nounswap.wtf", 302);
     }
   }
