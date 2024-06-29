@@ -3,7 +3,7 @@ import { FrameButtonMetadata, FrameRequest, getFrameHtmlResponse } from "@coinba
 import { transactionFlowConfigs, SupportedTransactionFlowSlug } from "../config";
 import { getTransactionReceipt } from "viem/actions";
 import { Hex } from "viem";
-import { sendAnalyticsEvent } from "@/common/utils/analytics";
+import { trackEvent } from "@/common/utils/analytics";
 
 export async function GET(req: NextRequest, { params }: { params: { slug: string; hash: string } }): Promise<Response> {
   const config = transactionFlowConfigs[params.slug as SupportedTransactionFlowSlug];
@@ -49,7 +49,7 @@ export async function POST(req: NextRequest, { params }: { params: { slug: strin
   } else {
     // First time, so store for next time
     searchParams.append("hash", transactionHash);
-    sendAnalyticsEvent("txn_pending", { slug: params.slug, hash: transactionHash });
+    trackEvent("txn_pending", { slug: params.slug, hash: transactionHash });
   }
 
   let status: "pending" | "success" | "failed" = "pending";
@@ -69,13 +69,13 @@ export async function POST(req: NextRequest, { params }: { params: { slug: strin
 
   let secondButton: FrameButtonMetadata = { label: "Refresh", action: "post" };
   if (status == "success") {
-    sendAnalyticsEvent("txn_successful", { slug: params.slug, hash: transactionHash });
+    trackEvent("txn_successful", { slug: params.slug, hash: transactionHash });
     secondButton = config.terminalButtons.success;
     if (config.deriveTerminalButtonTargetFromState && decodedState?.txSuccessTarget) {
       secondButton.target = decodedState.txSuccessTarget;
     }
   } else if (status == "failed") {
-    sendAnalyticsEvent("txn_failed", { slug: params.slug, hash: transactionHash });
+    trackEvent("txn_failed", { slug: params.slug, hash: transactionHash });
     secondButton = config.terminalButtons.failed;
     if (config.deriveTerminalButtonTargetFromState && decodedState?.txFailedTarget) {
       secondButton.target = decodedState.txFailedTarget;

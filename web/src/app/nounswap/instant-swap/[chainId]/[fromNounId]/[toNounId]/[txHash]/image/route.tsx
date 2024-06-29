@@ -1,6 +1,6 @@
 import { CHAIN_FOR_ID } from "@/app/nounswap/config";
 import { getNoun } from "@/common/nouns/data/getNoun";
-import { sendAnalyticsEvent } from "@/common/utils/analytics";
+import { trackEvent } from "@/common/utils/analytics";
 import { generateImageResponse } from "@/utils/generateImage/generateImage";
 
 export async function GET(
@@ -18,7 +18,7 @@ export async function GET(
 
   const [fromNoun, toNoun] = await Promise.all([getNoun({ id: fromNounId }), getNoun({ id: toNounId })]);
 
-  sendAnalyticsEvent("image_regeneration", { app: "nounswap/instant-swap" });
+  trackEvent("image_regeneration", { app: "nounswap/instant-swap" });
 
   return generateImageResponse({
     frameSize: { width: 1200, height: 1200 },

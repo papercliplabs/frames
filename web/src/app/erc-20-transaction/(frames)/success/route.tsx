@@ -5,7 +5,7 @@ import { Hex, erc20Abi, parseEventLogs } from "viem";
 import { getClientForChainId } from "@/common/utils/walletClients";
 import { getTransactionReceipt } from "viem/actions";
 import { extractAndValidateState } from "../../utils/validation";
-import { sendAnalyticsEvent } from "@/common/utils/analytics";
+import { trackEvent } from "@/common/utils/analytics";
 
 export async function POST(req: NextRequest): Promise<Response> {
   const frameRequest: FrameRequest = await req.json();
@@ -25,7 +25,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     throw Error("Missing txn hash");
   }
 
-  sendAnalyticsEvent("txn_success", { hash: transactionHash, appName: state.appName });
+  trackEvent("txn_success", { hash: transactionHash, appName: state.appName });
 
   const receipt = await getTransactionReceipt(client, {
     hash: transactionHash,

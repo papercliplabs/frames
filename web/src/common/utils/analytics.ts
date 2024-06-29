@@ -1,32 +1,38 @@
-export async function sendAnalyticsEvent(name: string, value: Record<string, string | number>): Promise<void> {
-  if (process.env.NEXT_PUBLIC_URL === "https://frames.paperclip.xyz") {
-    const payload = {
-      client_id: "frame_server",
-      events: [
-        {
-          name,
-          params: value,
-        },
-      ],
-    };
+import umami from "@umami/node";
+import Plausible from "plausible-tracker";
 
+umami.init({
+  websiteId: process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID,
+  hostUrl: "https://umami.paperclip.xyz",
+});
+
+const plausible = Plausible({
+  domain: process.env.NEXT_PUBLIC_PLAUSIBLE_DATA_DOMAIN,
+  apiHost: "https://plausible.paperclip.xyz",
+  trackLocalhost: true,
+});
+
+export async function trackEvent(name: string, payload: Record<string, string | number>) {
+  console.log("TRACKING EVENT", name, payload);
+
+  // Umami
+  if (process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID) {
     try {
-      const response = await fetch(
-        `https://www.google-analytics.com/mp/collect?measurement_id=${process.env.GA_MEASUREMENT_ID!}&api_secret=${process.env.GA_API_SECRET!}`,
-        {
-          method: "POST",
-          body: JSON.stringify(payload),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (!response.ok) {
-        console.error("Failed to send event to Google Analytics");
+      const resp = await umami.track(name, payload);
+      if (!resp.ok) {
+        console.error("Event tracking failed", resp.status, await resp.text());
       }
     } catch (e) {
-      console.error("Error sending ga event: ", e);
+      console.error("Umami event tracking failed", e);
+    }
+  }
+
+  // Plausible
+  if (process.env.NEXT_PUBLIC_PLAUSIBLE_DATA_DOMAIN) {
+    try {
+      plausible.trackEvent(name, { props: payload });
+    } catch (e) {
+      console.error("Plausible event tracking failed", e);
     }
   }
 }

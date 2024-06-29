@@ -5,7 +5,7 @@ import { SupportedMintCollection, mintConfigs } from "../configs";
 import { extractComposableQueryParams, getComposeResponse } from "@/utils/composableParams";
 import { isAllowedCaster, restrictedFrameResponse } from "@/utils/restrictedFrame";
 import { FrameButtonMetadata, FrameRequest, getFrameHtmlResponse } from "@coinbase/onchainkit/frame";
-import { sendAnalyticsEvent } from "@/common/utils/analytics";
+import { trackEvent } from "@/common/utils/analytics";
 
 export async function GET(req: NextRequest, { params }: { params: { collection: string } }): Promise<Response> {
   const config = mintConfigs[params.collection as SupportedMintCollection];
@@ -60,7 +60,7 @@ export async function POST(req: NextRequest, { params }: { params: { collection:
     },
   ];
 
-  sendAnalyticsEvent("mint_interaction", {
+  trackEvent("mint_interaction", {
     dao: params.collection,
   });
 

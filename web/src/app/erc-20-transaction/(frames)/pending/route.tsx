@@ -7,7 +7,7 @@ import { getClientForChainId } from "@/common/utils/walletClients";
 import { getFrameMessageWithNeynarApiKey } from "@/utils/farcaster";
 import { Hex } from "viem";
 import { getIsTransactionApproval } from "../../data/transactionStorage";
-import { sendAnalyticsEvent } from "@/common/utils/analytics";
+import { trackEvent } from "@/common/utils/analytics";
 
 export async function POST(req: NextRequest): Promise<Response> {
   const frameRequest: FrameRequest = await req.json();
@@ -31,7 +31,7 @@ export async function POST(req: NextRequest): Promise<Response> {
 
   // Only track if its the first entry
   if (frameValidationResponse.message.transaction?.hash) {
-    sendAnalyticsEvent("txn_pending", { hash: transactionHash, appName: state.appName });
+    trackEvent("txn_pending", { hash: transactionHash, appName: state.appName });
   }
 
   let status: "pending" | "success" | "failed" = "pending";

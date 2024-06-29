@@ -6,13 +6,13 @@ import { localImageUrl } from "@/utils/urlHelpers";
 import sharp, { Sharp } from "sharp";
 import "@/common/utils/bigIntPolyfill";
 import { generateImageResponse } from "@/utils/generateImage/generateImage";
-import { sendAnalyticsEvent } from "@/common/utils/analytics";
+import { trackEvent } from "@/common/utils/analytics";
 
 export async function GET(req: Request): Promise<Response> {
   const auctionData = await getCurrentAuctionDataCached();
   const backgroundImage = formBackgroundImage(auctionData.artworkImageSrc);
 
-  sendAnalyticsEvent("image_regeneration", { app: "nounish-auction/v2/vrbs" });
+  trackEvent("image_regeneration", { app: "nounish-auction/v2/vrbs" });
 
   return generateImageResponse({
     frameSize: { width: 1200, height: 1200 },
