@@ -6,8 +6,6 @@ umami.init({
 });
 
 export async function trackEvent(name: string, payload: Record<string, string | number>) {
-  console.log("TRACKING EVENT", name, payload);
-
   // Umami
   if (process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID) {
     try {
