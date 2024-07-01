@@ -29,7 +29,7 @@ export function middleware(request: NextRequest) {
 
   const host = request.headers.get("host");
   const fullUrl = request.nextUrl.clone();
-  if (process.env.NODE_ENV === "development") {
+  if (process.env.NODE_ENV === "development" || host?.includes("localhost")) {
     // Don't redirect in development
     return NextResponse.next();
   }

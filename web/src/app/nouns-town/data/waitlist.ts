@@ -11,7 +11,7 @@ export async function isUserOnWaitlist(fid: number): Promise<boolean> {
 }
 
 export async function addUserToWaitlist(fid: number) {
-  const { error } = await supabase.from("nouns-town-waitlist").insert({ fid });
+  const { error } = await supabase.from("nouns-town-waitlist").upsert({ fid });
   if (error) {
     console.error(`Error adding user to waitlist: ${fid} - ${JSON.stringify(error)}`);
   }

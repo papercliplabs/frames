@@ -1,10 +1,11 @@
-import { frameErrorResponse, frameResponse } from "@/common/utils/frameResponse";
-import { getUserInfo } from "@/utils/farcaster";
+import { frameResponse } from "@/common/utils/frameResponse";
 import { localImageUrl, relativeEndpointUrl } from "@/utils/urlHelpers";
 import { FrameRequest } from "@coinbase/onchainkit/frame";
-import { addUserToWaitlist, isUserOnWaitlist } from "../../data/waitlist";
+import { addUserToWaitlist } from "../../data/waitlist";
 
-const NOUN_TOWN_USER_ID = 533619;
+const NOUNS_TOWN_USER_ID = 749097;
+const NOUNS_TOWN_CHANNEL_ID = "nounstown";
+
 const SHARE_LINK_PARAMS: string = new URLSearchParams([
   ["text", "I joined the Nouns Town waitlist, don't miss out!"],
   ["embeds[]", `${process.env.NEXT_PUBLIC_URL}/nouns-town`],
@@ -14,22 +15,22 @@ export async function POST(req: Request): Promise<Response> {
   const frameRequest: FrameRequest = await req.json();
   const userFid = frameRequest.untrustedData.fid;
 
-  const alreadyOnWaitlist = await isUserOnWaitlist(userFid);
-  console.log("ON WAITLIST", alreadyOnWaitlist);
-  if (!alreadyOnWaitlist) {
-    const userWithViewerContext = await getUserInfo(userFid, NOUN_TOWN_USER_ID);
-    const isFollowing = userWithViewerContext.viewer_context?.followed_by; // If the viewer (nouns town) is followed by the user
-    console.log("FOLLOWING", isFollowing);
-    if (!isFollowing) {
-      return frameErrorResponse("Error: Must follow @nounstown to join waitlist & get DCs. Retry after following.");
-    }
+  // Don't do the follow checks, tradeoff for better UX
+  // const alreadyOnWaitlist = await isUserOnWaitlist(userFid);
+  // if (!alreadyOnWaitlist) {
+  //   // const isFollowingUser = await isUserFollowingUser(userFid, NOUNS_TOWN_USER_ID);
+  //   // const isFollowingChannel = isFollowingUser && (await isUserFollowingChannel(userFid, NOUNS_TOWN_CHANNEL_ID));
+  //   // if (!isFollowingUser || !isFollowingChannel) {
+  //   //   return frameErrorResponse("Must follow @nounstown.eth + /nounstown to RSVP. Retry 2min after following.");
+  //   // }
 
-    await addUserToWaitlist(userFid);
-  }
+  //   await addUserToWaitlist(userFid);
+  // }
+  addUserToWaitlist(userFid);
 
   return frameResponse({
     req,
-    browserRedirectUrl: "https://paperclip.xyz", // TODO: replace with actual once launched
+    browserRedirectUrl: "https://warpcast.com/~/channel/nounstown", // TODO: replace with actual once launched
     ogTitle: "Nouns Town",
     appName: "nouns-town",
     postUrl: relativeEndpointUrl(req, ""),
@@ -44,6 +45,8 @@ export async function POST(req: Request): Promise<Response> {
         action: "link",
         target: `https://warpcast.com/~/compose?${SHARE_LINK_PARAMS}`,
       },
+      { label: "Follow @nounstown", action: "link", target: "https://warpcast.com/nounstown.eth" },
+      { label: "Follow /nounstown", action: "link", target: "https://warpcast.com/~/channel/nounstown" },
     ],
   });
 }

@@ -11,7 +11,7 @@ async function response(req: Request, { params }: { params: { id: string } }): P
 
   return frameResponse({
     req,
-    browserRedirectUrl: "https://paperclip.xyz", // TODO: replace with actual once launched
+    browserRedirectUrl: "https://warpcast.com/~/channel/nounstown", // TODO: replace with actual once launched
     ogTitle: "Nouns Town",
     appName: "nouns-town",
     postUrl: relativeEndpointUrl(req, ""),
