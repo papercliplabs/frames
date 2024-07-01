@@ -45,8 +45,8 @@ export async function POST(req: Request): Promise<Response> {
         action: "link",
         target: `https://warpcast.com/~/compose?${SHARE_LINK_PARAMS}`,
       },
-      { label: "Follow @nounstown", action: "link", target: "https://warpcast.com/nounstown.eth" },
-      { label: "Follow /nounstown", action: "link", target: "https://warpcast.com/~/channel/nounstown" },
+      { label: "@nounstown", action: "link", target: "https://warpcast.com/nounstown.eth" },
+      { label: "/nounstown", action: "link", target: "https://warpcast.com/~/channel/nounstown" },
     ],
   });
 }
