@@ -26,3 +26,5 @@ async function response(req: NextRequest, { params }: { params: { id: string } }
 
 export const GET = response;
 export const POST = response;
+
+export const revalidate = 0;
