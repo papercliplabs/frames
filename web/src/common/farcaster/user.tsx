@@ -7,7 +7,7 @@ interface FCUser extends FarcasterUser {
 
 export async function getUserInfo(fid: number, viewerFid?: number): Promise<FCUser> {
   const url = `https://api.neynar.com/v2/farcaster/user/bulk?fids=${fid}${
-    viewerFid != undefined && "&viewer_fid=" + viewerFid
+    viewerFid != undefined ? "&viewer_fid=" + viewerFid : ""
   }`;
   const req = await fetch(url, {
     headers: {

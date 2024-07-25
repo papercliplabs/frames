@@ -1,6 +1,5 @@
 import sharp, { Color } from "sharp";
 import { Size } from "./types";
-import { unstable_cache } from "next/cache";
 import { customUnstableCache } from "@/common/utils/caching/customUnstableCache";
 
 interface AssembleImageParams {
@@ -23,7 +22,7 @@ async function assembleImageUncached({
   const base = sharp({
     create: {
       width: frameSize.width,
-      height: frameSize.width * maxGifPages, // Gifs are represented as vertical "toilet roll", the base needs to extend to accommodate this
+      height: frameSize.height * maxGifPages, // Gifs are represented as vertical "toilet roll", the base needs to extend to accommodate this
       channels: 4,
       background: backgroundColor,
     },
