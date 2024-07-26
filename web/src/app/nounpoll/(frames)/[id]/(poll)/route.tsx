@@ -1,11 +1,11 @@
-import { getQuestion } from "@/app/nounpoll/data/question";
+import { getPoll } from "@/app/nounpoll/data/poll";
 import { frameResponse } from "@/common/utils/frameResponse";
 import { localImageUrl, relativeEndpointUrl } from "@/utils/urlHelpers";
 
 async function response(req: Request, { params }: { params: { id: string } }): Promise<Response> {
-  const question = await getQuestion(parseInt(params.id));
+  const poll = await getPoll(parseInt(params.id));
 
-  if (!question) {
+  if (!poll) {
     return frameResponse({
       req,
       ogTitle: "NounPoll",
@@ -25,10 +25,10 @@ async function response(req: Request, { params }: { params: { id: string } }): P
     postUrl: relativeEndpointUrl(req, "/cast-vote"),
     image: { src: relativeEndpointUrl(req, `/image?t=${Date.now()}`), aspectRatio: "1.91:1" },
     buttons: [
-      { label: question.option1 },
-      { label: question.option2 },
-      ...(question.option3 ? [{ label: question.option3 }] : []),
-      ...(question?.option4 ? [{ label: question.option4 }] : []),
+      { label: poll.option1 },
+      { label: poll.option2 },
+      ...(poll.option3 ? [{ label: poll.option3 }] : []),
+      ...(poll?.option4 ? [{ label: poll.option4 }] : []),
     ],
   });
 }

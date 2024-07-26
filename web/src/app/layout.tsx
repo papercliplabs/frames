@@ -1,9 +1,21 @@
 import Script from "next/script";
+import "./globals.css";
+import { Inter } from "next/font/google";
+import { Toaster } from "@/components/ui/toaster";
+
+// If loading a variable font, you don't need to specify the font weight
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+});
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body>{children}</body>
+    <html lang="en" className={inter.className}>
+      <body>
+        {children}
+        <Toaster />
+      </body>
       <Analytics />
     </html>
   );
