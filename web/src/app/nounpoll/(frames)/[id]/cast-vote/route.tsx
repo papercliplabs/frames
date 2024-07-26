@@ -1,4 +1,4 @@
-import { getQuestion } from "@/app/nounpoll/data/question";
+import { getPoll } from "@/app/nounpoll/data/poll";
 import { castVote, didUserAlreadyVote } from "@/app/nounpoll/data/votes";
 import { getVoteWeightForFid } from "@/app/nounpoll/data/voteWeightForFid";
 import { frameErrorResponse, frameResponse } from "@/common/utils/frameResponse";
@@ -11,12 +11,12 @@ export async function POST(req: Request, { params }: { params: { id: string } })
 
   const frameRequest: FrameRequest = await req.json();
 
-  const [frameValidationResponse, question] = await Promise.all([
+  const [frameValidationResponse, poll] = await Promise.all([
     getFrameMessageWithNeynarApiKey(frameRequest),
-    getQuestion(pollId),
+    getPoll(pollId),
   ]);
 
-  if (!frameValidationResponse || !frameValidationResponse.message || !question) {
+  if (!frameValidationResponse || !frameValidationResponse.message || !poll) {
     console.error("nounpoll validation: invalid frame request - ", frameRequest);
     return frameErrorResponse("Invalid frame request");
   }
@@ -25,7 +25,7 @@ export async function POST(req: Request, { params }: { params: { id: string } })
 
   const [alreadyVoted, voteWeight] = await Promise.all([
     didUserAlreadyVote(pollId, userFid),
-    getVoteWeightForFid(userFid, BigInt(question.creationBlockNumber)),
+    getVoteWeightForFid(userFid, BigInt(poll.creationBlockNumber)),
   ]);
 
   if (alreadyVoted) {
