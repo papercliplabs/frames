@@ -12,6 +12,7 @@ export default function CreatedPage({ params }: { params: { id: string } }) {
   const shareLinkParams = new URLSearchParams([
     ["text", "I created a NounPoll to poll the Nouns community based on Noun voting weight!"],
     ["embeds[]", frameLink],
+    ["channelKey", "nouns"],
   ]);
 
   return (
