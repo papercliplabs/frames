@@ -1,9 +1,9 @@
-import { getQuestion } from "@/app/nounpoll/data/question";
+import { getPoll } from "@/app/nounpoll/data/poll";
 import { SECONDS_PER_DAY } from "@/utils/constants";
 import { generateImageResponse } from "@/utils/generateImage/generateImage";
 
 export async function GET(req: Request, { params }: { params: { id: string } }): Promise<Response> {
-  const question = await getQuestion(parseInt(params.id));
+  const poll = await getPoll(parseInt(params.id));
 
   return generateImageResponse({
     imageCacheMaxAgeS: SECONDS_PER_DAY,
@@ -21,7 +21,7 @@ export async function GET(req: Request, { params }: { params: { id: string } }):
         src: (
           <div tw="w-full h-full p-[64px] pr-[280px] flex flex-col justify-between">
             <div />
-            <div tw="text-[62px] font-semibold flex text-[#222222]">{question?.question}</div>
+            <div tw="text-[62px] font-semibold flex text-[#222222]">{poll?.question}</div>
             <div tw="text-[28px] font-normal text-[#898989]">
               Votes in this anonymous poll are weighted by the number of delegated Nouns to the verified addresses on
               your Farcaster account.
@@ -29,6 +29,12 @@ export async function GET(req: Request, { params }: { params: { id: string } }):
           </div>
         ),
         size: { width: 1200, height: 630 },
+      },
+      {
+        type: "static",
+        src: "/images/paperclip-icon.png",
+        size: { width: 80, height: 80 },
+        position: { left: 1080, top: 40 },
       },
     ],
   });

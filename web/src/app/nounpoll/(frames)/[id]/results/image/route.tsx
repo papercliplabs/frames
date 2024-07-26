@@ -1,4 +1,4 @@
-import { getQuestion } from "@/app/nounpoll/data/question";
+import { getPoll } from "@/app/nounpoll/data/poll";
 import { getPollResults } from "@/app/nounpoll/data/results";
 import { SECONDS_PER_DAY } from "@/utils/constants";
 import { formatNumber } from "@/utils/format";
@@ -10,13 +10,13 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
   const alreadyVoted = req.nextUrl.searchParams.get("already-voted");
   const voteWeight = req.nextUrl.searchParams.get("vote-weight");
 
-  const [question, results] = await Promise.all([getQuestion(pollId), getPollResults(pollId)]);
+  const [poll, results] = await Promise.all([getPoll(pollId), getPollResults(pollId)]);
 
   const labelAndResults = [
-    { label: question?.option1, result: results.option1 },
-    { label: question?.option2, result: results.option2 },
-    ...(question?.option3 ? [{ label: question.option3, result: results.option3 }] : []),
-    ...(question?.option4 ? [{ label: question.option4, result: results.option4 }] : []),
+    { label: poll?.option1, result: results.option1 },
+    { label: poll?.option2, result: results.option2 },
+    ...(poll?.option3 ? [{ label: poll.option3, result: results.option3 }] : []),
+    ...(poll?.option4 ? [{ label: poll.option4, result: results.option4 }] : []),
   ];
 
   return generateImageResponse({
@@ -34,7 +34,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
         type: "dynamic",
         src: (
           <div tw="w-full h-full p-[64px] flex flex-col justify-between">
-            <div tw="text-[40px] font-semibold flex text-[#222222]">{question?.question}</div>
+            <div tw="text-[40px] font-semibold flex text-[#222222]">{poll?.question}</div>
             <div tw="flex flex-col w-full" style={{ gap: 12 }}>
               {labelAndResults.map((entry, i) => (
                 <div key={i} tw="flex w-full h-[68px] justify-between items-center ">
@@ -63,6 +63,12 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
           </div>
         ),
         size: { width: 1200, height: 630 },
+      },
+      {
+        type: "static",
+        src: "/images/paperclip-icon.png",
+        size: { width: 80, height: 80 },
+        position: { left: 1080, top: 40 },
       },
     ],
   });
