@@ -29,7 +29,7 @@ async function response(req: Request, { params }: { params: { slug: string } }):
         label: "Refresh",
         action: "post",
       },
-      { label: "View", action: "link", target: config.frontendUrl },
+      { label: "Bid on site", action: "link", target: config.frontendUrl },
       {
         label: "Bid",
         action: "tx",
