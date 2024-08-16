@@ -2,6 +2,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { trackEvent } from "./common/utils/analytics";
+import { stripeReportUsage } from "./common/utils/stripe";
 
 export function middleware(request: NextRequest) {
   const time = new Date().toISOString();
@@ -26,6 +27,10 @@ export function middleware(request: NextRequest) {
     userAgent,
     requesterOrigin,
   }).catch(console.error);
+
+  if (app == "superrare") {
+    stripeReportUsage("superrare");
+  }
 
   const host = request.headers.get("host");
   const fullUrl = request.nextUrl.clone();
