@@ -44,7 +44,7 @@ export async function GET(): Promise<Response> {
               <img src={noun.imgSrc} width={600} height={600} alt={`#${noun.id}`} />
             </span>
             <span tw="bg-white w-full h-[46%] p-[80px] py-[70px] flex flex-col">
-              <span tw="text-[120px] pb-[24px]">Noun {noun.id}</span>
+              <div tw="flex text-[120px] pb-[24px]">{`Noun ${noun.id}`}</div>
               <span tw="text-[52px] flex flex-col font-bold" style={{ fontFamily: "pt-root-ui" }}>
                 {rowEntries.map((entry, i) => (
                   <span tw="flex flex-row justify-between pt-[24px]" key={i}>
