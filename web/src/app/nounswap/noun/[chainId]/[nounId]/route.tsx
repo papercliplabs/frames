@@ -19,18 +19,18 @@ async function response(
     const frameRequest: FrameRequest = await req.json();
     if (frameRequest.untrustedData.buttonIndex == 1) {
       trackEvent("link_clicked", { app: "nounswap/noun", nounId: params.nounId });
-      return Response.redirect(`https://www.nounswap.wtf/?nounId=${params.nounId}`, 302);
+      return Response.redirect(`https://www.nounswap.wtf/explore?nounId=${params.nounId}`, 302);
     }
   }
 
   return frameResponse({
     req,
-    browserRedirectUrl: `https://www.nounswap.wtf/?nounId=${params.nounId}`,
+    browserRedirectUrl: `https://www.nounswap.wtf/explore?nounId=${params.nounId}`,
     ogTitle: "NounSwap Noun",
     appName: "nounswap/noun",
     postUrl: relativeEndpointUrl(req, ""),
     image: {
-      src: relativeEndpointUrl(req, `/image?t=${Date.now()}`),
+      src: relativeEndpointUrl(req, `/image`), // Allow caching :)Allow caching :)Allow caching :)Allow caching :)
       aspectRatio: "1:1",
     },
     buttons: [
