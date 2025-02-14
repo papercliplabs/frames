@@ -1,4 +1,4 @@
-FROM node:20-alpine AS base
+FROM node:20.11.1-alpine AS base
 
 ARG OPENAI_API_KEY
 ARG LUMA_API_KEY
